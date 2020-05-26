@@ -9,33 +9,24 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
-    <div class="layui-logo">layui 后台布局</div>
+    <div class="layui-logo">Logo</div>
     <!-- 头部区域（可配合layui已有的水平导航） -->
     <ul class="layui-nav layui-layout-left">
-      <li class="layui-nav-item"><a href="">控制台</a></li>
-      <li class="layui-nav-item"><a href="">商品管理</a></li>
-      <li class="layui-nav-item"><a href="">用户</a></li>
-      <li class="layui-nav-item">
-        <a href="javascript:;">其它系统</a>
-        <dl class="layui-nav-child">
-          <dd><a href="">邮件管理</a></dd>
-          <dd><a href="">消息管理</a></dd>
-          <dd><a href="">授权管理</a></dd>
-        </dl>
-      </li>
+      <li class="layui-nav-item"><a href="">会员中心首页</a></li>
     </ul>
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
         <a href="javascript:;">
           <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-          贤心
+          陈银坤
         </a>
         <dl class="layui-nav-child">
           <dd><a href="">基本资料</a></dd>
           <dd><a href="">安全设置</a></dd>
+          <dd><a href="">退出</a></dd>
         </dl>
       </li>
-      <li class="layui-nav-item"><a href="">退了</a></li>
+     
     </ul>
   </div>
   
@@ -44,24 +35,18 @@
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree"  lay-filter="test">
         <li class="layui-nav-item layui-nav-itemed">
-          <a class="" href="javascript:;">所有商品</a>
+          <a class="" href="javascript:;">高新认定辅助系统</a>
           <dl class="layui-nav-child">
-            <dd><a href="javascript:;">列表一</a></dd>
-            <dd><a href="javascript:;">列表二</a></dd>
-            <dd><a href="javascript:;">列表三</a></dd>
-            <dd><a href="">超链接</a></dd>
+            <dd><a href="javascript:;">火炬统计</a></dd>
           </dl>
         </li>
         <li class="layui-nav-item">
-          <a href="javascript:;">解决方案</a>
+          <a href="javascript:;">个人中心</a>
           <dl class="layui-nav-child">
-            <dd><a href="javascript:;">列表一</a></dd>
-            <dd><a href="javascript:;">列表二</a></dd>
-            <dd><a href="">超链接</a></dd>
+            <dd><a href="javascript:;">基本资料</a></dd>
+            <dd><a href="javascript:;">修改密码</a></dd>
           </dl>
         </li>
-        <li class="layui-nav-item"><a href="">云市场</a></li>
-        <li class="layui-nav-item"><a href="">发布商品</a></li>
       </ul>
     </div>
   </div>
@@ -71,14 +56,178 @@
     <div style="padding: 15px;">
         <div class="layui-tab">
           <ul class="layui-tab-title">
-             <li class="layui-this">网站设置</li>
-             <li>用户管理</li>
-             <li>权限分配</li>
-             <li>商品管理</li>
-             <li>订单管理</li>
+             <li class="layui-this">国家高新技术产业开发区企业统计报表</li>
+             <li>企业概况</li>
+             <li>经济概况</li>
+             <li>人员概况</li>
+             <li>科技项目概况</li>
+             <li>科技活动概况</li>
           </ul>
              <div class="layui-tab-content">
-             <div class="layui-tab-item layui-show">内容1</div>
+             <div class="layui-tab-item layui-show">
+                 <form class="layui-form" action="">
+                      <div class="layui-form-item">
+                           <div class="layui-inline">
+                                <label class="layui-form-label">统一社会信用代码或企业组织机构代码(qa03)</label>
+                                <div class="layui-input-inline">
+                                     <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                           <div class="layui-inline">
+                                <label class="layui-form-label">行政区划代码(qa19)</label>
+                                <div class="layui-input-inline">
+                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                      </div>
+                      
+                      <div class="layui-form-item">
+                           <div class="layui-inline">
+                                <label class="layui-form-label">企业（单位）详细名称(qa04)</label>
+                                <div class="layui-input-inline">
+                                     <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                           <div class="layui-inline">
+                                <label class="layui-form-label">法人性质（qa15）</label>
+                                <div class="layui-input-inline">
+                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                      </div>                     
+                      
+                      <div class="layui-form-item">
+                           <div class="layui-inline">
+                                 <label class="layui-form-label">企业法人性别（qa19）</label>
+                                 <div class="layui-input-inline">
+                                        <select name="interest" lay-filter="aihao">
+                                            <option value=""></option>
+                                            <option value="0">男</option>
+                                            <option value="1" selected="">女</option>
+                                        </select>
+                                 </div>
+                            </div>
+                            
+                            <div class="layui-inline">
+                                   <label class="layui-form-label">出生年月（qa20）</label>
+                                   <div class="layui-input-inline">
+                                         <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                   </div>
+                            </div>
+                            
+                            <div class="layui-inline">
+                                   <label class="layui-form-label">学历（qd22）</label>
+                                   <div class="layui-input-inline">
+                                        <select name="interest" lay-filter="aihao">
+                                            <option value=""></option>
+                                            <option value="0">1.研究生</option>
+                                            <option value="0">2.本科</option>
+                                            <option value="0">3.大专</option>
+                                            <option value="0">4.其他</option>
+                                        </select>
+                                 </div>
+                            </div>
+                      </div> 
+                      
+                      <div class="layui-form-item">
+                           <div class="layui-inline">
+                                <label class="layui-form-label">企业通讯地址（qa05）</label>
+                                <div class="layui-input-inline">
+                                     <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                           <div class="layui-inline">
+                                <label class="layui-form-label">邮政编码（qa06）</label>
+                                <div class="layui-input-inline">
+                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                      </div>                           
+                      
+                      <div class="layui-form-item-address">
+                                   <label class="layui-form-label-address">企业注册地址（qa07）</label>
+                                   <div class="layui-input-block">
+                                            <input type="text" name="identity" lay-verify="identity" placeholder="" autocomplete="off" class="layui-input">
+                                   </div>
+                      </div>                  
+  
+                      <div class="layui-form-item">
+                           <div class="layui-inline">
+                                 <label class="layui-form-label">企业负责人（qa08）</label>
+                                 <div class="layui-input-inline">
+                                      <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                  </div>
+                            </div>
+                            <div class="layui-inline">
+                                   <label class="layui-form-label"> 联系电话（qa09）</label>
+                                   <div class="layui-input-inline">
+                                         <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                   </div>
+                            </div>
+                            <div class="layui-inline">
+                                   <label class="layui-form-label">传真（qa10）</label>
+                                   <div class="layui-input-inline">
+                                           <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                                   </div>
+                            </div>
+                      </div>
+                      
+                      <div class="layui-form-item">
+                           <div class="layui-inline">
+                                 <label class="layui-form-label">统计负责人（qa20）</label>
+                                 <div class="layui-input-inline">
+                                      <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                  </div>
+                            </div>
+                            <div class="layui-inline">
+                                   <label class="layui-form-label">填报人（qa11）</label>
+                                 <div class="layui-input-inline">
+                                      <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                  </div>
+                            </div>
+                            <div class="layui-inline">
+                                   <label class="layui-form-label">填报人电话（qa17）</label>
+                                   <div class="layui-input-inline">
+                                           <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                                   </div>
+                            </div>
+                      </div>       
+                      
+                      <div class="layui-form-item">
+                           <div class="layui-inline">
+                                <label class="layui-form-label">填报时间（qa12）</label>
+                                   <div class="layui-input-inline">
+                                         <input type="text" name="date" id="date1" lay-verify="date1" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                   </div>
+                           </div>
+                           <div class="layui-inline">
+                                <label class="layui-form-label">Email地址（qa13）</label>
+                                <div class="layui-input-inline">
+                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                      </div>                          
+                                     
+                      <div class="layui-form-item">
+                           <div class="layui-inline">
+                                <label class="layui-form-label">网址（qa14）</label>
+                                <div class="layui-input-inline">
+                                     <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                           <div class="layui-inline">
+                                <label class="layui-form-label">填报人手机（qa17）</label>
+                                <div class="layui-input-inline">
+                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                </div>
+                           </div>
+                      </div>     
+ 
+                     <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-6111334333458862" data-ad-slot="3820120620"></ins>
+  
+                     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                 </form>
+             </div>
              <div class="layui-tab-item">内容2</div>
              <div class="layui-tab-item">内容3</div>
              <div class="layui-tab-item">内容4</div>
@@ -99,6 +248,75 @@
 layui.use('element', function(){
   var element = layui.element;
   
+});
+
+layui.use(['form', 'layedit', 'laydate'], function(){
+	  var form = layui.form
+	  ,layer = layui.layer
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  
+	  //日期
+	  laydate.render({
+	    elem: '#date'
+	  });
+	  laydate.render({
+	    elem: '#date1'
+	  });
+	  
+	  //创建一个编辑器
+	  var editIndex = layedit.build('LAY_demo_editor');
+	 
+	  //自定义验证规则
+	  form.verify({
+	    title: function(value){
+	      if(value.length < 5){
+	        return '标题至少得5个字符啊';
+	      }
+	    }
+	    ,pass: [
+	      /^[\S]{6,12}$/
+	      ,'密码必须6到12位，且不能出现空格'
+	    ]
+	    ,content: function(value){
+	      layedit.sync(editIndex);
+	    }
+	  });
+	  
+	  //监听指定开关
+	  form.on('switch(switchTest)', function(data){
+	    layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+	      offset: '6px'
+	    });
+	    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+	  });
+	  
+	  //监听提交
+	  form.on('submit(demo1)', function(data){
+	    layer.alert(JSON.stringify(data.field), {
+	      title: '最终的提交信息'
+	    })
+	    return false;
+	  });
+	 
+	  //表单赋值
+	  layui.$('#LAY-component-form-setval').on('click', function(){
+	    form.val('example', {
+	      "username": "贤心" // "name": "value"
+	      ,"password": "123456"
+	      ,"interest": 1
+	      ,"like[write]": true //复选框选中状态
+	      ,"close": true //开关状态
+	      ,"sex": "女"
+	      ,"desc": "我爱 layui"
+	    });
+	  });
+	  
+	  //表单取值
+	  layui.$('#LAY-component-form-getval').on('click', function(){
+	    var data = form.val('example');
+	    alert(JSON.stringify(data));
+	  });	  
 });
 </script>
 </body>
