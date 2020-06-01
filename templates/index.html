@@ -70,13 +70,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">统一社会信用代码或企业组织机构代码(qa03)</label>
                                 <div class="layui-input-inline">
-                                     <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                     <input type="text" name="organizationCode" lay-verify="required" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">行政区划代码(qa19)</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                     <input type="text" name="areaNumber" lay-verify="required" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>
@@ -85,13 +85,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">企业（单位）详细名称(qa04)</label>
                                 <div class="layui-input-inline">
-                                     <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                     <input type="tel" name="enterpriseName" lay-verify="required" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">法人性质（qa15）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                     <input type="text" name="natureOfCorporation" lay-verify="required" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>                     
@@ -100,10 +100,10 @@
                            <div class="layui-inline">
                                  <label class="layui-form-label">企业法人性别（qa19）</label>
                                  <div class="layui-input-inline">
-                                        <select name="interest" lay-filter="aihao">
-                                            <option value=""></option>
+                                        <select name="corporateGender" lay-filter="aihao">
+                                            <option value="" selected=""></option>
                                             <option value="0">男</option>
-                                            <option value="1" selected="">女</option>
+                                            <option value="1">女</option>
                                         </select>
                                  </div>
                             </div>
@@ -111,14 +111,14 @@
                             <div class="layui-inline">
                                    <label class="layui-form-label">出生年月（qa20）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                         <input type="text" name="birthday" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
                                    </div>
                             </div>
                             
                             <div class="layui-inline">
                                    <label class="layui-form-label">学历（qd22）</label>
                                    <div class="layui-input-inline">
-                                        <select name="interest" lay-filter="aihao">
+                                        <select name="education" lay-filter="aihao">
                                             <option value=""></option>
                                             <option value="0">1.研究生</option>
                                             <option value="0">2.本科</option>
@@ -133,13 +133,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">企业通讯地址（qa05）</label>
                                 <div class="layui-input-inline">
-                                     <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                     <input type="text" name="address" lay-verify="" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">邮政编码（qa06）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                     <input type="text" name="postalCode" lay-verify="" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>                           
@@ -147,7 +147,7 @@
                       <div class="layui-form-item-address">
                                    <label class="layui-form-label-address">企业注册地址（qa07）</label>
                                    <div class="layui-input-block">
-                                            <input type="text" name="identity" lay-verify="identity" placeholder="" autocomplete="off" class="layui-input">
+                                            <input type="text" name="registeredAddress" lay-verify="" placeholder="" autocomplete="off" class="layui-input">
                                    </div>
                       </div>                  
   
@@ -155,19 +155,19 @@
                            <div class="layui-inline">
                                  <label class="layui-form-label">企业负责人（qa08）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                      <input type="text" name="manager" lay-verify="" autocomplete="off" class="layui-input">
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label"> 联系电话（qa09）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                         <input type="text" name="telephone" lay-verify="required|number" autocomplete="off" class="layui-input">
                                    </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">传真（qa10）</label>
                                    <div class="layui-input-inline">
-                                           <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                                           <input type="text" name="fax" lay-verify="" autocomplete="off" class="layui-input">
                                    </div>
                             </div>
                       </div>
@@ -176,19 +176,19 @@
                            <div class="layui-inline">
                                  <label class="layui-form-label">统计负责人（qa20）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                      <input type="text" name="statisticalControlOfficer" lay-verify="" autocomplete="off" class="layui-input">
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">填报人（qa11）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                      <input type="text" name="preparedBy" lay-verify="" autocomplete="off" class="layui-input">
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">填报人电话（qa17）</label>
                                    <div class="layui-input-inline">
-                                           <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                                           <input type="tel" name="preparedByTelephone" lay-verify="number" autocomplete="off" class="layui-input">
                                    </div>
                             </div>
                       </div>       
@@ -197,7 +197,7 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">填报时间（qa12）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="date" id="date1" lay-verify="date1" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                         <input type="text" name="fillingTime" id="fillingTime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
                                    </div>
                            </div>
                            <div class="layui-inline">
@@ -212,13 +212,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">网址（qa14）</label>
                                 <div class="layui-input-inline">
-                                     <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                     <input type="text" name="url" lay-verify="url" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">填报人手机（qa17）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                     <input type="text" name="preparedByMobilephone" lay-verify="" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>     
