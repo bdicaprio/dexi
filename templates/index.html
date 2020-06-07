@@ -18,7 +18,8 @@
       <li class="layui-nav-item">
         <a href="javascript:;">
           <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-          陈银坤
+          {{ username_id }}
+          <input type="text" id = "username_id" value="123" /> 
         </a>
         <dl class="layui-nav-child">
           <dd><a href="">基本资料</a></dd>
@@ -222,6 +223,12 @@
                                 </div>
                            </div>
                       </div>     
+                      
+                      <div style="width:100%;height:50px;">
+                           <div style="display:block;float:right" id="layerDemo">                        
+                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                           </div>
+                     </div>
  
                      <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-6111334333458862" data-ad-slot="3820120620"></ins>
   
@@ -396,9 +403,19 @@
                               <td>qb16_1</td>
                               <td contentEditable="true"></td>
                             </tr>                                                                                                                                                                                                                                                                
-                         </tbody>
-                      </table>                    
+                         </tbody>                                                                   
+                      </table>    
+                      
+                      <div style="width:100%;height:50px;">
+                           <div style="display:block;float:right" id="layerDemo">                        
+                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                           </div>
+                     </div>                                          
              </div>
+             
+             
+             
+             
              <div class="layui-tab-item">
                      <table class="layui-table">
                             <colgroup>
@@ -827,7 +844,13 @@
                               <td>千元</td>                         
                             </tr>                                                                                                                                                                                                                                                                                                                                                                           
                          </tbody>  
-                     </table>                                               
+                     </table>     
+                     
+                      <div style="width:100%;height:50px;">
+                           <div style="display:block;float:right" id="layerDemo">                        
+                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                           </div>
+                     </div>                                                                   
              </div>
              <div class="layui-tab-item">
                      <table class="layui-table">
@@ -997,12 +1020,134 @@
                               <td contentEditable="true"></td>
                             </tr>                                                                                                                                                                                                                                                                                                                                                                             
                          </tbody>                                              
-                      </table>              
+                      </table>  
+                      
+                      <div style="width:100%;height:50px;">
+                           <div style="display:block;float:right" id="layerDemo">                        
+                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                           </div>
+                     </div>                                      
              </div>
+             
              <div class="layui-tab-item">
-             	   <table class="layui-hide" id="test"></table>      
+                 <div style="width:100%;height:50px;">
+                    <div style="display:block;float:right" id="layerDemo">                        
+                           <button data-method="offset" data-type="auto" class="layui-btn" id="add-project-1">添加</button>
+                    </div>
+                 </div>
+                 
+                 <!--遮罩层开始  -->                
+                 <div id='shade' class='shade hide'  style="position:fixed;height:100%;width:100%;top:0px;bottom:0px;left:0px;rigth:0px;background-color:#ddd;z-index:1040;opacity: 0.5;"></div>
+                 <!-- 遮罩层结束 -->                 
+                 
+                 <!-- 编辑层开始 -->
+                     <div id='submit_from' class='submit_from hide layui-anim layui-anim-scale' style="position:fixed;max-height:550px;width:1000px;top:15%;bottom:0%;left:20%;background-color:white;z-index:1080;overflow:auto;">
+                            <form class="layui-form" method='post' action='' onsubmit="return dosubmit();">
+                                      <div class="layui-form-item">
+                                            <label class="layui-form-label-project">项目名称</label>
+                                                <div class="layui-input-block">
+                                                      <input class="layui-input-project" type="text" name="projectName" lay-verify="title" autocomplete="off" placeholder="请输入项目名称" >
+                                                </div>
+                                      </div>
+                                      
+                                      
+                                      
+                                       <div class="layui-form-item">
+                                              <div class="layui-inline">
+                                                      <label class="layui-form-label-project">项目来源</label>
+                                                      <div class="layui-input-inline">
+                                                            <input type="text" name="projectFrom" lay-verify="required|number" autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                              </div>
+                                              <div class="layui-inline">
+                                                     <label class="layui-form-label-project">开展形式</label>
+                                                     <div class="layui-input-inline">
+                                                           <input type="text" name="developmentForm " id="developmentForm" lay-verify="required|number"  autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                               </div>
+                                              <div class="layui-inline">
+                                                     <label class="layui-form-label-project">当年成果展示</label>
+                                                     <div class="layui-input-inline">
+                                                           <input type="text" name="achievement" id="achievement" lay-verify="required|number"  autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                               </div>                                                 
+                                        </div>  
+                                        
+                                        
+                                       <div class="layui-form-item">
+                                              <div class="layui-inline">
+                                                      <label class="layui-form-label-project">经济目标</label>
+                                                      <div class="layui-input-inline">
+                                                            <input type="text" name="economicGoals" lay-verify="required|number" autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                              </div>
+                                              <div class="layui-inline">
+                                                     <label class="layui-form-label-project">活动类型</label>
+                                                     <div class="layui-input-inline">
+                                                           <input type="text" name="activityType" id="activityType" lay-verify="required|number" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                               </div>
+                                              <div class="layui-inline">
+                                                     <label class="layui-form-label-project">所处阶段</label>
+                                                     <div class="layui-input-inline">
+                                                           <input type="text" name="stage" id="stage" lay-verify="required|number"  autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                               </div>                                                 
+                                        </div> 
+                                        
+                                        
+                                       <div class="layui-form-item">
+                                              <div class="layui-inline">
+                                                      <label class="layui-form-label-project">起始时间</label>
+                                                      <div class="layui-input-inline">
+                                                            <input type="text" name="startTime" id="startTime" lay-verify="date" placeholder="yyyy-MM-dd"  autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                              </div>
+                                              <div class="layui-inline">
+                                                     <label class="layui-form-label-project">完成时间</label>
+                                                     <div class="layui-input-inline">
+                                                           <input type="text" name="endTime" id="endTime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                               </div>                                              
+                                              <div class="layui-inline">
+                                                     <label class="layui-form-label-project">参加人员（人）</label>
+                                                     <div class="layui-input-inline">
+                                                           <input type="text" name="personnel" id="personnel" lay-verify="required|number"  autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                               </div>                                               
+                                        </div> 
+                                        
+                                       <div class="layui-form-item">
+                                              <div class="layui-inline">
+                                                      <label class="layui-form-label-project">经费（千元）</label>
+                                                      <div class="layui-input-inline">
+                                                            <input type="text" name="funds" lay-verify="required" autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                              </div>
+                                              <div class="layui-inline">
+                                                     <label class="layui-form-label-project">政府资金（千元）</label>
+                                                     <div class="layui-input-inline">
+                                                           <input type="text" name="capital" id="capital" lay-verify="required"  autocomplete="off" class="layui-input-project-small">
+                                                      </div>
+                                               </div>                                              
+                                              <div class="layui-inline">
+                                                         <div style="width:100%;height:50px;">
+                                                                <div style="display:block;float:right" id="layerDemo">                        
+                                                                        <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">添加</button>
+                                                                        <button data-method="offset" data-type="auto" class="layui-btn" id="cancel-project">取消</button>
+                                                                </div>
+                                                          </div>                                                      
+                                               </div>                                               
+                                        </div>                                                                                                                                                                  
+	                        </form>
+	                  </div>             
+	                            
+                 <!-- 获取表格数据 --> 
+             	 <table class="layui-hide" id="test"></table>      
              </div>
-             <div class="layui-tab-item">
+             
+             
+             <div class="layui-tab-item"> 
                      <table class="layui-table">
                             <colgroup>
                                 <col width="450">
@@ -1272,8 +1417,10 @@
                               <td contentEditable="true"></td>
                             </tr>                                                                                                                                                                                                                                                                                                                                                                                                                                  
                          </tbody>                                              
-                      </table> 
-                                       
+                     </table> 
+					  
+					  
+					  
                      <table class="layui-table">
                             <colgroup>
                                 <col width="450">
@@ -1558,7 +1705,13 @@
                               <td contentEditable="true"></td>
                             </tr>                                                                                                                                                                                                                                                                                                                                                                                                                           
                          </tbody>  
-                     </table>               
+                     </table>  
+                     
+                      <div style="width:100%;height:50px;">
+                           <div style="display:block;float:right" id="layerDemo">                        
+                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                           </div>
+                     </div>                                                                                     
              </div>
            </div>
         </div>
@@ -1571,109 +1724,55 @@
   </div>
 </div>
 <script src="/static/layui.js"></script>
+
 <script>
 //JavaScript代码区域
 layui.use('element', function(){
-  var element = layui.element;
+	var element = layui.element;
   
 });
 
-layui.use(['form', 'layedit', 'laydate'], function(){
-	  var form = layui.form
-	  ,layer = layui.layer
-	  ,layedit = layui.layedit
-	  ,laydate = layui.laydate;
-	  
-	  //日期
-	  laydate.render({
-	    elem: '#date'
-	  });
-	  laydate.render({
-	    elem: '#date1'
-	  });
-	  
-	  //创建一个编辑器
-	  var editIndex = layedit.build('LAY_demo_editor');
-	 
-	  //自定义验证规则
-	  form.verify({
-	    title: function(value){
-	      if(value.length < 5){
-	        return '标题至少得5个字符啊';
-	      }
-	    }
-	    ,pass: [
-	      /^[\S]{6,12}$/
-	      ,'密码必须6到12位，且不能出现空格'
-	    ]
-	    ,content: function(value){
-	      layedit.sync(editIndex);
-	    }
-	  });
-	  
-	  //监听指定开关
-	  form.on('switch(switchTest)', function(data){
-	    layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
-	      offset: '6px'
-	    });
-	    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-	  });
-	  
-	  //监听提交
-	  form.on('submit(demo1)', function(data){
-	    layer.alert(JSON.stringify(data.field), {
-	      title: '最终的提交信息'
-	    })
-	    return false;
-	  });
-	 
-	  //表单赋值
-	  layui.$('#LAY-component-form-setval').on('click', function(){
-	    form.val('example', {
-	      "username": "贤心" // "name": "value"
-	      ,"password": "123456"
-	      ,"interest": 1
-	      ,"like[write]": true //复选框选中状态
-	      ,"close": true //开关状态
-	      ,"sex": "女"
-	      ,"desc": "我爱 layui"
-	    });
-	  });
-	  
-	  //表单取值
-	  layui.$('#LAY-component-form-getval').on('click', function(){
-	    var data = form.val('example');
-	    alert(JSON.stringify(data));
-	  });	  
+layui.use('layer', function(){ 
+	  var $ = layui.jquery, layer = layui.layer; 
+	  $('#add-project-1').click(function(){
+			$('#submit_from').removeClass('hide');
+	  })
+	
 });
+
 
 layui.use('table', function(){
 	  var table = layui.table;
-	  
 	  table.render({
 	    elem: '#test'
-	    ,url:'/demo/table/user/'
+	    ,url:'/getprojectlist/'
 	    ,cols: [[
-	      {field:'id', width:80, title: '序号qh00', sort: true}
-	      ,{field:'username', width:80, title: '项目名称xmmc'}
-	      ,{field:'sex', width:80, title: '项目来源qh11', sort: true}
-	      ,{field:'city', width:80, title: '开展形式qh31'}
-	      ,{field:'sign', title: '当年成果展示qh21', minWidth: 150}
-	      ,{field:'experience', width:80, title: '经济目标qh32', sort: true}
-	      ,{field:'score', width:80, title: '活动类型qh33', sort: true}
-	      ,{field:'classify', width:80, title: '起始时间qh34'}
-	      ,{field:'wealth', width:135, title: '完成时间qh35', sort: true}
-	      ,{field:'experience', width:80, title: '所处阶段qh36', sort: true}
-	      ,{field:'score', width:80, title: '参加人员（人）qh44', sort: true}
-	      ,{field:'classify', width:80, title: '时间（人月）qh40'}
-	      ,{field:'wealth', width:135, title: '经费（千元）qh51', sort: true}	
-	      ,{field:'wealth', width:135, title: '政府资金（千元）qh52', sort: true}	
+	       {field:'projectName', width:90, title: '项目名称'}
+	      ,{field:'projectFrom', width:90, title: '项目来源'}
+	      ,{field:'developmentForm', width:90, title: '开展形式'}
+	      ,{field:'achievement', width:90,title: '当年成果展示'}
+	      ,{field:'economicGoals', width:90, title: '经济目标'}
+	      ,{field:'activityType', width:80, title: '活动类型'}
+	      ,{field:'startTime', width:90, title: '起始时间'}
+	      ,{field:'endTime', width:90, title: '完成时间'}
+	      ,{field:'stage', width:80, title: '所处阶段'}
+	      ,{field:'personnel', width:80, title: '参加人员（人）'}
+	      ,{field:'time', width:80, title: '时间（人月）'}
+	      ,{field:'capital', width:110, title: '经费（千元）'}	
+	      ,{field:'funds', width:110, title: '政府资金（千元）'}	
+	      ,{fixed: 'right',  toolbar: '#barDemo'}
+	      
 	    ]]
 	    ,page: true
 	  });
 });
 
-
 </script>
+
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
 </body>
 </html>

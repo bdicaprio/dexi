@@ -14,8 +14,9 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from app01.views import Index
+from app01.views import index,getprojectlist
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^index/', Index),
+    url(r'^index/', index),
+    url(r'^getprojectlist/', getprojectlist),
 ]
