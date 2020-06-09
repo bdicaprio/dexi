@@ -6,6 +6,7 @@ from app01 import models
 from _cffi_backend import string
 from django.db import connection
 import json
+from builtins import dict
 
 # Create your views here.
 def index(request,*args,**kwargs):
@@ -34,7 +35,7 @@ def index(request,*args,**kwargs):
     
 #    return render_to_response('index.html')
 
-def getprojectlist(request):
+def getPojectList(request):
     sql = ''
     sql_count = ''
     ID = ''
@@ -53,7 +54,6 @@ def getprojectlist(request):
     cursor.execute(sql)
     rawData = cursor.fetchall()    
     col_names = [desc[0] for desc in cursor.description]
-    print(col_names)
     result = []
     
     for row in rawData:
@@ -69,3 +69,51 @@ def getprojectlist(request):
     count = count[0][0]      
     dict = {"code":0,"msg":"","count":count,"data":result}
     return HttpResponse(json.dumps(dict), content_type="application/json")
+
+def addProject(request):
+    postData = request.POST
+    print(postData)
+    username = request.session.get('username','anybody') 
+    dict = {
+        'organizationCode' : postData.get('organizationCode'),
+        'areaNumber' : postData.get('areaNumber'),
+        'enterpriseName' : postData.get('enterpriseName'),
+        'natureOfCorporation' : postData.get('natureOfCorporation'),
+        'corporateGenderId' : postData.get('corporateGenderId'),
+        'birthday' : postData.get('birthday'),
+        'educationId' : postData.get('educationId'),
+        'address' : postData.get('address'),
+        'postalCode' : postData.get('postalCode'),
+        'registeredAddress' : postData.get('registeredAddress'),
+        'manager' : postData.get('manager'),
+        'telephone' : postData.get('telephone'),       
+        'fax' : postData.get('fax'),
+        'statisticalControlOfficer' : postData.get('statisticalControlOfficer'),
+        'preparedBy' : postData.get('preparedBy'),
+        'preparedByTelephone' : postData.get('preparedByTelephone'),
+        'fillingTime' : postData.get('fillingTime'),
+        'email' : postData.get('email'),
+        'url' : postData.get('url'),
+        'preparedByMobilephone' : postData.get('preparedByMobilephone'),  
+    }
+        
+    return render(
+        request,
+        "index.html", 
+        {
+
+        }                
+    )
+       
+def addCompany(request):
+    postData = request.POST.getlist('compandyData[]')
+    print(postData)
+    for i in postData:
+        print(i)
+    return render(
+        request,
+        "index.html", 
+        {
+
+       }
+    )

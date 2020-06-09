@@ -66,18 +66,18 @@
           </ul>
              <div class="layui-tab-content">
              <div class="layui-tab-item layui-show">
-                 <form class="layui-form" action="">
+                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %}
                       <div class="layui-form-item">
                            <div class="layui-inline">
                                 <label class="layui-form-label">统一社会信用代码或企业组织机构代码(qa03)</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="organizationCode" lay-verify="required" autocomplete="off" class="layui-input">
+                                     <input type="text" name="organizationCode" id='organizationCode' autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">行政区划代码(qa19)</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="areaNumber" lay-verify="required" autocomplete="off" class="layui-input">
+                                     <input type="text" name="areaNumber" id="areaNumber" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>
@@ -86,23 +86,24 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">企业（单位）详细名称(qa04)</label>
                                 <div class="layui-input-inline">
-                                     <input type="tel" name="enterpriseName" lay-verify="required" autocomplete="off" class="layui-input">
+                                     <input type="tel" name="enterpriseName"  id="enterpriseName" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">法人性质（qa15）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="natureOfCorporation" lay-verify="required" autocomplete="off" class="layui-input">
+                                     <input type="text" name="natureOfCorporation" id="natureOfCorporation" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>                     
                       
                       <div class="layui-form-item">
                            <div class="layui-inline">
+                                 <input type='hidden' id='corporateGenderId' name='corporateGenderId' />
                                  <label class="layui-form-label">企业法人性别（qa19）</label>
                                  <div class="layui-input-inline">
-                                        <select name="corporateGender" lay-filter="aihao">
-                                            <option value="" selected=""></option>
+                                        <select name="corporateGender" lay-filter="aihao" id="corporateGender" >
+                                            <option value=""></option>
                                             <option value="0">男</option>
                                             <option value="1">女</option>
                                         </select>
@@ -112,19 +113,20 @@
                             <div class="layui-inline">
                                    <label class="layui-form-label">出生年月（qa20）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="birthday" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                         <input type="text" name="birthday" id="birthday"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
                                    </div>
                             </div>
                             
                             <div class="layui-inline">
+                                   <input type='hidden' id='educationId' name='educationId' />
                                    <label class="layui-form-label">学历（qd22）</label>
                                    <div class="layui-input-inline">
-                                        <select name="education" lay-filter="aihao">
+                                        <select name="education" lay-filter="aihao" id='education'>
                                             <option value=""></option>
-                                            <option value="0">1.研究生</option>
-                                            <option value="0">2.本科</option>
-                                            <option value="0">3.大专</option>
-                                            <option value="0">4.其他</option>
+                                            <option value="1">1.研究生</option>
+                                            <option value="2">2.本科</option>
+                                            <option value="3">3.大专</option>
+                                            <option value="4">4.其他</option>
                                         </select>
                                  </div>
                             </div>
@@ -134,13 +136,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">企业通讯地址（qa05）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="address" lay-verify="" autocomplete="off" class="layui-input">
+                                     <input type="text" name="address" id="address" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">邮政编码（qa06）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="postalCode" lay-verify="" autocomplete="off" class="layui-input">
+                                     <input type="text" name="postalCode" id="postalCode" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>                           
@@ -148,7 +150,7 @@
                       <div class="layui-form-item-address">
                                    <label class="layui-form-label-address">企业注册地址（qa07）</label>
                                    <div class="layui-input-block">
-                                            <input type="text" name="registeredAddress" lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+                                            <input type="text" name="registeredAddress" id="registeredAddress" placeholder="" autocomplete="off" class="layui-input">
                                    </div>
                       </div>                  
   
@@ -156,19 +158,19 @@
                            <div class="layui-inline">
                                  <label class="layui-form-label">企业负责人（qa08）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="manager" lay-verify="" autocomplete="off" class="layui-input">
+                                      <input type="text" name="manager" id="manager" autocomplete="off" class="layui-input">
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label"> 联系电话（qa09）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="telephone" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                         <input type="text" name="telephone" id="telephone" autocomplete="off" class="layui-input">
                                    </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">传真（qa10）</label>
                                    <div class="layui-input-inline">
-                                           <input type="text" name="fax" lay-verify="" autocomplete="off" class="layui-input">
+                                           <input type="text" name="fax" id="fax" autocomplete="off" class="layui-input">
                                    </div>
                             </div>
                       </div>
@@ -177,19 +179,19 @@
                            <div class="layui-inline">
                                  <label class="layui-form-label">统计负责人（qa20）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="statisticalControlOfficer" lay-verify="" autocomplete="off" class="layui-input">
+                                      <input type="text" name="statisticalControlOfficer" id="statisticalControlOfficer" autocomplete="off" class="layui-input">
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">填报人（qa11）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="preparedBy" lay-verify="" autocomplete="off" class="layui-input">
+                                      <input type="text" name="preparedBy" id="preparedBy" autocomplete="off" class="layui-input">
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">填报人电话（qa17）</label>
                                    <div class="layui-input-inline">
-                                           <input type="tel" name="preparedByTelephone" lay-verify="number" autocomplete="off" class="layui-input">
+                                           <input type="tel" name="preparedByTelephone" id="preparedByTelephone" autocomplete="off" class="layui-input">
                                    </div>
                             </div>
                       </div>       
@@ -198,13 +200,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">填报时间（qa12）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="fillingTime" id="fillingTime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                         <input type="text" name="fillingTime" id="fillingTime"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
                                    </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">Email地址（qa13）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                     <input type="text" name="email" id="email" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>                          
@@ -213,30 +215,33 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">网址（qa14）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                                     <input type="text" name="url"  id="url" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">填报人手机（qa17）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="preparedByMobilephone" lay-verify="" autocomplete="off" class="layui-input">
+                                     <input type="text" name="preparedByMobilephone" id="preparedByMobilephone" autocomplete="off" class="layui-input">
                                 </div>
                            </div>
                       </div>     
                       
                       <div style="width:100%;height:50px;">
-                           <div style="display:block;float:right" id="layerDemo">                        
-                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                           <div style="display:block;float:right" id="layerDemo">                                                                            
+                                <input type='submit' class='layui-btn' value='提交'  lay-submit="" lay-filter="save-statistics"> 
                            </div>
                      </div>
  
                      <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-6111334333458862" data-ad-slot="3820120620"></ins>
   
                      <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
-                 </form>
+                 </from>
              </div>
-             <div class="layui-tab-item">                               
-                     <table class="layui-table">
+             
+             
+             <div class="layui-tab-item">   
+                <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %}                            
+                     <table class="layui-table" id="tableCompany">
                             <colgroup>
                                 <col width="450">
                                 <col width="200">
@@ -408,9 +413,11 @@
                       
                       <div style="width:100%;height:50px;">
                            <div style="display:block;float:right" id="layerDemo">                        
-                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                                 <input type='hidden' id='compandyData' name='compandyData' />
+                                 <input type='submit' class='layui-btn' value='保存'  lay-submit="" lay-filter="save-company"> 
                            </div>
-                     </div>                                          
+                     </div>
+                  </from>                                             
              </div>
              
              
@@ -1724,21 +1731,95 @@
   </div>
 </div>
 <script src="/static/layui.js"></script>
+<script src="/static/jquery.min.js" type="text/javascript"></script>
 
 <script>
 //JavaScript代码区域
-layui.use('element', function(){
-	var element = layui.element;
-  
-});
+layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
+      var $ = layui.$
+      ,element = layui.element
+      ,form = layui.form
+      ,layer = layui.layer
+      ,layedit = layui.layedit
+      ,laydate = layui.laydate;
+      
+   
+       laydate.render({
+          elem: '#birthday'
+      });
+
+      laydate.render({
+          elem: '#fillingTime'
+      });
+      
+      form.on('submit(save-statistics)', function(data){
+         var optionCorporateGenderId = document.getElementById("corporateGender").selectedIndex;
+         var optionEducationId = document.getElementById("education").selectedIndex;   
+
+             
+         $('#corporateGenderId').val(optionCorporateGenderId)
+         $('#educationId').val(optionEducationId)      
+
+	     //layer.alert(JSON.stringify(data.field), {
+      
+         // title: "最终的提交信息"
+         //});   
+             	  
+          $.ajax({
+  		   type: 'POST',
+  		   data:data.field,
+           url: '/addProject/',
+  		   cache: false,
+  		   async: false,
+  		   success: function(data){　　　　　　　　　
+           layer.alert("修改完成", { });
+  		}
+      })       
+        return false;        
+     });    
+
+      form.on('submit(save-company)', function(data){
+              var options_company = [];                               
+              $("#tableCompany tr").each(function() {                        
+                     options_company.push($(this).children().eq(2).text());                       
+               });  
+              
+	     //layer.alert(JSON.stringify(data.field), {
+      
+         // title: "最终的提交信息"
+         //});   
+             	  
+          $.ajax({
+  		   type: 'POST',
+           data: {
+               compandyData: options_company,
+               csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+           },
+           url: '/addCompany/',
+  		   cache: false,
+  		   async: false,
+  		   success: function(data){　　　　　　　　　
+           layer.alert("修改完成", { });
+  		}
+      })       
+        return false;        
+     });  
+
+
+
+
+     
+}); 
+
 
 layui.use('layer', function(){ 
 	  var $ = layui.jquery, layer = layui.layer; 
 	  $('#add-project-1').click(function(){
 			$('#submit_from').removeClass('hide');
 	  })
-	
 });
+
+
 
 
 layui.use('table', function(){
@@ -1766,7 +1847,6 @@ layui.use('table', function(){
 	    ,page: true
 	  });
 });
-
 </script>
 
 <script type="text/html" id="barDemo">

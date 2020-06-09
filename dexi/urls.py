@@ -14,9 +14,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from app01.views import index,getprojectlist
+from app01.views import index,getPojectList,addProject,addCompany
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^index/', index),
-    url(r'^getprojectlist/', getprojectlist),
+    url(r'^getprojectlist/', getPojectList),
+    url(r'^addProject/', addProject),
+    url(r'^addCompany/', addCompany),    
 ]
