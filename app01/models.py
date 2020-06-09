@@ -142,7 +142,10 @@ class economic(models.Model):
     qc50 = models.CharField(max_length=64,blank=True,null=True)
     qc39 = models.CharField(max_length=64,blank=True,null=True)
     qc40 = models.CharField(max_length=64,blank=True,null=True)
-    qc41 = models.CharField(max_length=64,blank=True,null=True)                         
+    qc41 = models.CharField(max_length=64,blank=True,null=True)  
+    QC226_1 = models.CharField(max_length=64,blank=True,null=True)
+    QC226_2 = models.CharField(max_length=64,blank=True,null=True)
+    QC226 = models.CharField(max_length=64,blank=True,null=True)                             
     
     
     

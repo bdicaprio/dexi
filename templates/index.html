@@ -65,7 +65,7 @@
              <li>科技活动概况</li>
           </ul>
              <div class="layui-tab-content">
-             <div class="layui-tab-item layui-show">
+               <div class="layui-tab-item layui-show">
                  <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %}
                       <div class="layui-form-item">
                            <div class="layui-inline">
@@ -413,7 +413,7 @@
                       
                       <div style="width:100%;height:50px;">
                            <div style="display:block;float:right" id="layerDemo">                        
-                                 <input type='hidden' id='compandyData' name='compandyData' />
+                                 <input type='hidden' id='companyData' name='companyData' />
                                  <input type='submit' class='layui-btn' value='保存'  lay-submit="" lay-filter="save-company"> 
                            </div>
                      </div>
@@ -424,7 +424,8 @@
              
              
              <div class="layui-tab-item">
-                     <table class="layui-table">
+                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %} 
+                     <table class="layui-table" id="tableEconomic">
                             <colgroup>
                                 <col width="450">
                                 <col width="200">
@@ -635,7 +636,7 @@
                          </tbody>                                              
                       </table> 
                                        
-                     <table class="layui-table">
+                     <table class="layui-table" id="tableEconomicContinues">
                             <colgroup>
                                 <col width="450">
                                 <col width="200">
@@ -837,17 +838,17 @@
                             <tr>
                               <td colspan="4">补充资料：</td>
                             </tr>  
-                            <tr>                                                          
+                            <tr class="replenish">                                                          
                               <td>企业当年是否或得风险投资（QC226_1):</td>
                               <td colspan="3"  contentEditable="true"></td>                              
                             </tr>                              
-                            <tr>                              
+                            <tr class="replenish">                              
                               <td>若是，请注明企业获得风险投资的阶段是（QC226_2):</td>
-                              <td colspan="3"  contentEditable="true"></td>   
+                              <td  colspan="3"  contentEditable="true"></td>   
                             </tr>                              
-                            <tr>                              
+                            <tr class="replenish">                              
                               <td>当年获得创业风险投资机构的风险投资额为（QC226）：</td> 
-                              <td colspan="2"  contentEditable="true"></td>  
+                              <td  colspan="2"  contentEditable="true"></td>  
                               <td>千元</td>                         
                             </tr>                                                                                                                                                                                                                                                                                                                                                                           
                          </tbody>  
@@ -855,12 +856,18 @@
                      
                       <div style="width:100%;height:50px;">
                            <div style="display:block;float:right" id="layerDemo">                        
-                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                                 <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="save-economic">保存</button>-->
+                                 <input type='hidden' id='economicData' name='economicData' />
+                                 <input type='submit' class='layui-btn' value='提交'  lay-submit="" lay-filter="save-economic"> 
                            </div>
-                     </div>                                                                   
+                     </div>   
+                 </from>                                                                   
              </div>
+             
+             
              <div class="layui-tab-item">
-                     <table class="layui-table">
+                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %}
+                     <table class="layui-table" id="tablePersonnel">
                             <colgroup>
                                 <col width="450">
                                 <col width="200">
@@ -1031,9 +1038,12 @@
                       
                       <div style="width:100%;height:50px;">
                            <div style="display:block;float:right" id="layerDemo">                        
-                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                                 <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button> -->
+                                 <input type='hidden' id='personnelData' name='personnelData' />
+                                 <input type='submit' class='layui-btn' value='提交'  lay-submit="" lay-filter="save-personnel">                                  
                            </div>
-                     </div>                                      
+                     </div>   
+                 </from>                                      
              </div>
              
              <div class="layui-tab-item">
@@ -1155,6 +1165,7 @@
              
              
              <div class="layui-tab-item"> 
+                <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %}
                      <table class="layui-table">
                             <colgroup>
                                 <col width="450">
@@ -1718,7 +1729,8 @@
                            <div style="display:block;float:right" id="layerDemo">                        
                                  <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
                            </div>
-                     </div>                                                                                     
+                     </div>
+                 </from>                                                                                        
              </div>
            </div>
         </div>
@@ -1792,7 +1804,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
           $.ajax({
   		   type: 'POST',
            data: {
-               compandyData: options_company,
+               companyData: options_company,
                csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
            },
            url: '/addCompany/',
@@ -1804,7 +1816,74 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
       })       
         return false;        
      });  
+      
+      
+    form.on('submit(save-economic)', function(data){
+          var options_economic = [];
+          var options_economic_continues = [];
+          
+          $("#tableEconomic tr").each(function() {                        
+                 options_economic.push($(this).children().eq(3).text());                       
+           });  
+          $("#tableEconomicContinues tr").each(function() {                        
+        	     options_economic_continues.push($(this).children().eq(3).text());                       
+          });            
+          $("#tableEconomicContinues .replenish").each(function() {                        
+     	     options_economic_continues.push($(this).children().eq(1).text());                       
+       });             
+          
+      alert(options_economic_continues)    
+     //layer.alert(JSON.stringify(data.field), {
+  
+     // title: "最终的提交信息"
+     //});   
+         	  
+      $.ajax({
+		   type: 'POST',
+           data: {
+    	   economicData: options_economic,
+    	   economicContinuesData: options_economic_continues,
+           csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+           },
+           url: '/addEconomic/',
+		   cache: false,
+		   async: false,
+		   success: function(data){　　　　　　　　　
+           layer.alert("修改完成", { });
+		}
+      })       
+    return false;        
+ }); 
+    
+    form.on('submit(save-personnel)', function(data){
+        var options_personnel = [];
+        
+        $("#tablePersonnel tr").each(function() {                        
+        	 options_personnel.push($(this).children().eq(3).text());                       
+         });  
+          
+        
+    alert(options_personnel)    
+   //layer.alert(JSON.stringify(data.field), {
 
+   // title: "最终的提交信息"
+   //});   
+       	  
+    $.ajax({
+		   type: 'POST',
+         data: {
+        	personnelData: options_personnel,
+            csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+         },
+           url: '/addPersonnel/',
+		   cache: false,
+		   async: false,
+		   success: function(data){　　　　　　　　　
+         layer.alert("修改完成", { });
+		}
+    })       
+  return false;        
+}); 
 
 
 
