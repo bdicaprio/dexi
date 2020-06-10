@@ -7,6 +7,7 @@ from _cffi_backend import string
 from django.db import connection
 import json
 from builtins import dict
+from _ast import Dict
 
 # Create your views here.
 def index(request,*args,**kwargs):
@@ -14,20 +15,32 @@ def index(request,*args,**kwargs):
     #result = models.technologyProjects.objects.filter(account)  
     #username_id = str("1")
     
-    result = models.statistics.objects.values("username_id").filter(username_id=1)
-    id_tmp = {}
-    for i in result:
-        id_tmp.update(i)
+#    resultStatistics = models.statistics.objects.values().filter(username_id=1)
+    resultStatistics = models.statistics.objects.get(username_id=1)
+    resultCompany = models.company.objects.get(username_id=1)
+#    resultEconomic = models.economic.objects.get(username_id=1)
+    resultPersonnel = models.personnel.objects.get(username_id=1)
+    resultActivities = models.activities.objects.get(username_id=1)
     
-    username_id = ''  
-    for value in id_tmp.values():
-        username_id = value
-    return render(
+#    id_tmp = {}
+#    for i in resultStatistics:
+#        id_tmp.update(i)
+    
+#    username_id = ''  
+#    for value in id_tmp.values():
+#        username_id = value
+    print(resultStatistics)  
+        
+    return render (
         request,
         "index.html", 
         {
-        "result":result,  
-        "username_id":username_id,     
+        "resultStatistics":resultStatistics, 
+        "resultCompany":resultCompany, 
+#        "resultEconomic":resultEconomic, 
+        "resultPersonnel":resultPersonnel, 
+        "resultActivities":resultActivities,                     
+        "username_id":"1",     
        }
     )
     
@@ -67,7 +80,9 @@ def getPojectList(request):
     dict = {"code":0,"msg":"","count":count,"data":result}
     return HttpResponse(json.dumps(dict), content_type="application/json")
 
-def addProject(request):
+
+
+def addStatistics(request):
     postData = request.POST
     username = request.session.get('username','anybody') 
     dict = {
@@ -75,9 +90,9 @@ def addProject(request):
         'areaNumber' : postData.get('areaNumber'),
         'enterpriseName' : postData.get('enterpriseName'),
         'natureOfCorporation' : postData.get('natureOfCorporation'),
-        'corporateGenderId' : postData.get('corporateGenderId'),
+#        'corporateGenderId' : postData.get('corporateGenderId'),
         'birthday' : postData.get('birthday'),
-        'educationId' : postData.get('educationId'),
+#        'educationId' : postData.get('educationId'),
         'address' : postData.get('address'),
         'postalCode' : postData.get('postalCode'),
         'registeredAddress' : postData.get('registeredAddress'),
@@ -90,10 +105,45 @@ def addProject(request):
         'fillingTime' : postData.get('fillingTime'),
         'email' : postData.get('email'),
         'url' : postData.get('url'),
-        'preparedByMobilephone' : postData.get('preparedByMobilephone'),  
+        'preparedByMobilephone' : postData.get('preparedByMobilephone'), 
+        'username_id' : '1',    
     }
     
-#    models.statistics.objects.create(**dict)   
+    print(dict)
+    
+    models.statistics.objects.create(**dict)       
+    
+    return render(
+        request,
+        "index.html", 
+        {
+
+        }                
+    )
+    
+
+    
+def addProject(request):
+    postData = request.POST
+    username = request.session.get('username','anybody') 
+    
+    dict = {
+        'projectName' : postData.get('projectName'),
+        'projectFrom' : postData.get('projectFrom'),
+        'developmentForm' : postData.get('developmentForm'),
+        'achievement' : postData.get('achievement'),
+        'economicGoals' : postData.get('economicGoals'),
+        'activityType' : postData.get('activityType'),
+        'stage' : postData.get('stage'),
+        'startTime' : postData.get('startTime'),
+        'endTime' : postData.get('endTime'),
+        'personnel' : postData.get('personnel'),
+        'funds' : postData.get('funds'),
+        'capital' : postData.get('capital'),    
+        'username_id' : '1',   
+    }
+    print(dict)
+    models.projects.objects.create(**dict)   
      
     return render(
         request,
@@ -256,8 +306,10 @@ def addPersonnel(request):
        'qd27': postData[24],  
        'qd28': postData[25],                                 
     }
- 
+    print(dict) 
+        
 #    models.personnel.objects.create(**dict) 
+
       
     return render(
         request,
@@ -266,3 +318,112 @@ def addPersonnel(request):
 
        }
     )    
+    
+def addActivities(request):
+    postData = request.POST.getlist('activitiesData[]')
+    postDataContinues = request.POST.getlist('activitiesContinuesData[]')  
+    print(postData[8])
+    print(postDataContinues)   
+    dict = {
+       'qj09': postData[2],
+       'qj67': postData[3],
+       'qj09_1': postData[4],
+       'qj09_2': postData[5],
+       'qj09_3': postData[6],
+       'qj20': postData[8],
+       'qj23_1': postData[9],
+       'qj23_2': postData[10],
+       'qj23_3': postData[11],
+       'qj23_4': postData[12],   
+       'qj23_6': postData[13],
+       'qj23_7': postData[14],
+       'qj33': postData[15],
+       'qj33_1': postData[16],
+       'qj33_2': postData[17],
+       'qj33_4': postData[18],
+       'qj33_3': postData[19],
+       'qj23_5': postData[20],
+       'qj250': postData[22],
+       'qj251': postData[23],  
+       'qj01': postData[25],
+       'qj07_0': postData[26],
+       'qj07_1': postData[27],
+       'qj07_2': postData[28],
+       'qj55': postData[31],
+       'qj56': postData[32],
+       'qj56_1': postData[33],
+       'qj55_1': postData[34],
+       'qj55_2': postData[35],
+       'qj74': postData[36],      
+       'qj57_1': postData[38],
+       'qj75': postData[39],
+       'qj83': postData[40],   
+       'qj83_1': postData[41],   
+       'qj82': postData[42],       
+       'qj73': postDataContinues[2],
+       'qj73_2': postDataContinues[3],
+       'qj73_1': postDataContinues[4],
+       'qj23': postDataContinues[5],
+       'qj24': postDataContinues[6],
+       'qj70': postDataContinues[7],
+       'qj71': postDataContinues[8],
+       'qj72': postDataContinues[9],
+       'qj99': postDataContinues[10],  
+       'qj90': postDataContinues[11],
+       'qj92': postDataContinues[12],
+       'qj102': postDataContinues[13],
+       'qj25': postDataContinues[14],
+       'qj79': postDataContinues[15],
+       'qj77': postDataContinues[16],
+       'qj79_1': postDataContinues[17],
+       'qj79_2': postDataContinues[18],
+       'qj85': postDataContinues[19],
+       'qj85_1': postDataContinues[20],    
+       'qj86': postDataContinues[21],
+       'qj86_1': postDataContinues[22],
+       'qj87': postDataContinues[23],
+       'qj87_1': postDataContinues[24],
+       'qj101': postDataContinues[25],  
+       'qj101_1': postDataContinues[26],
+       'qj100': postDataContinues[27],
+       'qj100_1': postDataContinues[28],
+       'qj98_1': postDataContinues[29],
+       'qj27_1': postDataContinues[30],
+       'qj28_1': postDataContinues[31],  
+       'qj80_1': postDataContinues[36],
+       'qj80': postDataContinues[37],
+       'qj52': postDataContinues[38], 
+       'qj58': postDataContinues[31],  
+       'qj59': postDataContinues[36],
+       'qj61': postDataContinues[37],
+       'qj62': postDataContinues[38],                                       
+    }
+    print(dict) 
+        
+#    models.personnel.objects.create(**dict) 
+
+      
+    return render(
+        request,
+        "index.html", 
+        {
+
+       }
+    )      
+    
+    
+    
+def delProject(request):
+    postData = request.POST.get('delid')
+    print(postData) 
+        
+#    models.personnel.objects.create(**dict) 
+
+      
+    return render(
+        request,
+        "index.html", 
+        {
+
+       }
+    )  

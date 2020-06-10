@@ -66,18 +66,18 @@
           </ul>
              <div class="layui-tab-content">
                <div class="layui-tab-item layui-show">
-                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %}
+                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter="example123">{% csrf_token %}
                       <div class="layui-form-item">
                            <div class="layui-inline">
                                 <label class="layui-form-label">统一社会信用代码或企业组织机构代码(qa03)</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="organizationCode" id='organizationCode' autocomplete="off" class="layui-input">
+                                     <input type="text" name="organizationCode" id='organizationCode' autocomplete="off" class="layui-input" value={{ resultStatistics.organizationCode }} >
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">行政区划代码(qa19)</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="areaNumber" id="areaNumber" autocomplete="off" class="layui-input">
+                                     <input type="text" name="areaNumber" id="areaNumber" autocomplete="off" class="layui-input" value={{ resultStatistics.areaNumber }}>
                                 </div>
                            </div>
                       </div>
@@ -86,13 +86,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">企业（单位）详细名称(qa04)</label>
                                 <div class="layui-input-inline">
-                                     <input type="tel" name="enterpriseName"  id="enterpriseName" autocomplete="off" class="layui-input">
+                                     <input type="tel" name="enterpriseName"  id="enterpriseName" autocomplete="off" class="layui-input" value={{ resultStatistics.enterpriseName }} >
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">法人性质（qa15）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="natureOfCorporation" id="natureOfCorporation" autocomplete="off" class="layui-input">
+                                     <input type="text" name="natureOfCorporation" id="natureOfCorporation" autocomplete="off" class="layui-input" value={{ resultStatistics.natureOfCorporation }} >
                                 </div>
                            </div>
                       </div>                     
@@ -102,7 +102,7 @@
                                  <input type='hidden' id='corporateGenderId' name='corporateGenderId' />
                                  <label class="layui-form-label">企业法人性别（qa19）</label>
                                  <div class="layui-input-inline">
-                                        <select name="corporateGender" lay-filter="aihao" id="corporateGender" >
+                                        <select name="corporateGender" lay-filter="aihao" id="corporateGender">
                                             <option value=""></option>
                                             <option value="0">男</option>
                                             <option value="1">女</option>
@@ -113,7 +113,7 @@
                             <div class="layui-inline">
                                    <label class="layui-form-label">出生年月（qa20）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="birthday" id="birthday"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                         <input type="text" name="birthday" id="birthday"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value={{ resultStatistics.birthday|date:"Y-m-d H:i:s"  }} >
                                    </div>
                             </div>
                             
@@ -121,7 +121,7 @@
                                    <input type='hidden' id='educationId' name='educationId' />
                                    <label class="layui-form-label">学历（qd22）</label>
                                    <div class="layui-input-inline">
-                                        <select name="education" lay-filter="aihao" id='education'>
+                                        <select name="education" lay-filter="aihao" id='education'  >
                                             <option value=""></option>
                                             <option value="1">1.研究生</option>
                                             <option value="2">2.本科</option>
@@ -136,13 +136,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">企业通讯地址（qa05）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="address" id="address" autocomplete="off" class="layui-input">
+                                     <input type="text" name="address" id="address" autocomplete="off" class="layui-input" value={{ resultStatistics.address }} >
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">邮政编码（qa06）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="postalCode" id="postalCode" autocomplete="off" class="layui-input">
+                                     <input type="text" name="postalCode" id="postalCode" autocomplete="off" class="layui-input" value={{ resultStatistics.postalCode }} >
                                 </div>
                            </div>
                       </div>                           
@@ -150,7 +150,7 @@
                       <div class="layui-form-item-address">
                                    <label class="layui-form-label-address">企业注册地址（qa07）</label>
                                    <div class="layui-input-block">
-                                            <input type="text" name="registeredAddress" id="registeredAddress" placeholder="" autocomplete="off" class="layui-input">
+                                            <input type="text" name="registeredAddress" id="registeredAddress" placeholder="" autocomplete="off" class="layui-input" value={{ resultStatistics.registeredAddress }} >
                                    </div>
                       </div>                  
   
@@ -158,19 +158,19 @@
                            <div class="layui-inline">
                                  <label class="layui-form-label">企业负责人（qa08）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="manager" id="manager" autocomplete="off" class="layui-input">
+                                      <input type="text" name="manager" id="manager" autocomplete="off" class="layui-input" value={{ resultStatistics.manager }} >
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label"> 联系电话（qa09）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="telephone" id="telephone" autocomplete="off" class="layui-input">
+                                         <input type="text" name="telephone" id="telephone" autocomplete="off" class="layui-input" value={{ resultStatistics.telephone }} >
                                    </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">传真（qa10）</label>
                                    <div class="layui-input-inline">
-                                           <input type="text" name="fax" id="fax" autocomplete="off" class="layui-input">
+                                           <input type="text" name="fax" id="fax" autocomplete="off" class="layui-input" value={{ resultStatistics.fax }} >
                                    </div>
                             </div>
                       </div>
@@ -179,19 +179,19 @@
                            <div class="layui-inline">
                                  <label class="layui-form-label">统计负责人（qa20）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="statisticalControlOfficer" id="statisticalControlOfficer" autocomplete="off" class="layui-input">
+                                      <input type="text" name="statisticalControlOfficer" id="statisticalControlOfficer" autocomplete="off" class="layui-input" value={{ resultStatistics.statisticalControlOfficer }} >
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">填报人（qa11）</label>
                                  <div class="layui-input-inline">
-                                      <input type="text" name="preparedBy" id="preparedBy" autocomplete="off" class="layui-input">
+                                      <input type="text" name="preparedBy" id="preparedBy" autocomplete="off" class="layui-input" value={{ resultStatistics.preparedBy }} >
                                   </div>
                             </div>
                             <div class="layui-inline">
                                    <label class="layui-form-label">填报人电话（qa17）</label>
                                    <div class="layui-input-inline">
-                                           <input type="tel" name="preparedByTelephone" id="preparedByTelephone" autocomplete="off" class="layui-input">
+                                           <input type="tel" name="preparedByTelephone" id="preparedByTelephone" autocomplete="off" class="layui-input" value={{ resultStatistics.preparedByTelephone }} >
                                    </div>
                             </div>
                       </div>       
@@ -200,13 +200,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">填报时间（qa12）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="fillingTime" id="fillingTime"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                         <input type="text" name="fillingTime" id="fillingTime"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value={{ resultStatistics.fillingTime|date:"Y-m-d H:i:s"  }} >
                                    </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">Email地址（qa13）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="email" id="email" autocomplete="off" class="layui-input">
+                                     <input type="text" name="email" id="email" autocomplete="off" class="layui-input" value={{ resultStatistics.email }} >
                                 </div>
                            </div>
                       </div>                          
@@ -215,13 +215,13 @@
                            <div class="layui-inline">
                                 <label class="layui-form-label">网址（qa14）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="url"  id="url" autocomplete="off" class="layui-input">
+                                     <input type="text" name="url"  id="url" autocomplete="off" class="layui-input" value={{ resultStatistics.url }} >
                                 </div>
                            </div>
                            <div class="layui-inline">
                                 <label class="layui-form-label">填报人手机（qa17）</label>
                                 <div class="layui-input-inline">
-                                     <input type="text" name="preparedByMobilephone" id="preparedByMobilephone" autocomplete="off" class="layui-input">
+                                     <input type="text" name="preparedByMobilephone" id="preparedByMobilephone" autocomplete="off" class="layui-input" value={{ resultStatistics.preparedByMobilephone }} >
                                 </div>
                            </div>
                       </div>     
@@ -258,7 +258,7 @@
                             <tr>
                               <td>企业注册地是否在国家高新技术产业开发区内</td>
                               <td>qb07_2</td>
-                              <td contentEditable="true"></td>
+                              <td contentEditable="true">{{ resultCompany.qb07_2 }}</td>
                             </tr>
                             <tr>
                               <td>企业主要生产经营活动是否在国家高新技术产业开发区内</td>
@@ -1049,7 +1049,7 @@
              <div class="layui-tab-item">
                  <div style="width:100%;height:50px;">
                     <div style="display:block;float:right" id="layerDemo">                        
-                           <button data-method="offset" data-type="auto" class="layui-btn" id="add-project-1">添加</button>
+                           <button data-method="offset" data-type="auto" class="layui-btn" id="add-project-1">添加</button>                          
                     </div>
                  </div>
                  
@@ -1057,13 +1057,13 @@
                  <div id='shade' class='shade hide'  style="position:fixed;height:100%;width:100%;top:0px;bottom:0px;left:0px;rigth:0px;background-color:#ddd;z-index:1040;opacity: 0.5;"></div>
                  <!-- 遮罩层结束 -->                 
                  
-                 <!-- 编辑层开始 -->
+                 <!-- 添加层开始 -->
                      <div id='submit_from' class='submit_from hide layui-anim layui-anim-scale' style="position:fixed;max-height:550px;width:1000px;top:15%;bottom:0%;left:20%;background-color:white;z-index:1080;overflow:auto;">
-                            <form class="layui-form" method='post' action='' onsubmit="return dosubmit();">
+                            <form class="layui-form" method='post' action='' onsubmit="return dosubmit();" lay-filter="example">{% csrf_token %}
                                       <div class="layui-form-item">
                                             <label class="layui-form-label-project">项目名称</label>
                                                 <div class="layui-input-block">
-                                                      <input class="layui-input-project" type="text" name="projectName" lay-verify="title" autocomplete="off" placeholder="请输入项目名称" >
+                                                      <input class="layui-input-project" type="text" name="projectName" id="projectName" lay-verify="title" autocomplete="off" placeholder="请输入项目名称" >
                                                 </div>
                                       </div>
                                       
@@ -1073,19 +1073,19 @@
                                               <div class="layui-inline">
                                                       <label class="layui-form-label-project">项目来源</label>
                                                       <div class="layui-input-inline">
-                                                            <input type="text" name="projectFrom" lay-verify="required|number" autocomplete="off" class="layui-input-project-small">
+                                                            <input type="text" name="projectFrom"  autocomplete="off" id="projectFrom" class="layui-input-project-small">
                                                       </div>
                                               </div>
                                               <div class="layui-inline">
                                                      <label class="layui-form-label-project">开展形式</label>
                                                      <div class="layui-input-inline">
-                                                           <input type="text" name="developmentForm " id="developmentForm" lay-verify="required|number"  autocomplete="off" class="layui-input-project-small">
+                                                           <input type="text" name="developmentForm " id="developmentForm"  autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                                </div>
                                               <div class="layui-inline">
                                                      <label class="layui-form-label-project">当年成果展示</label>
                                                      <div class="layui-input-inline">
-                                                           <input type="text" name="achievement" id="achievement" lay-verify="required|number"  autocomplete="off" class="layui-input-project-small">
+                                                           <input type="text" name="achievement" id="achievement"   autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                                </div>                                                 
                                         </div>  
@@ -1095,19 +1095,19 @@
                                               <div class="layui-inline">
                                                       <label class="layui-form-label-project">经济目标</label>
                                                       <div class="layui-input-inline">
-                                                            <input type="text" name="economicGoals" lay-verify="required|number" autocomplete="off" class="layui-input-project-small">
+                                                            <input type="text" name="economicGoals"  autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                               </div>
                                               <div class="layui-inline">
                                                      <label class="layui-form-label-project">活动类型</label>
                                                      <div class="layui-input-inline">
-                                                           <input type="text" name="activityType" id="activityType" lay-verify="required|number" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input-project-small">
+                                                           <input type="text" name="activityType" id="activityType"  autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                                </div>
                                               <div class="layui-inline">
                                                      <label class="layui-form-label-project">所处阶段</label>
                                                      <div class="layui-input-inline">
-                                                           <input type="text" name="stage" id="stage" lay-verify="required|number"  autocomplete="off" class="layui-input-project-small">
+                                                           <input type="text" name="stage" id="stage"   autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                                </div>                                                 
                                         </div> 
@@ -1117,19 +1117,19 @@
                                               <div class="layui-inline">
                                                       <label class="layui-form-label-project">起始时间</label>
                                                       <div class="layui-input-inline">
-                                                            <input type="text" name="startTime" id="startTime" lay-verify="date" placeholder="yyyy-MM-dd"  autocomplete="off" class="layui-input-project-small">
+                                                            <input type="text" name="startTime" id="startTime" placeholder="yyyy-MM-dd"  autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                               </div>
                                               <div class="layui-inline">
                                                      <label class="layui-form-label-project">完成时间</label>
                                                      <div class="layui-input-inline">
-                                                           <input type="text" name="endTime" id="endTime" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input-project-small">
+                                                           <input type="text" name="endTime" id="endTime"   placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                                </div>                                              
                                               <div class="layui-inline">
                                                      <label class="layui-form-label-project">参加人员（人）</label>
                                                      <div class="layui-input-inline">
-                                                           <input type="text" name="personnel" id="personnel" lay-verify="required|number"  autocomplete="off" class="layui-input-project-small">
+                                                           <input type="text" name="personnel" id="personnel"  autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                                </div>                                               
                                         </div> 
@@ -1138,35 +1138,56 @@
                                               <div class="layui-inline">
                                                       <label class="layui-form-label-project">经费（千元）</label>
                                                       <div class="layui-input-inline">
-                                                            <input type="text" name="funds" lay-verify="required" autocomplete="off" class="layui-input-project-small">
+                                                            <input type="text" name="funds"  autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                               </div>
                                               <div class="layui-inline">
                                                      <label class="layui-form-label-project">政府资金（千元）</label>
                                                      <div class="layui-input-inline">
-                                                           <input type="text" name="capital" id="capital" lay-verify="required"  autocomplete="off" class="layui-input-project-small">
+                                                           <input type="text" name="capital" id="capital"  autocomplete="off" class="layui-input-project-small">
                                                       </div>
                                                </div>                                              
                                               <div class="layui-inline">
                                                          <div style="width:100%;height:50px;">
                                                                 <div style="display:block;float:right" id="layerDemo">                        
-                                                                        <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">添加</button>
-                                                                        <button data-method="offset" data-type="auto" class="layui-btn" id="cancel-project">取消</button>
+                                                                       <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">添加</button>
+                                                                        <button data-method="offset" data-type="auto" class="layui-btn" id="cancel-project">取消</button>-->
+                                                                        <input type='hidden' id='activitiesData' name='activitiesData' />
+                                                                        <input type='submit' class='layui-btn' value='保存'  lay-submit="" lay-filter="save-project">  
+                                                                        <input type='submit' class='layui-btn' value='取消'  lay-submit="" lay-filter="cancal-project">                                                                                                                                                   
                                                                 </div>
                                                           </div>                                                      
                                                </div>                                               
                                         </div>                                                                                                                                                                  
 	                        </form>
-	                  </div>             
+	                  </div>    
+	                  
+	                  
+<!--删除层开始  -->
+                     <div id='wpd-model-del' class='wpq-model-del hide'  style="position:fixed;height:200px;width:300px;top:30%;bottom:0%;left:40%;rigth:0px;background-color:#E8FAF6;z-index:1050;border-radius: 8px;box-shadow: #666 0px 0px 10px;behavior: url(/PIE.htc);">
+	
+	                             <div class='title' style='padding-top:12px;text-align:center;height:40px;width:300px;background-color:#E8FAF6'>真的要删除吗</div>
+	                                 <form id='form' class='form' method='post' action='/delproject/'>{% csrf_token %}
+		 	
+		                        <div>
+			                         <input type='hidden' id='delid' name='delid' />
+		                        </div>
+		                        <div class='bottom' style='padding:20% 0 0 5%;text-align:center'>
+			                    <input type='submit' class='btn1' value='确定' /><input type='button' class='btn1' value='取消'  onclick="Canceldel()" />
+		              </div>
+</div>
+<!-- 删除层结束 -->	          
+
+                 
 	                            
                  <!-- 获取表格数据 --> 
-             	 <table class="layui-hide" id="test"></table>      
+             	 <table class="layui-hide" id="test" lay-filter="demo123"></table>      
              </div>
              
              
              <div class="layui-tab-item"> 
                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %}
-                     <table class="layui-table">
+                     <table class="layui-table" id="tableActivities">
                             <colgroup>
                                 <col width="450">
                                 <col width="200">
@@ -1439,7 +1460,7 @@
 					  
 					  
 					  
-                     <table class="layui-table">
+                     <table class="layui-table" id="tableActivitiesContinues">
                             <colgroup>
                                 <col width="450">
                                 <col width="200">
@@ -1727,7 +1748,9 @@
                      
                       <div style="width:100%;height:50px;">
                            <div style="display:block;float:right" id="layerDemo">                        
-                                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>
+                                 <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>-->
+                                 <input type='hidden' id='activitiesData' name='activitiesData' />
+                                 <input type='submit' class='layui-btn' value='提交'  lay-submit="" lay-filter="save-activities">                                     
                            </div>
                      </div>
                  </from>                                                                                        
@@ -1755,7 +1778,12 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
       ,layedit = layui.layedit
       ,laydate = layui.laydate;
       
-   
+     form.val('example123', {
+       "corporateGender": "1"
+      ,"education": "1"
+    });
+
+
        laydate.render({
           elem: '#birthday'
       });
@@ -1780,7 +1808,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
           $.ajax({
   		   type: 'POST',
   		   data:data.field,
-           url: '/addProject/',
+           url: '/addStatistics/',
   		   cache: false,
   		   async: false,
   		   success: function(data){　　　　　　　　　
@@ -1886,15 +1914,110 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
 }); 
 
 
+    form.on('submit(save-activities)', function(data){
+        var options_activities = [];
+        var options_activities_continues = [];
+        
+        $("#tableActivities tr").each(function() {                        
+        	 options_activities.push($(this).children().eq(3).text());                       
+         });
+          
+        $("#tableActivitiesContinues tr").each(function() {                        
+        	 options_activities_continues.push($(this).children().eq(3).text());                       
+         });             
+         
+      
+   //layer.alert(JSON.stringify(data.field), {
 
+   // title: "最终的提交信息"
+   //});   
+       	  
+    $.ajax({
+		   type: 'POST',
+           data: {
+        	activitiesData: options_activities,
+    	    activitiesContinuesData: options_activities_continues,        	       	
+            csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+         },
+           url: '/addActivities/',
+		   cache: false,
+		   async: false,
+		   success: function(data){　　　　　　　　　
+         layer.alert("修改完成", { });
+		}
+    })       
+  return false;        
+}); 
+
+      form.on('submit(save-project)', function(data){
+          
+	     //layer.alert(JSON.stringify(data.field), {
+      
+         // title: "最终的提交信息"
+         //});   
+         $('#submit_from').addClass('hide'); 
+          form.val('example',{
+          "projectName": ""
+          ,"achievement": ""  
+          ,"economicGoals": ""    
+          ,"activityType": ""      
+          ,"stage": ""  
+          ,"startTime": ""    
+          ,"endTime": ""    
+          ,"personnel": ""  
+          ,"funds": ""    
+          ,"capital": ""              
+         }) ;            
+         
+          $.ajax({
+  		   type: 'POST',
+  		   data:data.field,
+           url: '/addProject/',
+  		   cache: false,
+  		   async: false,
+  		   success: function(data){　　　　　　　　　
+           layer.alert("修改完成", { });
+  		}
+      })       
+        return false;             
+     }); 
      
+
+      form.on('submit(cancal-project)', function(data){
+         $('#submit_from').addClass('hide'); 
+          form.val('example',{
+          "projectName": ""
+          ,"achievement": ""  
+          ,"economicGoals": ""    
+          ,"activityType": ""      
+          ,"stage": ""  
+          ,"startTime": ""    
+          ,"endTime": ""    
+          ,"personnel": ""  
+          ,"funds": ""    
+          ,"capital": ""              
+         }) ; 
+         return false;                            
+     });      
+         
 }); 
 
 
-layui.use('layer', function(){ 
-	  var $ = layui.jquery, layer = layui.layer; 
+layui.use(['layer','jquery','element','form', 'layedit', 'laydate'], function(){ 
+	  var $ = layui.jquery
+	  , layer = layui.layer
+	  , laydate = layui.laydate;
 	  $('#add-project-1').click(function(){
 			$('#submit_from').removeClass('hide');
+			
+			laydate.render({
+                 elem: '#startTime'
+             });
+             
+ 
+            laydate.render({
+                elem: '#endTime'
+            });
 	  })
 });
 
@@ -1925,6 +2048,45 @@ layui.use('table', function(){
 	    ]]
 	    ,page: true
 	  });
+	  
+	  table.on('tool(demo123)', function(obj){
+	       var data = obj.data;
+           if(obj.event === 'del'){
+                 layer.confirm('真的要删除吗', function(index){
+                    var delid = data.id
+                    $.ajax({
+	       		        type:'POST',
+                        data: {
+        	                  delid: delid, 	       	
+                              csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+                        },
+	                    url: '/delProject/',
+	       		        cache:false,
+	       		        async:false,
+	       		        success:function(data){　　　　　　　　　
+	       		        layer.alert("删除完成", { });
+	       		        }
+	             })                               
+                 layer.close(index);
+              });                
+           } 
+           else if(obj.event === 'edit'){
+               var id = data.id               
+               $('#projectName').val(data.projectName)
+               $('#projectFrom').val(data.projectFrom)
+               $('#developmentForm').val(data.developmentForm)
+               $('#achievement').val(data.achievement)
+               $('#economicGoals').val(data.economicGoals)
+               $('#activityType').val(data.activityType)
+               $('#stage').val(data.stage)
+               $('#startTime').val(data.startTime)
+               $('#endTime').val(data.endTime)
+               $('#personnel').val(data.personnel)               
+               $('#funds').val(data.funds)
+               $('#capital').val(data.capital)                         
+               $('#submit_from').removeClass('hide');                                        
+           }          
+      });
 });
 </script>
 
