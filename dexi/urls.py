@@ -14,17 +14,33 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from app01.views import index,getPojectList,addProject,addCompany,addEconomic,addPersonnel,addActivities,addStatistics,delProject
+from app01 import views
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^index/', index),
-    url(r'^getprojectlist/', getPojectList),
-    url(r'^addProject/', addProject),
-    url(r'^addCompany/', addCompany),    
-    url(r'^addEconomic/', addEconomic), 
-    url(r'^addPersonnel/', addPersonnel), 
-    url(r'^addActivities/', addActivities),
-    url(r'^addStatistics/', addStatistics),
-    url(r'^delProject/', delProject),    
+    url(r'^login/', views.login),
+    url(r'^index/', views.index),
+    url(r'^getprojectlist/', views.getPojectList),
+    url(r'^addProject/', views.addProject),
+    url(r'^addCompany/', views.addCompany),    
+    url(r'^addEconomic/', views.addEconomic), 
+    url(r'^addPersonnel/', views.addPersonnel), 
+    url(r'^addActivities/', views.addActivities),
+    url(r'^addStatistics/', views.addStatistics),
+    url(r'^delProject/', views.delProject),    
+    url(r'^member/', views.member),   
+    url(r'^saveUserinfo/', views.saveUserinfo),   
+    url(r'^changepasswd/', views.changepasswd),   
+    url(r'^changePassword/', views.changePassword),
+    url(r'^membermanager/', views.membermanager), 
+    url(r'^getuserinfo/', views.getuserinfo),
+    url(r'^torchgather/', views.torchgather),
+    url(r'^getStatistics/', views.getStatistics),  
+    url(r'^getCompany/', views.getCompany),
+    url(r'^getEconomic/', views.getEconomic),
+    url(r'^getPersonnel/', views.getPersonnel),  
+    url(r'^getProjects/', views.getProjects),
+    url(r'^getActivities/', views.getActivities),    
     
+                   
+                                
 ]

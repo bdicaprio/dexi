@@ -1,23 +1,32 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
 
 
 # Create your models here.
-class user(models.Model):
-    id = models.AutoField(primary_key=True) 
-    account = models.CharField(max_length=16,blank=True,null=True)
-    password = models.CharField(max_length=16,blank=True,null=True)
-    name = models.CharField(max_length=16,blank=True,null=True)
-    nickname = models.CharField(max_length=16,blank=True,null=True)
-    sex = models.BooleanField()
-    telephone = models.IntegerField(blank=True,null=True)
-    email = models.EmailField()
-    companyname = models.CharField(max_length=16,blank=True,null=True) 
-    remarks = models.TextField(blank=True,null=True)
 
-#ÆóÒµÍ³¼Æ±í
+
+
+class userProfile(AbstractUser):
+    nickname = models.CharField(max_length=50,blank=True,null=True)    
+    phone = models.CharField(max_length=20, default='')
+    role = models.CharField(max_length=10, default='user', choices=(('user', 'æ™®é€šç”¨æˆ·'), ('admin', 'ç®¡ç†å‘˜'), ('vip', 'VIP')))
+    companyname = models.CharField(max_length=16,blank=True,null=True) 
+    remarks = models.TextField(blank=True,null=True)    
+    last_active = models.DateField(auto_now_add=True)
+    created_time = models.DateTimeField(auto_now_add=True)
+    hyperlink = models.CharField(max_length=16,blank=True,null=True,default="ç‚¹å‡»æŸ¥çœ‹è¯¦ç»†ä¿¡æ¯") 
+    
+    class Meta:
+        db_table = 'auth_user'
+        
+
+
+
+#ï¿½ï¿½ÒµÍ³ï¿½Æ±ï¿½
 class statistics(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(user,blank=True,null=True)
+    username = models.ForeignKey(userProfile,blank=True,null=True)
     organizationCode = models.CharField(max_length=16,blank=True,null=True)
     areaNumber = models.CharField(max_length=16,blank=True,null=True)
     enterpriseName = models.CharField(max_length=16,blank=True,null=True)
@@ -39,10 +48,10 @@ class statistics(models.Model):
     url = models.CharField(max_length=16,blank=True,null=True)
     preparedByMobilephone = models.CharField(max_length=16,blank=True,null=True)
     
-#ÆóÒµ¸Å¿ö±í
+#ï¿½ï¿½Òµï¿½Å¿ï¿½ï¿½ï¿½
 class company(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(user,blank=True,null=True)
+    username = models.ForeignKey(userProfile,blank=True,null=True)
     qb07_2 = models.CharField(max_length=64,blank=True,null=True)
     qb07_3 = models.CharField(max_length=64,blank=True,null=True)
     qb08 = models.TextField(max_length=64,blank=True,null=True) 
@@ -77,10 +86,10 @@ class company(models.Model):
     qb16_1 = models.TextField(max_length=64,blank=True,null=True)
            
     
-#¾­¼Ã¸Å¿ö±í
+#ï¿½ï¿½ï¿½Ã¸Å¿ï¿½ï¿½ï¿½
 class economic(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(user,blank=True,null=True)
+    username = models.ForeignKey(userProfile,blank=True,null=True)
     qc02 = models.CharField(max_length=64,blank=True,null=True)
     qc02_05 = models.CharField(max_length=64,blank=True,null=True)
     qc55 = models.CharField(max_length=64,blank=True,null=True)
@@ -149,10 +158,10 @@ class economic(models.Model):
     
     
     
-#ÈËÔ±¸Å¿ö±í
+#ï¿½ï¿½Ô±ï¿½Å¿ï¿½ï¿½ï¿½
 class personnel(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(user,blank=True,null=True)
+    username = models.ForeignKey(userProfile,blank=True,null=True)
     qd01 = models.CharField(max_length=64,blank=True,null=True)
     qd03 = models.CharField(max_length=8,blank=True,null=True)
     qd25 = models.CharField(max_length=16,blank=True,null=True)
@@ -176,10 +185,10 @@ class personnel(models.Model):
     qd28 = models.IntegerField(blank=True,null=True)
 
     
-#¿Æ¼¼ÏîÄ¿¸Å¿ö    
+#ï¿½Æ¼ï¿½ï¿½ï¿½Ä¿ï¿½Å¿ï¿½    
 class projects(models.Model):
     id = models.AutoField(primary_key=True) 
-    username = models.ForeignKey(user,blank=True,null=True)
+    username = models.ForeignKey(userProfile,blank=True,null=True)
     projectName = models.CharField(max_length=64,blank=True,null=True)   
     projectFrom = models.CharField(max_length=64,blank=True,null=True)   
     developmentForm = models.CharField(max_length=64,blank=True,null=True)
@@ -194,10 +203,10 @@ class projects(models.Model):
     funds = models.IntegerField(blank=True,null=True)
     capital = models.IntegerField(blank=True,null=True)
 
-#¿Æ¼¼»î¶¯¸Å¿ö    
+#ï¿½Æ¼ï¿½ï¿½î¶¯ï¿½Å¿ï¿½    
 class activities(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(user,blank=True,null=True)
+    username = models.ForeignKey(userProfile,blank=True,null=True)
     qj09 = models.CharField(max_length=64,blank=True,null=True)
     qj67 = models.CharField(max_length=64,blank=True,null=True)
     qj09_1 = models.CharField(max_length=64,blank=True,null=True)

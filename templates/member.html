@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+        <div class="layui-tab">
+             <div class="layui-tab-content">
+               <div class="layui-tab-item layui-show">
+                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter="example">{% csrf_token %}
+                     <div class="layui-inline" style="margin-top:50px;">
+                                <label class="layui-form-label" style="margin-left:300px;">账号</label>
+                                <div class="layui-input-inline" >
+                                     <input style="width:600px;" readonly="readonly" type="text" name="username" id='username' autocomplete="off" class="layui-input" value={{ resultUser.username }} >
+                                </div>
+                      </div>
+                     <div class="layui-inline" style="margin-top:30px;">
+                                <label class="layui-form-label" style="margin-left:300px;">昵称</label>
+                                <div class="layui-input-inline" >
+                                     <input style="width:600px;" type="text" name="nickname" id='nickname' autocomplete="off" class="layui-input" value={{ resultUser.nickname }} >
+                                </div>
+                      </div>    
+                     <div class="layui-inline" style="margin-top:30px;">
+                                <label class="layui-form-label" style="margin-left:300px;">手机号</label>
+                                <div class="layui-input-inline" >
+                                     <input style="width:600px;" type="text" name="phone" id='phone' autocomplete="off" class="layui-input" value={{ resultUser.phone }} >
+                                </div>
+                      </div>  
+                     <div class="layui-inline" style="margin-top:30px;">
+                                <label class="layui-form-label" style="margin-left:300px;">邮箱</label>
+                                <div class="layui-input-inline" >
+                                     <input style="width:600px;" type="text" name="email" id='email' autocomplete="off" class="layui-input" value={{ resultUser.email }} >
+                                </div>
+                      </div>  
+                     <div class="layui-inline" style="margin-top:30px;">
+                                <label class="layui-form-label" style="margin-left:300px;">公司</label>
+                                <div class="layui-input-inline" >
+                                     <input style="width:600px;" type="text" name="companyname" id='companyname' autocomplete="off" class="layui-input" value={{ resultUser.companyname }} >
+                                </div>
+                      </div>      
+
+                     <div class="layui-inline" style="margin-top:30px;">
+                                <label class="layui-form-label" style="margin-left:300px;"></label>
+                                <div style="display:block;float:right" id="layerDemo">                        
+                                      <input type='hidden' id='companyData' name='companyData' />
+                                      <input type='submit' class='layui-btn' value='保存'  lay-submit="" lay-filter="save-userinfo"> 
+                                </div>
+                      </div>                      
+                      
+                      <div class="layui-inline">
+
+                     </div>                      
+                                                                                                                                                           
+                 </from>
+             </div>                                                       
+           </div>
+        </div>
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% block js %}
+<script>
+layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
+      var element = layui.element
+      ,form = layui.form;
+      
+      form.on('submit(save-userinfo)', function(data){
+  
+
+	    // layer.alert(JSON.stringify(data.field), {
+      
+        //  title: "最终的提交信息"
+        // });   
+             	  
+          $.ajax({
+  		   type: 'POST',
+  		   data:data.field,
+           url: '/saveUserinfo/',
+  		   cache: false,
+  		   async: false,
+  		   success: function(data){　　　　　　　　　
+           layer.alert("修改完成", { });
+  		}
+      })       
+        return false;        
+     }); 
+      
+      
+});
+
+</script>
+{% endblock %}

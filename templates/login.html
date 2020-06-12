@@ -8,7 +8,7 @@
     </head>
     <body>
          <div class="fly-header layui-bg-black"> 
-             <div class="layui-container"> <a class="fly-logo" href="/"> <img src="//res.layui.com/static/images/fly/logo.png" alt="layui"> </a> 
+             <div class="layui-container"> <a class="fly-logo" href="/"> <img src="/static/logo.jpg" alt="layui"> </a> 
                  <ul class="layui-nav fly-nav layui-hide-xs"> 
                  </ul> 
                  
@@ -21,45 +21,31 @@
                   <div  class="fly-panel fly-panel-user" pad20> 
                           <div  class="layui-tab layui-tab-brief" lay-filter="user"> 
                                 <ul class="layui-tab-title"> 
-                                       <li class="layui-this">登入</li> <li><a href="/reg/">注册</a></li>
+                                       <li class="layui-this" style="margin-left:500px;">登入</li> 
                                  </ul>                                     
                                             <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;"> 
                                                  <div class="layui-tab-item layui-show"> 
                                                      <div class="layui-form layui-form-pane">
-                                                        <form method="post"> 
-                                                              <div class="layui-form-item"> 
+                                                        <form method="post" action="/login/" >{% csrf_token %}
+                                                              <div class="layui-form-item" style="margin-left:400px;"> 
                                                                      <input type="hidden" name="secret" value="%E9%98%B2%E6%AD%A2%E5%B9%BF%E5%91%8A%E7%8B%97454212"> 
-                                                                     <label for="L_email" class="layui-form-label">手机/邮箱</label> 
+                                                                     <label for="L_username" class="layui-form-label" >用户名</label> 
                                                                      <div class="layui-input-inline"> 
-                                                                         <input type="text" id="L_loginName" name="loginName" required lay-verify="required" autocomplete="off" class="layui-input"> 
-                                                                     </div> 
-                                                                     <div class="layui-form-mid layui-word-aux"> 使用手机或者邮箱中的任意一个均可（若采用手机，请确保你的帐号已绑定过该手机） 
-                                                                     </div> 
+                                                                         <input type="text" id="username" name="username" required lay-verify="required" autocomplete="off" class="layui-input"> 
+                                                                     </div>                                                                   
                                                               </div>
                                                               
-                                                              <div class="layui-form-item">
-                                                                    <label for="L_pass" class="layui-form-label">密码</label>                                       
+                                                              <div class="layui-form-item" style="margin-left:400px;">
+                                                                    <label for="L_password" class="layui-form-label">密码</label>                                       
                                                                     <div class="layui-input-inline"> 
-                                                                       <input type="password" id="L_pass" name="pass" required lay-verify="required" autocomplete="off" class="layui-input">
+                                                                       <input type="password" id="password" name="password" required lay-verify="required" autocomplete="off" class="layui-input">
                                                                     </div> 
                                                                </div>  
                                                                                                                                                           
-                                                               <div class="layui-form-item">
-                                                                    <label for="L_vercode" class="layui-form-label">图形码</label> 
-                                                                    <div class="layui-input-inline"> 
-                                                                         <input type="text" id="L_imagecode" name="imagecode" required lay-verify="required" autocomplete="off" class="layui-input"> 
-                                                                    </div> 
-                                                                    
-                                                                    <div class="layui-form-mid" style="padding: 0!important;">                                                           
-                                                                         <img src="/auth/imagecode?t=1591081051950" class="fly-imagecode"> 
-                                                                    </div> 
-                                                               </div> 
                                                                
-                                                               <div class="layui-form-item"> 
+                                                               <div class="layui-form-item" style="margin-left:500px;"> 
                                                                      <button class="layui-btn" lay-filter="*" lay-submit>立即登录</button> 
-                                                                     <span style="padding-left:20px;">
-                                                                            <a href="/user/forget">忘记密码？</a> 
-                                                                      </span> 
+                                     
                                                                </div>                                                                                                     
                                                      </form>
                                              </div> 
@@ -78,13 +64,6 @@
                  layui.cache.user ={username:'游客' ,uid:-1 ,avatar:'//res.layui.com/static/images/fly/avatar/default.png' ,experience:0 ,sum:0 ,vip:0 ,sex:''};
                  layui.config({version:"1590913495283"}).extend({'fly':'//res.layui.com/static/lay/modules/fly/index'}).use('fly');
             </script>
-             
-            <script>
-                    var _hmt =_hmt ||[];
-                           (function() {var hm =document.createElement("script");
-                                 hm.src ="https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
-                                 var s =document.getElementsByTagName("script")[0];
-                                 s.parentNode.insertBefore(hm,s);})();
-            </script>                           
+                      
      </body>
 </html>

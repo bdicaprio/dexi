@@ -1,15 +1,51 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import migrations, models
+from django.db import models, migrations
+from django.conf import settings
+import django.core.validators
+import django.utils.timezone
+import django.contrib.auth.models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('auth', '0006_require_contenttypes_0002'),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='userProfile',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('password', models.CharField(verbose_name='password', max_length=128)),
+                ('last_login', models.DateTimeField(verbose_name='last login', blank=True, null=True)),
+                ('is_superuser', models.BooleanField(verbose_name='superuser status', default=False, help_text='Designates that this user has all permissions without explicitly assigning them.')),
+                ('username', models.CharField(verbose_name='username', max_length=30, unique=True, help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.', validators=[django.core.validators.RegexValidator('^[\\w.@+-]+$', 'Enter a valid username. This value may contain only letters, numbers and @/./+/-/_ characters.', 'invalid')], error_messages={'unique': 'A user with that username already exists.'})),
+                ('first_name', models.CharField(verbose_name='first name', max_length=30, blank=True)),
+                ('last_name', models.CharField(verbose_name='last name', max_length=30, blank=True)),
+                ('email', models.EmailField(verbose_name='email address', max_length=254, blank=True)),
+                ('is_staff', models.BooleanField(verbose_name='staff status', default=False, help_text='Designates whether the user can log into this admin site.')),
+                ('is_active', models.BooleanField(verbose_name='active', default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.')),
+                ('date_joined', models.DateTimeField(verbose_name='date joined', default=django.utils.timezone.now)),
+                ('nickname', models.CharField(max_length=50, blank=True, null=True)),
+                ('phone', models.CharField(max_length=20, default='')),
+                ('role', models.CharField(max_length=10, default='user', choices=[('user', '普通用户'), ('admin', '管理员'), ('vip', 'VIP')])),
+                ('companyname', models.CharField(max_length=16, blank=True, null=True)),
+                ('remarks', models.TextField(blank=True, null=True)),
+                ('last_active', models.DateField(auto_now_add=True)),
+                ('created_time', models.DateTimeField(auto_now_add=True)),
+                ('groups', models.ManyToManyField(verbose_name='groups', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group')),
+                ('user_permissions', models.ManyToManyField(verbose_name='user permissions', blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission')),
+            ],
+            options={
+                'db_table': 'auth_user',
+            },
+            managers=[
+                ('objects', django.contrib.auth.models.UserManager()),
+            ],
+        ),
         migrations.CreateModel(
             name='activities',
             fields=[
@@ -88,6 +124,7 @@ class Migration(migrations.Migration):
                 ('qj87_1', models.CharField(max_length=64, blank=True, null=True)),
                 ('qj101', models.CharField(max_length=64, blank=True, null=True)),
                 ('qj101_1', models.CharField(max_length=64, blank=True, null=True)),
+                ('username', models.ForeignKey(blank=True, null=True, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -126,6 +163,7 @@ class Migration(migrations.Migration):
                 ('qb15_5', models.TextField(max_length=64, blank=True, null=True)),
                 ('qb16', models.TextField(max_length=64, blank=True, null=True)),
                 ('qb16_1', models.TextField(max_length=64, blank=True, null=True)),
+                ('username', models.ForeignKey(blank=True, null=True, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -193,6 +231,10 @@ class Migration(migrations.Migration):
                 ('qc39', models.CharField(max_length=64, blank=True, null=True)),
                 ('qc40', models.CharField(max_length=64, blank=True, null=True)),
                 ('qc41', models.CharField(max_length=64, blank=True, null=True)),
+                ('QC226_1', models.CharField(max_length=64, blank=True, null=True)),
+                ('QC226_2', models.CharField(max_length=64, blank=True, null=True)),
+                ('QC226', models.CharField(max_length=64, blank=True, null=True)),
+                ('username', models.ForeignKey(blank=True, null=True, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -220,6 +262,7 @@ class Migration(migrations.Migration):
                 ('qd36', models.CharField(max_length=8, blank=True, null=True)),
                 ('qd27', models.CharField(max_length=16, blank=True, null=True)),
                 ('qd28', models.IntegerField(blank=True, null=True)),
+                ('username', models.ForeignKey(blank=True, null=True, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -239,6 +282,7 @@ class Migration(migrations.Migration):
                 ('stage', models.CharField(max_length=64, blank=True, null=True)),
                 ('funds', models.IntegerField(blank=True, null=True)),
                 ('capital', models.IntegerField(blank=True, null=True)),
+                ('username', models.ForeignKey(blank=True, null=True, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -265,51 +309,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254)),
                 ('url', models.CharField(max_length=16, blank=True, null=True)),
                 ('preparedByMobilephone', models.CharField(max_length=16, blank=True, null=True)),
+                ('username', models.ForeignKey(blank=True, null=True, to=settings.AUTH_USER_MODEL)),
             ],
-        ),
-        migrations.CreateModel(
-            name='user',
-            fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('account', models.CharField(max_length=16, blank=True, null=True)),
-                ('password', models.CharField(max_length=16, blank=True, null=True)),
-                ('name', models.CharField(max_length=16, blank=True, null=True)),
-                ('nickname', models.CharField(max_length=16, blank=True, null=True)),
-                ('sex', models.BooleanField()),
-                ('telephone', models.IntegerField(blank=True, null=True)),
-                ('email', models.EmailField(max_length=254)),
-                ('companyname', models.CharField(max_length=16, blank=True, null=True)),
-                ('remarks', models.TextField(blank=True, null=True)),
-            ],
-        ),
-        migrations.AddField(
-            model_name='statistics',
-            name='username',
-            field=models.ForeignKey(blank=True, null=True, to='app01.user'),
-        ),
-        migrations.AddField(
-            model_name='projects',
-            name='username',
-            field=models.ForeignKey(blank=True, null=True, to='app01.user'),
-        ),
-        migrations.AddField(
-            model_name='personnel',
-            name='username',
-            field=models.ForeignKey(blank=True, null=True, to='app01.user'),
-        ),
-        migrations.AddField(
-            model_name='economic',
-            name='username',
-            field=models.ForeignKey(blank=True, null=True, to='app01.user'),
-        ),
-        migrations.AddField(
-            model_name='company',
-            name='username',
-            field=models.ForeignKey(blank=True, null=True, to='app01.user'),
-        ),
-        migrations.AddField(
-            model_name='activities',
-            name='username',
-            field=models.ForeignKey(blank=True, null=True, to='app01.user'),
         ),
     ]
