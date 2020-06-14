@@ -4,19 +4,29 @@
   <div class="layui-body">
     <!-- 内容主体区域 -->
 
-                 
-                    
-      <div style="margin-top:30px;width:100%;height:50px;">
-            <div style="display:block;float:left;margin-left:30px;" id="layerDemo">                        
-                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">导入</button>                          
-            </div>
-      </div>
+      
+  	  <div class="layui-inline" style="width:100%;height:70px;">
+               <div style="width:100%;height:50px;">
+                   <div id="layerDemo">                        
+                         <button style="margin-top:30px;margin-left:30px;"  id="search-company" class="layui-btn"  data-type="reload">搜索公司名称</button>
+                               <div class="layui-input-inline" style="margin-top:30px;">
+                                   <input type="text" name="searchcompany" id="searchcompany" autocomplete="off" class="layui-input" />
+                              </div>
+                         <div style="display:block;float:right;margin-right:30px;margin-top:30px;" id="layerDemo"> 
+                              <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">批量导入</button>                         
+                         </div>                  
+                   </div>                
+               </div>
+               
+       </div>   
+      
+      
     
     
       <div style="padding: 15px;">
 
                  <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter="example">{% csrf_token %}
-						<table class="layui-hide" id="test" lay-filter="test"></table>                                                                                                                                                                                
+						<table class="layui-hide" id="test" lay-filter="test" lay-data="{id: 'idTest'}"></table>                                                                                                                                                                                
                  </from>
                                                   
       </div>
@@ -25,7 +35,7 @@
  </div>
   
   <div class="layui-footer">
-    <!-- 底部固定区域 -->
+    <!-- 搴曢儴鍥哄畾鍖哄煙 -->
     
   </div>
 </div>
@@ -42,30 +52,58 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
       
       table.render({
 	    elem: '#test'
-	    ,url:'/getuserinfo/'
+	    ,url:'/getcompanyinfo/'
 	    ,cols: [[
-	       {field:'username', width:90, title: '用户'}
-	      ,{field:'companyname', width:350, title: '公司'}
-	      ,{field:'phone', width:200, title: '电话'}
-	      ,{field:'hyperlink', width:150,title: '企业统计报表',event: 'statisticsonclick'}	      
-	      ,{field:'hyperlink', width:150,title: '企业概况',event: 'companyonclick'}
-	      ,{field:'hyperlink', width:150, title: '经济概况',event: 'economiconclick'}
-	      ,{field:'hyperlink', width:150, title: '人员概况',event: 'personnelonclick'}
-	      ,{field:'hyperlink', width:150, title: '科技项目概况',event: 'projectsonclick'}
-	      ,{field:'hyperlink', width:150, title: '科技活动概况',event: 'activitiesonclick'}	      	      
+	       {field:'username', width:70, title: '用户'}
+	      ,{field:'companyname', width:150, title: '公司名称'}
+	      ,{field:'phone', width:120, title: '电话'}
+	      ,{field:'hyperlink', width:150,title: '企业统计表〃',event: 'statisticsonclick'}	      
+	      ,{field:'hyperlink', width:150,title: '企业概况表',event: 'companyonclick'}
+	      ,{field:'hyperlink', width:150, title: '经济概况表',event: 'economiconclick'}
+	      ,{field:'hyperlink', width:150, title: '人员概况表',event: 'personnelonclick'}
+	      ,{field:'hyperlink', width:150, title: '科技项目表',event: 'projectsonclick'}
+	      ,{field:'hyperlink', width:150, title: '科技活动表',event: 'activitiesonclick'}	      	      
 	      ,{fixed: 'right',  toolbar: '#barDemo'}	      
 	    ]]
+        ,id: 'idTest'      
 	    ,page: true
 	  });
+      
+      var $ = layui.$, active = {
+    		  
+    	        reload: function(){
+    	            var searchcompany = $('#searchcompany');
+    	            
+    	            	
+    	            table.reload('idTest', {
+    	            	
+    	                page: {
+    	                    curr: 1 //重新从第 1 页开始
+    	                  }
+    	            
+    	                ,where: {
+    	       				
+    	                	 company: searchcompany.val()
+
+    	                }
+    	            });
+    	        }
+    	    };
+      
+        $('#search-company').on('click', function(){
+    	    var type = $(this).data('type');
+    	    active[type] ? active[type].call(this) : '';
+    	
+    	});       
       
     	  
       table.on('tool(test)', function(obj){
             var data = obj.data;
             if(obj.event === 'statisticsonclick'){ 
-                var username = data.username                              
+               var username = data.username                              
                layer.open({
                      type:2 ,
-                     area: ['1500px','850px'],   
+                     area: ['1500px','650px'],   
                      manmin: true,
                      content: '/getStatistics?username=' + username            
                })                            
@@ -75,7 +113,7 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
                var username = data.username                              
                layer.open({
                      type:2 ,
-                     area: ['1500px','850px'],   
+                     area: ['1500px','650px'],   
                      manmin: true,
                      content: '/getCompany?username=' + username            
                })                            
@@ -85,7 +123,7 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
                 var username = data.username                              
                layer.open({
                      type:2 ,
-                     area: ['1500px','850px'],   
+                     area: ['1500px','650px'],   
                      manmin: true,
                      content: '/getEconomic?username=' + username            
                })                            
@@ -95,7 +133,7 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
                 var username = data.username                              
                layer.open({
                      type:2 ,
-                     area: ['1500px','850px'],   
+                     area: ['1500px','650px'],   
                      manmin: true,
                      content: '/getPersonnel?username=' + username            
                })                            
@@ -107,30 +145,71 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
                 var limit = 10     
                layer.open({
                      type:2 ,
-                     area: ['1500px','850px'],   
+                     area: ['1500px','650px'],   
                      manmin: true,
                      content: '/getProjects?username=' + username
                })                            
             }   
             
             else if(obj.event === 'activitiesonclick'){ 
-                var username = data.username                              
+               var username = data.username                              
                layer.open({
                      type:2 ,
-                     area: ['1500px','850px'],   
+                     area: ['1500px','650px'],   
                      manmin: true,
                      content: '/getActivities?username=' + username            
                })                            
-            }                                                                
+            }  
+            
+            else if (obj.event === 'saveAs'){
+            	      var companyname = data.companyname
+            	      
+            	      $.ajax({
+            		          type:'POST',
+            		          url:'/createExcel/',
+            		          dataType:'text',
+            		          data:{'companyname':companyname},
+            		          success:function(text){
+            		        	  var data = JSON.parse(text)
+            		        	  alert(data.a)
+            		              var url = '/static/' + 'template.xls'; 
+            		              window.location.href = url;   
+         		             
+            		          },error:function(){
+            		        	  layer.alert('导出失败');
+            		          }
+            		    });
+            }
+            
+            else if (obj.event === 'del'){
+                layer.confirm('真的要删除吗', function(index){          
+                   	obj.del();
+                       var companyname = data.companyname
+                       $.ajax({
+    	       		       type:'POST',
+                           data: {
+           	                  delcompanyname: companyname, 	       	
+                                 csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+                           },
+    	                    url: '/delCompany/',
+    	       		        cache:false,
+    	       		        async:false,
+    	       		        success:function(data){　　　　　　　　　
+    	       		        layer.alert("删除完成", { });
+    	       		        }
+    	             })                               
+                    layer.close(index);
+                 });  
+            }
                         
-      });	  
+      });
                                   
 });
 
 </script>
 <script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-xs" lay-event="edit">导出</a>
-  <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>--> 
+  <a class="layui-btn layui-btn-xs" lay-event="saveAs">导出</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
 	  

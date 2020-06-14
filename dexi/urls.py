@@ -18,9 +18,12 @@ from app01 import views
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/', views.login),
+    url(r'^logout/', views.logout),    
+    url(r'^authlogin/', views.authlogin),       
     url(r'^index/', views.index),
     url(r'^getprojectlist/', views.getPojectList),
     url(r'^addProject/', views.addProject),
+    url(r'^saveProject/', views.saveProject),     
     url(r'^addCompany/', views.addCompany),    
     url(r'^addEconomic/', views.addEconomic), 
     url(r'^addPersonnel/', views.addPersonnel), 
@@ -39,8 +42,16 @@ urlpatterns = [
     url(r'^getEconomic/', views.getEconomic),
     url(r'^getPersonnel/', views.getPersonnel),  
     url(r'^getProjects/', views.getProjects),
-    url(r'^getActivities/', views.getActivities),    
+    url(r'^getActivities/', views.getActivities),
+    url(r'^addUser/', views.addUser),   
+    url(r'^saveUser/', views.saveUser), 
+    url(r'^editUser/', views.editUser),
+    url(r'^delUser/', views.delUser),
+    url(r'^getcompanyinfo/', views.getcompanyinfo),   
+    url(r'^delCompany/', views.delCompany),        
+    url(r'^createExcel/', views.createExcel),     
+        
+     
     
-                   
-                                
+                                                              
 ]

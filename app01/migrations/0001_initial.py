@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
-from django.conf import settings
-import django.core.validators
-import django.utils.timezone
+from django.db import migrations, models
 import django.contrib.auth.models
+from django.conf import settings
+import django.utils.timezone
+import django.core.validators
 
 
 class Migration(migrations.Migration):
@@ -36,6 +36,7 @@ class Migration(migrations.Migration):
                 ('remarks', models.TextField(blank=True, null=True)),
                 ('last_active', models.DateField(auto_now_add=True)),
                 ('created_time', models.DateTimeField(auto_now_add=True)),
+                ('hyperlink', models.CharField(max_length=16, blank=True, null=True, default='点击查看详细信息')),
                 ('groups', models.ManyToManyField(verbose_name='groups', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group')),
                 ('user_permissions', models.ManyToManyField(verbose_name='user permissions', blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission')),
             ],

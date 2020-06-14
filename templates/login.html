@@ -26,7 +26,7 @@
                                             <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;"> 
                                                  <div class="layui-tab-item layui-show"> 
                                                      <div class="layui-form layui-form-pane">
-                                                        <form method="post" action="/login/" >{% csrf_token %}
+                                                        <form method="post" action="/authlogin/" >{% csrf_token %}
                                                               <div class="layui-form-item" style="margin-left:400px;"> 
                                                                      <input type="hidden" name="secret" value="%E9%98%B2%E6%AD%A2%E5%B9%BF%E5%91%8A%E7%8B%97454212"> 
                                                                      <label for="L_username" class="layui-form-label" >用户名</label> 
@@ -44,8 +44,9 @@
                                                                                                                                                           
                                                                
                                                                <div class="layui-form-item" style="margin-left:500px;"> 
-                                                                     <button class="layui-btn" lay-filter="*" lay-submit>立即登录</button> 
-                                     
+                                                                     <!-- <button class="layui-btn" lay-filter="*" lay-submit>立即登录</button> -->                                    							     
+                                     							     <input type='submit' class='layui-btn' value='立即登入'  lay-submit="" lay-filter="login"> 
+                                     							     <span style="color:red;">{{ error }}</span>
                                                                </div>                                                                                                     
                                                      </form>
                                              </div> 
@@ -55,15 +56,6 @@
                       </div>
                 </div>                  
          </div>
-                                        
-                                        
-            <script src="//res.layui.com/layui/dist/layui.js?t=1590913495283">
-            </script>                                       
-            <script>
-                 layui.cache.page ='';
-                 layui.cache.user ={username:'游客' ,uid:-1 ,avatar:'//res.layui.com/static/images/fly/avatar/default.png' ,experience:0 ,sum:0 ,vip:0 ,sex:''};
-                 layui.config({version:"1590913495283"}).extend({'fly':'//res.layui.com/static/lay/modules/fly/index'}).use('fly');
-            </script>
                       
      </body>
 </html>

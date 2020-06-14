@@ -13,167 +13,575 @@
     <div style="padding: 15px;">
         <div class="layui-tab">
              <div class="layui-tab-content">
-               <div class="layui-tab-item layui-show">
-                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter="example123">{% csrf_token %}
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                <label class="layui-form-label">统一社会信用代码或企业组织机构代码(qa03)</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="organizationCode" id='organizationCode' autocomplete="off" class="layui-input" value={{ resultStatistics.organizationCode }} >
-                                </div>
+               <div class="layui-tab-item layui-show" style="margin-top:-50px;">
+                <from class="layui-form" method="post" action="" onsubmit="return dosubmit();">{% csrf_token %}
+                     <table class="layui-table" id="tableActivities">
+                            <colgroup>
+                                <col width="450">
+                                <col width="200">
+                                <col>
+                                <col>
+                            </colgroup>
+                        <thead>
+                            <tr>
+                              <th>指标名称</th>
+                              <th>计量单位</th>
+                              <th>代码</th>
+                              <th>数量</th>
+                            </tr> 
+                         </thead>
+                         <tbody>
+                            <tr>
+                              <td>一、科技活动人员情况</td>
+                              <td>—</td>
+                              <td>—</td>                              
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>科技活动人员合计</td>
+                              <td>人</td>
+                              <td>qj09</td>  
+                              <td contentEditable="true">{{ resultActivities.qj09 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：管理和服务人员</td>
+                              <td>人</td>
+                              <td>qj67</td>  
+                              <td contentEditable="true">{{ resultActivities.qj67 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：全职人员</td>
+                              <td>人</td>
+                              <td>qj09_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj09_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：本科毕业及以上人员</td>
+                              <td>人</td>
+                              <td>qj09_2</td>  
+                              <td contentEditable="true">{{ resultActivities.qj09_2 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：外聘人员</td>
+                              <td>人</td>
+                              <td>qj09_3</td>  
+                              <td contentEditable="true">{{ resultActivities.qj09_3 }}</td>
+                            </tr> 
+                            <tr>
+                              <td>二、科技活动费用情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>科技活动经费支出合计</td>
+                              <td>千元</td>
+                              <td>qj20</td>  
+                              <td contentEditable="true">{{ resultActivities.qj20 }}</td>
+                            </tr>
+                            <tr>
+                              <td>1.人员人工费用（包含各种补贴）</td>
+                              <td>千元</td>
+                              <td>qj23_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj23_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>2.直接投入费用</td>
+                              <td>千元</td>
+                              <td>qj23_2</td>  
+                              <td contentEditable="true">{{ resultActivities.qj23_2 }}</td>
+                            </tr>
+                            <tr>
+                              <td>3.折旧费用与长期待摊费用</td>
+                              <td>千元</td>
+                              <td>qj23_3</td>  
+                              <td contentEditable="true">{{ resultActivities.qj23_3 }}</td>
+                            </tr>
+                            <tr>
+                              <td>4.无形资产摊销费用</td>
+                              <td>千元</td>
+                              <td>qj23_4</td>  
+                              <td contentEditable="true">{{ resultActivities.qj23_4 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>5.设计费用</td>
+                              <td>千元</td>
+                              <td>qj23_6</td>  
+                              <td contentEditable="true">{{ resultActivities.qj23_6 }}</td>
+                            </tr>
+                            <tr>
+                              <td>6.装备调试费用与试验费用</td>
+                              <td>千元</td>
+                              <td>qj23_7</td>  
+                              <td contentEditable="true">{{ resultActivities.qj23_7 }}</td>
+                            </tr>
+                            <tr>
+                              <td>7.委托外单位开展科技活动费用合计</td>
+                              <td>千元</td>
+                              <td>qj33</td>  
+                              <td contentEditable="true">{{ resultActivities.qj33 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：委托境内研究机构</td>
+                              <td>千元</td>
+                              <td>qj33_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj33_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>委托境内高等学校</td>
+                              <td>千元</td>
+                              <td>qj33_2</td>  
+                              <td contentEditable="true">{{ resultActivities.qj33_2 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>委托境内企业</td>
+                              <td>千元</td>
+                              <td>qj33_4</td>  
+                              <td contentEditable="true">{{ resultActivities.qj33_4 }}</td>
+                            </tr>
+                            <tr>
+                              <td>委托境外机构</td>
+                              <td>千元</td>
+                              <td>qj33_3</td>  
+                              <td contentEditable="true">{{ resultActivities.qj33_3 }}</td>
+                            </tr>
+                            <tr>
+                              <td>8.其他费用</td>
+                              <td>千元</td>
+                              <td>qj23_5</td>  
+                              <td contentEditable="true">{{ resultActivities.qj23_5 }}</td>
+                            </tr>
+                            <tr>
+                              <td>三、科技活动的资产情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>当年形成于科技活动的固定资产支出</td>
+                              <td>千元</td>
+                              <td>qj250</td>  
+                              <td contentEditable="true">{{ resultActivities.qj250 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>其中：仪器和设备</td>
+                              <td>千元</td>
+                              <td>qj251</td>  
+                              <td contentEditable="true">{{ resultActivities.qj251 }}</td>
+                            </tr> 
+                            <tr>
+                              <td>四、企业办（境内）研发机构情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>期末机构数</td>
+                              <td>家</td>
+                              <td>qj01</td>  
+                              <td contentEditable="true">{{ resultActivities.qj01 }}</td>
+                            </tr>
+                            <tr>
+                              <td>机构研究开发人员合计</td>
+                              <td>千元</td>
+                              <td>qj07_0</td>  
+                              <td contentEditable="true">{{ resultActivities.qj07_0 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：博士毕业</td>
+                              <td>人</td>
+                              <td>qj07_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj07_1 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>其中：硕士毕业</td>
+                              <td>人</td>
+                              <td>qj07_2</td>  
+                              <td contentEditable="true">{{ resultActivities.qj07_2 }}</td>
+                            </tr>
+                            <tr>
+                              <td>五、科技活动产出及相关情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>（一）自主只是产权情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>当年专利申请数</td>
+                              <td>件</td>
+                              <td>qj55</td>  
+                              <td contentEditable="true">{{ resultActivities.qj55 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：申请发明专利</td>
+                              <td>件</td>
+                              <td>qj56</td>  
+                              <td contentEditable="true">{{ resultActivities.qj56 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：申请国内发明专利</td>
+                              <td>件</td>
+                              <td>qj56_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj56_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：申请欧美日专利</td>
+                              <td>件</td>
+                              <td>qj55_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj55_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：申请PCT专利</td>
+                              <td>件</td>
+                              <td>qj55_2</td>  
+                              <td contentEditable="true">{{ resultActivities.qj55_2 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>当年专利授权数</td>
+                              <td>件</td>
+                              <td>qj74</td>  
+                              <td contentEditable="true"> {{ resultActivities.qj74 }}</td>
+                            </tr> 
+                            <tr>
+                              <td>其中：授权发明专利</td>
+                              <td>件</td>
+                              <td>qj57</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>其中：授权国内发明专利</td>
+                              <td>件</td>
+                              <td>qj57_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj57_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：授权欧美日专利</td>
+                              <td>件</td>
+                              <td>qj75</td>  
+                              <td contentEditable="true">{{ resultActivities.qj75 }}</td>
+                            </tr>
+                            <tr>
+                              <td>期末拥有有效专利数</td>
+                              <td>件</td>
+                              <td>qj83</td>  
+                              <td contentEditable="true">{{ resultActivities.qj83 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>其中：拥有境外授权专利</td>
+                              <td>件</td>
+                              <td>qj83_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj83_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：拥有欧美日专利</td>
+                              <td>件</td>
+                              <td>qj82</td>  
+                              <td contentEditable="true">{{ resultActivities.qj82 }}</td>
+                            </tr>                                                                                                                                                                                                                                                                                                                                                                                                                                  
+                         </tbody>                                              
+                     </table> 
+					  
+					  
+					  
+                     <table class="layui-table" id="tableActivitiesContinues">
+                            <colgroup>
+                                <col width="450">
+                                <col width="200">
+                                <col>
+                                <col>
+                            </colgroup>                            
+                        <thead>
+                            <tr>
+                              <td colspan="4">续表</td>
+                            </tr>                            
+                            <tr>
+                              <th>指标名称</th>
+                              <th>计量单位</th>
+                              <th>代码</th>
+                              <th>数量</th>
+                            </tr> 
+                         </thead>
+                         <tbody>   
+                            <tr>
+                              <td>其中：拥有发明专利</td>
+                              <td>件</td>
+                              <td>qj73</td>                              
+                              <td contentEditable="true">{{ resultActivities.qj73 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：已被实施的发明专利</td>
+                              <td>件</td>
+                              <td>qj73_2</td>  
+                              <td contentEditable="true">{{ resultActivities.qj73_2 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：境外授权发明专利</td>
+                              <td>件</td>
+                              <td>qj73_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj73_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>专利所有权转让及许可</td>
+                              <td>件	</td>
+                              <td>qj23</td>  
+                              <td contentEditable="true">{{ resultActivities.qj23 }}</td>
+                            </tr>
+                            <tr>
+                              <td>专利所有权转让及许可收入</td>
+                              <td>千元</td>
+                              <td>qj24</td>  
+                              <td contentEditable="true">{{ resultActivities.qj24 }}</td>
+                            </tr>
+                            <tr>
+                              <td>（二）新产品生产及销售情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr> 
+                            <tr>
+                              <td>新产品产值</td>
+                              <td>千元</td>
+                              <td>qj70</td>  
+                              <td contentEditable="true">{{ resultActivities.qj70 }}</td>
+                            </tr>
+                            <tr>
+                              <td>新产品销售收入</td>
+                              <td>千元</td>
+                              <td>qj71</td>  
+                              <td contentEditable="true">{{ resultActivities.qj71 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：出口</td>
+                              <td>千元</td>
+                              <td>qj72</td>  
+                              <td contentEditable="true">{{ resultActivities.qj72 }}</td>
+                            </tr>
+                            <tr>
+                              <td>（三）企业在境外设立分支机构情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>期末境外营销服务机构数</td>
+                              <td>个</td>
+                              <td>qj99</td>  
+                              <td contentEditable="true">{{ resultActivities.qj99 }}</td>
+                            </tr>
+                            <tr>
+                              <td>期末境外技术研发机构数</td>
+                              <td>个</td>
+                              <td>qj90</td>  
+                              <td contentEditable="true">{{ resultActivities.qj90 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>期末境外生产制造基地数</td>
+                              <td>个</td>
+                              <td>qj92</td>  
+                              <td contentEditable="true">{{ resultActivities.qj92 }}</td>
+                            </tr>
+                            <tr>
+                              <td>当年在境外设立分支机构数</td>
+                              <td>个</td>
+                              <td>qj102</td>  
+                              <td contentEditable="true">{{ resultActivities.qj102 }}</td>
+                            </tr>
+                            <tr>
+                              <td>（四）其他情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>发表科技论文</td>
+                              <td>篇</td>
+                              <td>qj25</td>  
+                              <td contentEditable="true">{{ resultActivities.qj25 }}</td>
+                            </tr>
+                            <tr>
+                              <td>期末拥有注册商标</td>
+                              <td>件</td>
+                              <td>qj79</td>  
+                              <td contentEditable="true">{{ resultActivities.qj79 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>其中：当年注册商标</td>
+                              <td>件</td>
+                              <td>qj77</td>  
+                              <td contentEditable="true">{{ resultActivities.qj77 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：境外注册商标</td>
+                              <td>件</td>
+                              <td>qj79_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj79_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：当年境外注册商标</td>
+                              <td>件</td>
+                              <td>qj79_2</td>  
+                              <td contentEditable="true">{{ resultActivities.qj79_2 }}</td>
+                            </tr>
+                            <tr>
+                              <td>拥有软件著作权</td>
+                              <td>件</td>
+                              <td>qj85</td>  
+                              <td contentEditable="true">{{ resultActivities.qj85 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：当年获得软件著作权</td>
+                              <td>件</td>
+                              <td>qj85_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj85_1 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>拥有集成电路布图</td>
+                              <td>件</td>
+                              <td>qj86</td>  
+                              <td contentEditable="true">{{ resultActivities.qj86 }}</td>
+                            </tr> 
+                            <tr>
+                              <td>其中：当年获得集成电路布图</td>
+                              <td>件</td>
+                              <td>qj86_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj86_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>拥有植物新品种</td>
+                              <td>件</td>
+                              <td>qj87</td>  
+                              <td contentEditable="true">{{ resultActivities.qj87 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：当年获得植物新品种</td>
+                              <td>件</td>
+                              <td>qj87_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj87_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>拥有国家一类新药品种</td>
+                              <td>件</td>
+                              <td>qj101</td>  
+                              <td contentEditable="true">{{ resultActivities.qj101 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>其中：当年获得国家一类新药证书</td>
+                              <td>件</td>
+                              <td>qj101_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj101_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>拥有国家一级重要保护品种</td>
+                              <td>件</td>
+                              <td>qj100</td>  
+                              <td contentEditable="true">{{ resultActivities.qj100 }}</td>
+                            </tr>
+                            <tr>
+                              <td>其中：当年获得国家一级中药保护品证书</td>
+                              <td>件</td>
+                              <td>qj100_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj100_1 }}</td>
+                            </tr>    
+                            <tr>
+                              <td>当年形成国际标准</td>
+                              <td>件</td>
+                              <td>qj98_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj98_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>当年形成国家或行业标准</td>
+                              <td>件</td>
+                              <td>qj27_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj27_1 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>当年获得国家科技奖励</td>
+                              <td>件</td>
+                              <td>qj28_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj28_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>六、技术合同交易情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>认定登记的技术合同项数</td>
+                              <td>项</td>
+                              <td>qj80_1</td>  
+                              <td contentEditable="true">{{ resultActivities.qj80_1 }}</td>
+                            </tr>
+                            <tr>
+                              <td>认定登记的技术合同成交金额</td>
+                              <td>千元</td>
+                              <td>qj80</td>  
+                              <td contentEditable="true">{{ resultActivities.qj80 }}</td>
+                            </tr>
+                            <tr>
+                              <td>七、其他相关情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>  
+                            <tr>
+                              <td>（一）政府经费情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr> 
+                            <tr>
+                              <td>来自政府部门的科技活动经费</td>
+                              <td>千元</td>
+                              <td>qj52</td>  
+                              <td contentEditable="true">{{ resultActivities.qj52 }}</td>
+                            </tr>
+                            <tr>
+                              <td>（二）技术改造和技术获取情况</td>
+                              <td>—</td>
+                              <td>—</td>  
+                              <td>—</td>
+                            </tr>
+                            <tr>
+                              <td>技术改造经费支出</td>
+                              <td>千元</td>
+                              <td>qj58</td>  
+                              <td contentEditable="true">{{ resultActivities.qj58 }}</td>
+                            </tr>
+                            <tr>
+                              <td>引进境外技术经费支出</td>
+                              <td>千元</td>
+                              <td>qj59</td>  
+                              <td contentEditable="true">{{ resultActivities.qj59 }}</td>
+                            </tr>  
+                            <tr>
+                              <td>引进技术的笑话吸收经费支出</td>
+                              <td>千元</td>
+                              <td>qj61</td>  
+                              <td contentEditable="true">{{ resultActivities.qj61 }}</td>
+                            </tr>
+                            <tr>
+                              <td>购买境内技术经费支出</td>
+                              <td>千元</td>
+                              <td>qj62</td>  
+                              <td contentEditable="true">{{ resultActivities.qj62 }}</td>
+                            </tr>                                                                                                                                                                                                                                                                                                                                                                                                                           
+                         </tbody>  
+                     </table>  
+                     
+                      <div style="width:100%;height:50px;">
+                           <div style="display:block;float:right" id="layerDemo">                        
+                                 <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>-->
+                                 <input type='hidden' id='activitiesData' name='activitiesData' />
+                                 <input type='submit' class='layui-btn' value='提交'  lay-submit="" lay-filter="save-activities">                                     
                            </div>
-                           <div class="layui-inline">
-                                <label class="layui-form-label">行政区划代码(qa19)</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="areaNumber" id="areaNumber" autocomplete="off" class="layui-input" value={{ resultStatistics.areaNumber }}>
-                                </div>
-                           </div>
-                      </div>
-                      
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                <label class="layui-form-label">企业（单位）详细名称(qa04)</label>
-                                <div class="layui-input-inline">
-                                     <input type="tel" name="enterpriseName"  id="enterpriseName" autocomplete="off" class="layui-input" value={{ resultStatistics.enterpriseName }} >
-                                </div>
-                           </div>
-                           <div class="layui-inline">
-                                <label class="layui-form-label">法人性质（qa15）</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="natureOfCorporation" id="natureOfCorporation" autocomplete="off" class="layui-input" value={{ resultStatistics.natureOfCorporation }} >
-                                </div>
-                           </div>
-                      </div>                     
-                      
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                 <input type='hidden' id='corporateGenderId' name='corporateGenderId' />
-                                 <label class="layui-form-label">企业法人性别（qa19）</label>
-                                 <div class="layui-input-inline">
-                                        <select name="corporateGender" lay-filter="aihao" id="corporateGender">
-                                            <option value=""></option>
-                                            <option value="1">男</option>
-                                            <option value="2">女</option>
-                                        </select>
-                                 </div>
-                            </div>
-                            
-                            <div class="layui-inline">
-                                   <label class="layui-form-label">出生年月（qa20）</label>
-                                   <div class="layui-input-inline">
-                                         <input type="text" name="birthday" id="birthday"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value={{ resultStatistics.birthday|date:"Y-m-d H:i:s"  }} >
-                                   </div>
-                            </div>
-                            
-                            <div class="layui-inline">
-                                   <input type='hidden' id='educationId' name='educationId' />
-                                   <label class="layui-form-label">学历（qd22）</label>
-                                   <div class="layui-input-inline">
-                                        <select name="education" lay-filter="aihao" id='education'  >
-                                            <option value=""></option>
-                                            <option value="1">1.研究生</option>
-                                            <option value="2">2.本科</option>
-                                            <option value="3">3.大专</option>
-                                            <option value="4">4.其他</option>
-                                        </select>
-                                 </div>
-                            </div>
-                      </div> 
-                      
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                <label class="layui-form-label">企业通讯地址（qa05）</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="address" id="address" autocomplete="off" class="layui-input" value={{ resultStatistics.address }} >
-                                </div>
-                           </div>
-                           <div class="layui-inline">
-                                <label class="layui-form-label">邮政编码（qa06）</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="postalCode" id="postalCode" autocomplete="off" class="layui-input" value={{ resultStatistics.postalCode }} >
-                                </div>
-                           </div>
-                      </div>                           
-                      
-                      <div class="layui-form-item-address">
-                                   <label class="layui-form-label-address">企业注册地址（qa07）</label>
-                                   <div class="layui-input-block">
-                                            <input type="text" name="registeredAddress" id="registeredAddress" placeholder="" autocomplete="off" class="layui-input" value={{ resultStatistics.registeredAddress }} >
-                                   </div>
-                      </div>                  
-  
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                 <label class="layui-form-label">企业负责人（qa08）</label>
-                                 <div class="layui-input-inline">
-                                      <input type="text" name="manager" id="manager" autocomplete="off" class="layui-input" value={{ resultStatistics.manager }} >
-                                  </div>
-                            </div>
-                            <div class="layui-inline">
-                                   <label class="layui-form-label"> 联系电话（qa09）</label>
-                                   <div class="layui-input-inline">
-                                         <input type="text" name="telephone" id="telephone" autocomplete="off" class="layui-input" value={{ resultStatistics.telephone }} >
-                                   </div>
-                            </div>
-                            <div class="layui-inline">
-                                   <label class="layui-form-label">传真（qa10）</label>
-                                   <div class="layui-input-inline">
-                                           <input type="text" name="fax" id="fax" autocomplete="off" class="layui-input" value={{ resultStatistics.fax }} >
-                                   </div>
-                            </div>
-                      </div>
-                      
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                 <label class="layui-form-label">统计负责人（qa20）</label>
-                                 <div class="layui-input-inline">
-                                      <input type="text" name="statisticalControlOfficer" id="statisticalControlOfficer" autocomplete="off" class="layui-input" value={{ resultStatistics.statisticalControlOfficer }} >
-                                  </div>
-                            </div>
-                            <div class="layui-inline">
-                                   <label class="layui-form-label">填报人（qa11）</label>
-                                 <div class="layui-input-inline">
-                                      <input type="text" name="preparedBy" id="preparedBy" autocomplete="off" class="layui-input" value={{ resultStatistics.preparedBy }} >
-                                  </div>
-                            </div>
-                            <div class="layui-inline">
-                                   <label class="layui-form-label">填报人电话（qa17）</label>
-                                   <div class="layui-input-inline">
-                                           <input type="tel" name="preparedByTelephone" id="preparedByTelephone" autocomplete="off" class="layui-input" value={{ resultStatistics.preparedByTelephone }} >
-                                   </div>
-                            </div>
-                      </div>       
-                      
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                <label class="layui-form-label">填报时间（qa12）</label>
-                                   <div class="layui-input-inline">
-                                         <input type="text" name="fillingTime" id="fillingTime"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value={{ resultStatistics.fillingTime|date:"Y-m-d H:i:s"  }} >
-                                   </div>
-                           </div>
-                           <div class="layui-inline">
-                                <label class="layui-form-label">Email地址（qa13）</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="email" id="email" autocomplete="off" class="layui-input" value={{ resultStatistics.email }} >
-                                </div>
-                           </div>
-                      </div>                          
-                                     
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                <label class="layui-form-label">网址（qa14）</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="url"  id="url" autocomplete="off" class="layui-input" value={{ resultStatistics.url }} >
-                                </div>
-                           </div>
-                           <div class="layui-inline">
-                                <label class="layui-form-label">填报人手机（qa17）</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="preparedByMobilephone" id="preparedByMobilephone" autocomplete="off" class="layui-input" value={{ resultStatistics.preparedByMobilephone }} >
-                                </div>
-                           </div>
-                      </div>                        
-                 </from>
+                     </div>
+                 </from>                                                                                          
              </div>                 
            </div>
         </div>

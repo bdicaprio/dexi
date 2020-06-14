@@ -1,22 +1,31 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}	
 {% block content %}
 
   <div class="layui-body">
     <!-- 内容主体区域 -->
-
+        <div class="layui-inline" style="width:100%;height:70px;">
+                 <div style="width:100%;height:50px;">
+                     <div id="layerDemo">                        
+                           <button style="margin-top:30px;margin-left:30px;"  id="search-user" class="layui-btn"  data-type="reload">搜索用户</button>
+                                 <div class="layui-input-inline" style="margin-top:30px;">
+                                     <input type="text" name="searchuser" id="searchuser" autocomplete="off" class="layui-input" />
+                                </div>
+                           <div style="display:block;float:right;margin-right:30px;margin-top:30px;" id="layerDemo"> 
+                                <button data-method="offset" data-type="auto" class="layui-btn" id="save-user">添加</button>                         
+                           </div>                  
+                     </div>                
+                 </div>
+                 
+         </div>
                  
                     
-      <div style="margin-top:30px;width:100%;height:50px;">
-            <div style="display:block;float:left;margin-left:30px;" id="layerDemo">                        
-                 <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">添加</button>                          
-            </div>
-      </div>
+
     
     
       <div style="padding: 15px;">
 
-                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter="example">{% csrf_token %}
-						<table class="layui-hide" id="test" lay-filter="demo123"></table>                      
+                 <from class="layui-form"  onsubmit="return dosubmit();" lay-filter="example">{% csrf_token %}
+						<table class="layui-hide" id="test" lay-filter="demo123"  lay-data="{id: 'idTest'}" ></table>                      
                                                                                                                                                            
                  </from>
                                                   
@@ -45,17 +54,106 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
 	    elem: '#test'
 	    ,url:'/getuserinfo/'
 	    ,cols: [[
-	       {field:'username', width:90, title: '用户名称'}
+		   {field:'is_superuser', width:90, title: '是否管理员'}	    	
+	      ,{field:'username', width:90, title: '用户名称'}
 	      ,{field:'nickname', width:120, title: '昵称'}
 	      ,{field:'phone', width:200, title: '电话'}
 	      ,{field:'email', width:300,title: 'E-mail'}
-	      ,{field:'companyname', width:700, title: '公司名称'}
+	      ,{field:'companyname', width:450, title: '公司名称'}
 	      ,{fixed: 'right',  toolbar: '#barDemo'}
 	      
 	    ]]
+        ,id: 'idTest'
 	    ,page: true
 	  });
       
+      
+      var $ = layui.$, active = {
+    		  
+  	        reload: function(){
+  	            var searchuser = $('#searchuser');
+  	            
+  	            	
+  	            table.reload('idTest', {
+  	            	
+  	                page: {
+  	                    curr: 1 //重新从第 1 页开始
+  	                  }
+  	            
+  	                ,where: {
+  	       				
+  	                	    username: searchuser.val()
+
+  	                }
+  	            });
+  	        }
+  	    };
+    
+    $('#search-user').on('click', function(){
+  	    var type = $(this).data('type');
+  	    active[type] ? active[type].call(this) : '';
+  	
+  	});      
+      
+      
+	  $('#save-user').click(function(){
+          layer.open({
+              type:2 ,
+              area: ['1000px','700px'],   
+              manmin: true,             
+              content: '/addUser/'         
+            }) 
+	  }); 
+	  
+	  
+	  table.on('tool(demo123)', function(obj){
+	      var data = obj.data;
+          if(obj.event === 'del'){
+                layer.confirm('真的要删除吗', function(index){          
+               	obj.del();
+                   var delid = data.id
+                   $.ajax({
+	       		       type:'POST',
+                       data: {
+       	                  delid: delid, 	       	
+                             csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+                       },
+	                    url: '/delUser/',
+	       		        cache:false,
+	       		        async:false,
+	       		        success:function(data){　　　　　　　　　
+	       		        layer.alert("删除完成", { });
+	       		        }
+	             })                               
+                layer.close(index);
+             });                
+          } 
+          else if(obj.event === 'edit'){
+       	  var id = data.id
+
+       	  layer.open({
+                    type:2 ,
+                    area: ['1000px','700px'],   
+                    manmin: true,             
+                    content: '/editUser?id='+ id         
+              })
+ 
+              $('#projectName').val(data.projectName)          
+              $('#projectFrom').val(data.projectFrom)
+              $('#developmentForm').val(data.developmentForm)
+              $('#achievement').val(data.achievement)
+              $('#economicGoals').val(data.economicGoals)
+              $('#activityType').val(data.activityType)
+              $('#stage').val(data.stage)
+              $('#startTime').val(data.startTime)
+              $('#endTime').val(data.endTime)
+              $('#personnel').val(data.personnel)               
+              $('#funds').val(data.funds)
+              $('#capital').val(data.capital)                                                               
+          } 
+          
+          
+     });
       
 });
 

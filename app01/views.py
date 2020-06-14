@@ -8,76 +8,113 @@ from django.db import connection
 import json
 from builtins import dict
 from _ast import Dict
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponseRedirect
 from django.utils.encoding import repercent_broken_unicode
 from django.contrib.auth.hashers import make_password
+from io import BytesIO
+import datetime
+from openpyxl import load_workbook
+from openpyxl import Workbook
+from django.http import StreamingHttpResponse
 
 # Create your views here.
 
-#登入页面验证
-def login(request,*args,**kwargs):
+
+def login(request):
+    return render(request,'login.html',{})
+
+def logout(request):
+    request.session.flush()
+    return render(request,'login.html',{})
+
+#验证
+def authlogin(request,*args,**kwargs):
     if request.method == 'GET':
         return render(request,'login.html')
     else:
         postData = request.POST
         username = postData.get('username')
         password = postData.get('password')
-        
         user = authenticate(username=username,password=password)
         if user is not None:
             
             request.session['username'] = username
-            return HttpResponseRedirect (
-            "/index/", 
-           { 
-               
-           }      
-        )
-        else:
-            return HttpResponseRedirect('/login/',{})
+            return HttpResponseRedirect ("/index/", { } )                 
+        else:      
+            return render(request,'login.html',{'error':'用户名或密码错误',})
     
     
 #获取index页面所有数据   
 def index(request,*args,**kwargs):
     username = request.session.get('username','anybody')
     resultId = models.userProfile.objects.values("id").filter(username=username)
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
+
     id = ''
     for i in resultId:
         id = i['id']
-    resultStatistics = models.statistics.objects.get(username_id=id)
-    resultCompany = models.company.objects.get(username_id=id)
-    resultEconomic = models.economic.objects.get(username_id=id)
-    resultPersonnel = models.personnel.objects.get(username_id=id)
-    resultActivities = models.activities.objects.get(username_id=id)
-
-    return render (
-        request,
-        "index.html", 
-        {
-        "resultStatistics":resultStatistics, 
-        "resultCompany":resultCompany, 
-        "resultEconomic":resultEconomic, 
-        "resultPersonnel":resultPersonnel, 
-        "resultActivities":resultActivities, 
-        "username":username,                       
-       }
-    )
+    try:
+        resultStatistics = models.statistics.objects.get(username_id=id)
+        resultCompany = models.company.objects.get(username_id=id)
+        resultEconomic = models.economic.objects.get(username_id=id)
+        resultPersonnel = models.personnel.objects.get(username_id=id)
+        resultActivities = models.activities.objects.get(username_id=id)
+        
+        return render (
+            request,
+            "index.html", 
+            {
+            "resultStatistics":resultStatistics, 
+            "resultCompany":resultCompany, 
+            "resultEconomic":resultEconomic, 
+            "resultPersonnel":resultPersonnel, 
+            "resultActivities":resultActivities, 
+            "username":username,
+            "superuser":superuser,                       
+           } 
+        )       
+    except:
+        resultStatistics = {"corporateGender":0,"education":0,}             
+        return render (
+            request,
+            "index.html", 
+            {
+            "resultStatistics":resultStatistics, 
+            "username":username,                       
+            
+            }
+        )
+        
+   
     
 #获取项目表格数据
 def getPojectList(request):
     sql = ''
     sql_count = ''
-    ID = ''
+    id = ''
     getData = request.GET
     p = request.GET.get('page')
     l = request.GET.get('limit')
+    username = request.session.get('username','anybody') 
+    projectName = getData.get('projectName')
     start = str((int(p)-1) * int(l))
     end = str(l)
-    ID = '1'
-    
-    sql = 'select id,username_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  username_id = ' +   ID   +  ' limit '  +  start + ','  + end
-    sql_count = 'select count(*)  from  app01_projects'
+    print(len(str(projectName)))
+    resultId = models.userProfile.objects.values("id").filter(username=username)
+    for i in resultId:
+        id = str(i['id'])        
+    if (str(projectName)) == 'None':
+        sql = 'select id,username_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  username_id = ' +   id   +  ' limit '  +  start + ','  + end
+        sql_count = 'select count(*)  from  app01_projects'
+    elif(len(str(projectName)) == 0):
+        sql = 'select id,username_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  username_id = ' +   id   +  ' limit '  +  start + ','  + end
+        sql_count = 'select count(*)  from  app01_projects'        
+    else :
+        sql = 'select id,username_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  username_id = ' +   id  + ' and   projectName like '  +  " '%"    +   projectName  + "%' " +  ' limit '  +  start + ','  + end
+        print(sql)
+        sql_count = 'select count(*)  from app01_projects  where  username_id = ' +   id  + ' and  projectName = ' +   projectName   +  ' limit '  +  start + ','  + end
+        
     cursor = connection.cursor()
     cursor.execute(sql)
     rawData = cursor.fetchall()    
@@ -102,14 +139,18 @@ def getPojectList(request):
 def addStatistics(request):
     postData = request.POST
     username = request.session.get('username','anybody') 
+    resultId = models.userProfile.objects.values("id").filter(username=username)
+    id = ''
+    for i in resultId:
+        id = i['id']            
     dict = {
         'organizationCode' : postData.get('organizationCode'),
         'areaNumber' : postData.get('areaNumber'),
         'enterpriseName' : postData.get('enterpriseName'),
         'natureOfCorporation' : postData.get('natureOfCorporation'),
-#        'corporateGenderId' : postData.get('corporateGenderId'),
+        'corporateGender' : postData.get('corporateGender'),
         'birthday' : postData.get('birthday'),
-#        'educationId' : postData.get('educationId'),
+        'education' : postData.get('education'),
         'address' : postData.get('address'),
         'postalCode' : postData.get('postalCode'),
         'registeredAddress' : postData.get('registeredAddress'),
@@ -123,11 +164,15 @@ def addStatistics(request):
         'email' : postData.get('email'),
         'url' : postData.get('url'),
         'preparedByMobilephone' : postData.get('preparedByMobilephone'), 
-        'username_id' : '1',    
-    }  
+        'username_id' : id,    
+    }
     
-    models.statistics.objects.create(**dict)       
-    
+    if models.statistics.objects.filter(username_id=id):
+        print("11111111111111111111111111111111")
+        models.statistics.objects.update(**dict)
+    else:
+        print("2222222222222222222222222")
+        models.statistics.objects.create(**dict)
     return render(
         request,
         "index.html", 
@@ -136,40 +181,90 @@ def addStatistics(request):
         }                
     )
     
-
-    
-def addProject(request):
+def addProject(request):   
+    getData = request.GET
+    id = getData.get('id')
+    try:
+        result = models.projects.objects.get(id=id)
+        return render(
+        request,
+        "addproject.html", 
+        {
+            'result':result,
+        }  
+    )
+    except:
+        return render(request,"addproject.html",                
+                {
+                    
+                }  
+    )
+        
+        
+def saveProject(request):
     postData = request.POST
     username = request.session.get('username','anybody') 
-    
-    dict = {
-        'projectName' : postData.get('projectName'),
-        'projectFrom' : postData.get('projectFrom'),
-        'developmentForm' : postData.get('developmentForm'),
-        'achievement' : postData.get('achievement'),
-        'economicGoals' : postData.get('economicGoals'),
-        'activityType' : postData.get('activityType'),
-        'stage' : postData.get('stage'),
-        'startTime' : postData.get('startTime'),
-        'endTime' : postData.get('endTime'),
-        'personnel' : postData.get('personnel'),
-        'funds' : postData.get('funds'),
-        'capital' : postData.get('capital'),    
-        'username_id' : '1',   
-    }
-
-    models.projects.objects.create(**dict)   
+    resultId = models.userProfile.objects.values("id").filter(username=username)
+    username_id = ''
+    for i in resultId:
+        username_id = i['id']         
+    try:    
+        id = postData.get('id')
+        dict = {
+            'projectName' : postData.get('projectName'),
+            'projectFrom' : postData.get('projectFrom'),
+            'developmentForm' : postData.get('developmentForm'),
+            'achievement' : postData.get('achievement'),
+            'economicGoals' : postData.get('economicGoals'),
+            'activityType' : postData.get('activityType'),
+            'stage' : postData.get('stage'),
+            'startTime' : postData.get('startTime'),
+            'endTime' : postData.get('endTime'),
+            'personnel' : postData.get('personnel'),
+            'funds' : postData.get('funds'),
+            'capital' : postData.get('capital'),
+            'username_id' : username_id ,
+        }
+        
+        models.projects.objects.filter(id=id).update(**dict)
+        
+    except:
+        dict = {
+            'projectName' : postData.get('projectName'),
+            'projectFrom' : postData.get('projectFrom'),
+            'developmentForm' : postData.get('developmentForm'),
+            'achievement' : postData.get('achievement'),
+            'economicGoals' : postData.get('economicGoals'),
+            'activityType' : postData.get('activityType'),
+            'stage' : postData.get('stage'),
+            'startTime' : postData.get('startTime'),
+            'endTime' : postData.get('endTime'),
+            'personnel' : postData.get('personnel'),
+            'funds' : postData.get('funds'),
+            'capital' : postData.get('capital'),
+            'username_id' : username_id ,
+        }
+        
+        models.projects.objects.create(**dict)    
      
+         
     return render(
-        request,
-        "index.html", 
-        {
+            request,
+            "addproject.html", 
+            {
+    
+            }                
+        )
 
-        }                
-    )
        
 def addCompany(request):
     postData = request.POST.getlist('companyData[]')
+    username = request.session.get('username','anybody') 
+    resultId = models.userProfile.objects.values("id").filter(username=username)
+    id = ''
+    for i in resultId:
+        id = i['id']   
+    print(postData[31])        
     dict = {
        'qb07_2': postData[1],
        'qb07_3': postData[2],
@@ -184,26 +279,32 @@ def addCompany(request):
        'qb20_1': postData[11],
        'qb20': postData[12],
        'qb06': postData[13],
-       'qb06_1': postData[14],
-       'qb06_2': postData[15],
-       'qb18': postData[16],
-       'qb09': postData[17],
-       'qb10': postData[18],
-       'qb12': postData[19],
-       'qb14': postData[20],  
-       'qb14_1': postData[21],
-       'qb14_2': postData[22],
-       'qb15': postData[23],
-       'qb15_1': postData[24],
-       'qb15_2': postData[25],
-       'qb15_3': postData[26],
-       'qb15_4': postData[27],
-       'qb15_5': postData[28],
-       'qb16': postData[29],
-       'qb16_1': postData[30],                   
+       'qb06_1': postData[15],
+       'qb06_2': postData[16],
+       'qb18': postData[17],
+       'qb09': postData[18],
+       'qb10': postData[19],
+       'qb12': postData[20],
+       'qb14': postData[21],  
+       'qb14_1': postData[22],
+       'qb14_2': postData[23],
+       'qb15': postData[24],
+       'qb15_1': postData[25],
+       'qb15_2': postData[26],
+       'qb15_3': postData[27],
+       'qb15_4': postData[28],
+       'qb15_5': postData[29],
+       'qb16': postData[30],
+       'qb16_1': postData[31], 
+       'username_id' : id,                      
     }
+    if models.company.objects.filter(username_id=id):
+        print("11111111111111111111111111111111")
+        models.company.objects.update(**dict)
+    else:
+        print("2222222222222222222222222")
+        models.company.objects.create(**dict)    
         
-    models.company.objects.create(**dict)   
     return render(
         request,
         "index.html", 
@@ -216,7 +317,11 @@ def addCompany(request):
 def addEconomic(request):
     postData = request.POST.getlist('economicData[]')
     postDataContinues = request.POST.getlist('economicContinuesData[]') 
-
+    username = request.session.get('username','anybody') 
+    resultId = models.userProfile.objects.values("id").filter(username=username)
+    id = ''
+    for i in resultId:
+        id = i['id']         
     dict = {
        'qc02': postData[1],
        'qc02_05': postData[2],
@@ -282,11 +387,15 @@ def addEconomic(request):
        'qc41': postDataContinues[31],  
        'QC226_1': postDataContinues[36],
        'QC226_2': postDataContinues[37],
-       'QC226': postDataContinues[38],                                      
+       'QC226': postDataContinues[38], 
+       'username_id' : id,                                         
     }
- 
-    models.economic.objects.create(**dict) 
-      
+    if models.economic.objects.filter(username_id=id):
+        print("11111111111111111111111111111111")
+        models.economic.objects.update(**dict)
+    else:
+        print("2222222222222222222222222")
+        models.economic.objects.create(**dict)
     return render(
         request,
         "index.html", 
@@ -298,6 +407,11 @@ def addEconomic(request):
 
 def addPersonnel(request):
     postData = request.POST.getlist('personnelData[]')
+    username = request.session.get('username','anybody') 
+    resultId = models.userProfile.objects.values("id").filter(username=username)  
+    id = ''
+    for i in resultId:
+        id = i['id']    
     dict = {
        'qd01': postData[2],
        'qd03': postData[3],
@@ -319,12 +433,16 @@ def addPersonnel(request):
        'qd35': postData[21],
        'qd36': postData[22],
        'qd27': postData[24],  
-       'qd28': postData[25],                                 
+       'qd28': postData[25],   
+       'username_id' : id,                                         
     }
-
-        
-#    models.personnel.objects.create(**dict) 
-
+    print()
+    if models.personnel.objects.filter(username_id=id):
+        print("11111111111111111111111111111111")
+        models.personnel.objects.update(**dict)
+    else:
+        print("2222222222222222222222222")
+        models.personnel.objects.create(**dict)
       
     return render(
         request,
@@ -337,7 +455,11 @@ def addPersonnel(request):
 def addActivities(request):
     postData = request.POST.getlist('activitiesData[]')
     postDataContinues = request.POST.getlist('activitiesContinuesData[]')  
-  
+    username = request.session.get('username','anybody') 
+    resultId = models.userProfile.objects.values("id").filter(username=username)
+    id = ''
+    for i in resultId:
+        id = i['id']        
     dict = {
        'qj09': postData[2],
        'qj67': postData[3],
@@ -379,44 +501,47 @@ def addActivities(request):
        'qj73_1': postDataContinues[4],
        'qj23': postDataContinues[5],
        'qj24': postDataContinues[6],
-       'qj70': postDataContinues[7],
-       'qj71': postDataContinues[8],
-       'qj72': postDataContinues[9],
-       'qj99': postDataContinues[10],  
-       'qj90': postDataContinues[11],
-       'qj92': postDataContinues[12],
-       'qj102': postDataContinues[13],
-       'qj25': postDataContinues[14],
-       'qj79': postDataContinues[15],
-       'qj77': postDataContinues[16],
-       'qj79_1': postDataContinues[17],
-       'qj79_2': postDataContinues[18],
-       'qj85': postDataContinues[19],
-       'qj85_1': postDataContinues[20],    
-       'qj86': postDataContinues[21],
-       'qj86_1': postDataContinues[22],
-       'qj87': postDataContinues[23],
-       'qj87_1': postDataContinues[24],
-       'qj101': postDataContinues[25],  
-       'qj101_1': postDataContinues[26],
-       'qj100': postDataContinues[27],
-       'qj100_1': postDataContinues[28],
-       'qj98_1': postDataContinues[29],
-       'qj27_1': postDataContinues[30],
-       'qj28_1': postDataContinues[31],  
+       'qj70': postDataContinues[8],
+       'qj71': postDataContinues[9],
+       'qj72': postDataContinues[10],
+       'qj99': postDataContinues[12],  
+       'qj90': postDataContinues[13],
+       'qj92': postDataContinues[14],
+       'qj102': postDataContinues[15],
+       'qj25': postDataContinues[17],
+       'qj79': postDataContinues[18],
+       'qj77': postDataContinues[19],
+       'qj79_1': postDataContinues[20],
+       'qj79_2': postDataContinues[21],
+       'qj85': postDataContinues[22],
+       'qj85_1': postDataContinues[23],    
+       'qj86': postDataContinues[24],
+       'qj86_1': postDataContinues[25],
+       'qj87': postDataContinues[26],
+       'qj87_1': postDataContinues[27],
+       'qj101': postDataContinues[28],  
+       'qj101_1': postDataContinues[29],
+       'qj100': postDataContinues[30],
+       'qj100_1': postDataContinues[31],
+       'qj98_1': postDataContinues[32],
+       'qj27_1': postDataContinues[33],
+       'qj28_1': postDataContinues[34],  
        'qj80_1': postDataContinues[36],
        'qj80': postDataContinues[37],
-       'qj52': postDataContinues[38], 
-       'qj58': postDataContinues[31],  
-       'qj59': postDataContinues[36],
-       'qj61': postDataContinues[37],
-       'qj62': postDataContinues[38],                                       
+       'qj52': postDataContinues[40], 
+       'qj58': postDataContinues[42],  
+       'qj59': postDataContinues[43],
+       'qj61': postDataContinues[44],
+       'qj62': postDataContinues[45],                                       
     }
 
-        
-#    models.personnel.objects.create(**dict) 
-
-      
+    if models.activities.objects.filter(username_id=id):
+        print("11111111111111111111111111111111")
+        models.activities.objects.update(**dict)
+    else:
+        print("2222222222222222222222222")
+        models.activities.objects.create(**dict)        
+  
     return render(
         request,
         "index.html", 
@@ -428,10 +553,9 @@ def addActivities(request):
     
     
 def delProject(request):
-    postData = request.POST.get('delid')
-
-        
-#    models.personnel.objects.create(**dict) 
+    postData = request.POST
+    delid = postData.get('delid')
+    models.projects.objects.filter(id=delid).delete() 
 
       
     return render(
@@ -446,6 +570,7 @@ def delProject(request):
 def member(request): 
     username = request.session.get('username','anybody')
     resultId = models.userProfile.objects.values("id").filter(username=username)
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
     id = ''
     for i in resultId:
         id = i['id'] 
@@ -455,6 +580,8 @@ def member(request):
         "member.html", 
         {
           "resultUser":resultUser,
+          "username":username,
+          "superuser":superuser,
         }
     )   
     
@@ -479,11 +606,13 @@ def saveUserinfo(request):
     
 def changepasswd(request): 
     username = request.session.get('username','anybody')
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
     return render(
         request,
         "changepasswd.html", 
         {
-  
+            "username":username,
+            "superuser":superuser,
         }
     )    
     
@@ -508,14 +637,54 @@ def changePassword(request):
     
 
 def membermanager(request):
-    username = request.session.get('username','anybody')       
+    username = request.session.get('username','anybody')  
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)     
     return render(
         request,
         "membermanager.html", 
         {
-          
+          "username":username,
+          "superuser":superuser,
         }
-    )   
+    )  
+    
+def getcompanyinfo(request):       
+    sql = ''
+    sql_count = ''
+    ID = ''
+    getData = request.GET
+    p = request.GET.get('page')
+    l = request.GET.get('limit')
+    company = request.GET.get('company')
+    print(company)
+    start = str((int(p)-1) * int(l))
+    end = str(l)
+    if company is not None:
+        sql = 'select id,username,phone, companyname,hyperlink,is_superuser  from auth_user  where companyname  like ' + "'%"  +  company  + "%' " +  ' limit '  +  start + ','  + end
+        sql_count = 'select count(*)  from auth_user  where username  like ' + "'%"  +  company  + "%' " +  ' limit '  +  start + ','  + end
+        print(sql)
+    else:
+        sql = 'select id,username,phone, companyname,hyperlink,is_superuser  from auth_user '  +  ' limit '  +  start + ','  + end
+        print(sql)
+        sql_count = 'select count(*)  from  auth_user'
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    rawData = cursor.fetchall()    
+    col_names = [desc[0] for desc in cursor.description]
+    result = []
+    
+    for row in rawData:
+        objDict = {}
+        
+        for index, value in enumerate(row):           
+            objDict[col_names[index]] = value       
+    
+        result.append(objDict)
+    cursor.execute(sql_count)
+    count = cursor.fetchall()
+    count = count[0][0]      
+    dict = {"code":0,"msg":"","count":count,"data":result}
+    return HttpResponse(json.dumps(dict), content_type="application/json")        
  
  
 def getuserinfo(request):       
@@ -525,12 +694,18 @@ def getuserinfo(request):
     getData = request.GET
     p = request.GET.get('page')
     l = request.GET.get('limit')
+    username = request.GET.get('username')
+    print(username)
     start = str((int(p)-1) * int(l))
     end = str(l)
-    ID = '1'
-    
-    sql = 'select username,nickname,phone,email, companyname,hyperlink  from auth_user '  +  ' limit '  +  start + ','  + end
-    sql_count = 'select count(*)  from  auth_user'
+    if username is not None:
+        sql = 'select id,username,nickname,phone,email, companyname,hyperlink,is_superuser  from auth_user  where username  like ' + "'%"  +  username  + "%' " +  ' limit '  +  start + ','  + end
+        sql_count = 'select count(*)  from auth_user  where username  like ' + "'%"  +  username  + "%' " +  ' limit '  +  start + ','  + end
+        print(sql)
+    else:
+        sql = 'select id,username,nickname,phone,email, companyname,hyperlink,is_superuser  from auth_user '  +  ' limit '  +  start + ','  + end
+        print(sql)
+        sql_count = 'select count(*)  from  auth_user'
     cursor = connection.cursor()
     cursor.execute(sql)
     rawData = cursor.fetchall()    
@@ -552,12 +727,14 @@ def getuserinfo(request):
 
 
 def torchgather(request):
-    username = request.session.get('username','anybody')       
+    username = request.session.get('username','anybody') 
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)      
     return render(
         request,
         "torchgather.html", 
         {
-          
+              "username":username, 
+              "superuser":superuser,
         }
     )   
     
@@ -642,5 +819,130 @@ def getActivities(request):
         {
           'resultActivities':resultActivities,
         }
-    )                            
+    ) 
+    
+    
+def addUser(request):
+    
+    return render(
+        request,
+        "adduser.html", 
+        {
+          
+        }
+    )     
+                                   
+def saveUser(request):
+    postData = request.POST
+    username = request.session.get('username','anybody') 
+    try:
+        print("111111111111111111111111111111111111") 
+        print(postData.get("superuser"))
+        id = postData.get("id")
+    
+        dict = {
+            
+          'username' : postData.get("username"),    
+          'nickname' : postData.get("nickname"), 
+          'password' : make_password(postData.get("password")), 
+          'phone' : postData.get("phone"), 
+          'email' : postData.get("email"),
+          'companyname' : postData.get("companyname"),  
+          'is_superuser' : postData.get("superuser"),                                       
+        }
+        print(dict)
+        if id == None:
+            print("444444")
+            models.userProfile.objects.create(**dict)
+        else:
+            print("55555555555")
+            models.userProfile.objects.filter(id=id).update(**dict)
+    except:
+        print("22222222222222222222222222222222222222")
+        dict = {           
+          'username' : postData.get("username"),    
+          'nickname' : postData.get("nickname"), 
+          'password' : make_password(postData.get("password")), 
+          'phone' : postData.get("phone"), 
+          'email' : postData.get("email"),
+          'companyname' : postData.get("companyname"),  
+          'is_superuser' :  postData.get("superuser"),                                        
+        } 
+        models.userProfile.objects.create(**dict)  
+    
+    return render(
+            request,
+            "adduser.html", 
+            {
+    
+            }                
+        )  
+    
+def editUser(request):
+    getData = request.GET
+    id = getData.get("id")    
+    result = models.userProfile.objects.get(id=id)
+    return render(
+            request,
+            "edituser.html", 
+            {               
+                'result' : result,
+            }                
+    )          
+    
+def delUser(request):
+    postData = request.POST
+    delid = postData.get('delid')
+    models.userProfile.objects.filter(id=delid).delete() 
+
+      
+    return render(
+        request,
+        "membermanager.html", 
+        {
+
+       }
+    )  
+    
+def delCompany(request):
+    postData = request.POST
+    companyname = postData.get('delcompanyname')    
+    print(companyname)
+    return render(
+        request,
+        "torchgather.html", 
+        {
+
+       }
+    )  
+
+
+
+
+
+    
+def createExcel(request):
+    postData = request.POST.get("companyname")
+    print(postData)  
+    print("233131321312321") 
+    print("232131")
+    workbook = load_workbook('E:\\1.xlsx')
+    workbook.active = 0
+    workbook1 = workbook.active
+    print(workbook1)
+    workbook1['F2'] = '陈银坤'
+    timestr=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    filename='E:\\2-' + timestr + '.xlsx'
+    workbook.save(filename) 
+    print("1111111")
+    dict = {
+    "a": "1" ,
+    "b": "2" ,  
+    }
+    return HttpResponse(json.dumps(dict), content_type="application/json")
+
+
+
+ 
+
         
