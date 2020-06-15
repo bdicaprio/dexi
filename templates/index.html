@@ -1638,7 +1638,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
       ,laydate = layui.laydate;
       
       
-     
+     //给表单赋默认值
      
      form.val('from-statistics', {
        "corporateGender": {{ resultStatistics.corporateGender }}
@@ -1729,7 +1729,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
  }); 
     
     
-    
+    //保存人员概况表
     form.on('submit(save-personnel)', function(data){
         var options_personnel = [];
         
@@ -1737,12 +1737,6 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
         	 options_personnel.push($(this).children().eq(3).text());                       
          });  
           
-        
-    alert(options_personnel)    
-   //layer.alert(JSON.stringify(data.field), {
-
-   // title: "最终的提交信息"
-   //});   
        	  
     $.ajax({
 		   type: 'POST',
@@ -1760,7 +1754,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
   return false;        
 }); 
 
-
+    //保存科技活动表
     form.on('submit(save-activities)', function(data){
         var options_activities = [];
         var options_activities_continues = [];
@@ -1773,11 +1767,6 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
         	 options_activities_continues.push($(this).children().eq(3).text());                       
          });             
          
-      
-   //layer.alert(JSON.stringify(data.field), {
-
-   // title: "最终的提交信息"
-   //});   
        	  
     $.ajax({
 		   type: 'POST',
@@ -1798,7 +1787,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
 
 
      
-
+     <!--
       form.on('submit(cancal-project)', function(data){
          $('#submit_from').addClass('hide'); 
           form.val('example',{
@@ -1817,7 +1806,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
          }) ; 
          return false;                            
      });      
-         
+      -->   
 }); 
 
 

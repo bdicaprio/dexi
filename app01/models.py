@@ -21,12 +21,15 @@ class userProfile(AbstractUser):
         db_table = 'auth_user'
         
 
-
-
+class companyInfo(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.ForeignKey(userProfile,blank=True,null=True)
+    companyname = models.CharField(max_length=64,blank=True,null=True)
+    
 #��ҵͳ�Ʊ�
 class statistics(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(userProfile,blank=True,null=True)
+    company = models.ForeignKey(companyInfo,blank=True,null=True)
     organizationCode = models.CharField(max_length=16,blank=True,null=True)
     areaNumber = models.CharField(max_length=16,blank=True,null=True)
     enterpriseName = models.CharField(max_length=16,blank=True,null=True)
@@ -51,7 +54,7 @@ class statistics(models.Model):
 #��ҵ�ſ���
 class company(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(userProfile,blank=True,null=True)
+    company = models.ForeignKey(companyInfo,blank=True,null=True)
     qb07_2 = models.CharField(max_length=64,blank=True,null=True)
     qb07_3 = models.CharField(max_length=64,blank=True,null=True)
     qb08 = models.TextField(max_length=64,blank=True,null=True) 
@@ -89,7 +92,7 @@ class company(models.Model):
 #���øſ���
 class economic(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(userProfile,blank=True,null=True)
+    company = models.ForeignKey(companyInfo,blank=True,null=True)
     qc02 = models.CharField(max_length=64,blank=True,null=True)
     qc02_05 = models.CharField(max_length=64,blank=True,null=True)
     qc55 = models.CharField(max_length=64,blank=True,null=True)
@@ -161,7 +164,7 @@ class economic(models.Model):
 #��Ա�ſ���
 class personnel(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(userProfile,blank=True,null=True)
+    company = models.ForeignKey(companyInfo,blank=True,null=True)
     qd01 = models.CharField(max_length=64,blank=True,null=True)
     qd03 = models.CharField(max_length=8,blank=True,null=True)
     qd25 = models.CharField(max_length=16,blank=True,null=True)
@@ -188,7 +191,7 @@ class personnel(models.Model):
 #�Ƽ���Ŀ�ſ�    
 class projects(models.Model):
     id = models.AutoField(primary_key=True) 
-    username = models.ForeignKey(userProfile,blank=True,null=True)
+    company = models.ForeignKey(companyInfo,blank=True,null=True)
     projectName = models.CharField(max_length=64,blank=True,null=True)   
     projectFrom = models.CharField(max_length=64,blank=True,null=True)   
     developmentForm = models.CharField(max_length=64,blank=True,null=True)
@@ -206,7 +209,7 @@ class projects(models.Model):
 #�Ƽ���ſ�    
 class activities(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.ForeignKey(userProfile,blank=True,null=True)
+    company = models.ForeignKey(companyInfo,blank=True,null=True)
     qj09 = models.CharField(max_length=64,blank=True,null=True)
     qj67 = models.CharField(max_length=64,blank=True,null=True)
     qj09_1 = models.CharField(max_length=64,blank=True,null=True)

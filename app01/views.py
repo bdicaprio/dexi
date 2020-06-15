@@ -53,8 +53,25 @@ def index(request,*args,**kwargs):
     superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
 
     id = ''
+    lsSuperuser = ''
     for i in resultId:
         id = i['id']
+    for i in superuser:
+        lsSuperuser = str(i['is_superuser'])
+        
+
+    if lsSuperuser == 'True':
+        resultStatistics = {"corporateGender":0,"education":0,} 
+        return render (
+            request,
+            "index.html", 
+            {
+            "resultStatistics":resultStatistics, 
+            "username":username, 
+            "superuser":superuser,                                  
+            }  
+        )      
+        
     try:
         resultStatistics = models.statistics.objects.get(username_id=id)
         resultCompany = models.company.objects.get(username_id=id)
@@ -76,14 +93,14 @@ def index(request,*args,**kwargs):
            } 
         )       
     except:
-        resultStatistics = {"corporateGender":0,"education":0,}             
+        resultStatistics = {"corporateGender":0,"education":0,} #第一次登入传传默认值            
         return render (
             request,
             "index.html", 
             {
             "resultStatistics":resultStatistics, 
-            "username":username,                       
-            
+            "username":username, 
+            "superuser":superuser,                                  
             }
         )
         
@@ -94,46 +111,58 @@ def getPojectList(request):
     sql = ''
     sql_count = ''
     id = ''
+    CompanyNameId = ''
     getData = request.GET
     p = request.GET.get('page')
     l = request.GET.get('limit')
     username = request.session.get('username','anybody') 
-    projectName = getData.get('projectName')
-    start = str((int(p)-1) * int(l))
-    end = str(l)
-    print(len(str(projectName)))
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    for i in resultId:
-        id = str(i['id'])        
-    if (str(projectName)) == 'None':
-        sql = 'select id,username_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  username_id = ' +   id   +  ' limit '  +  start + ','  + end
-        sql_count = 'select count(*)  from  app01_projects'
-    elif(len(str(projectName)) == 0):
-        sql = 'select id,username_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  username_id = ' +   id   +  ' limit '  +  start + ','  + end
-        sql_count = 'select count(*)  from  app01_projects'        
-    else :
-        sql = 'select id,username_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  username_id = ' +   id  + ' and   projectName like '  +  " '%"    +   projectName  + "%' " +  ' limit '  +  start + ','  + end
-        print(sql)
-        sql_count = 'select count(*)  from app01_projects  where  username_id = ' +   id  + ' and  projectName = ' +   projectName   +  ' limit '  +  start + ','  + end
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
+    for i in superuser:
+        lsSuperuser = str(i['is_superuser'])        
+    if lsSuperuser == 'True':
+        dict = {"code":0,"msg":"","count":0,"data":""}
+        return HttpResponse(json.dumps(dict), content_type="application/json")
+    else:    
+        projectName = getData.get('projectName') #搜索接受项目名称
+        start = str((int(p)-1) * int(l))
+        end = str(l)
+        resultUsernameId = models.userProfile.objects.values("id").filter(username=username)
+        for i in resultUsernameId:
+            id = str(i['id']) 
+        resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+        for i in resultCompanyNameId:
+            CompanyNameId = str(i['id'])            
+        if (str(projectName)) == 'None':
+            sql = 'select id,company_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  company_id = ' +   CompanyNameId   +  ' limit '  +  start + ','  + end
+            print(sql)
+            sql_count = 'select count(*)  from  app01_projects'
+        elif(len(str(projectName)) == 0):
+            sql = 'select id,company_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  company_id = ' +   CompanyNameId   +  ' limit '  +  start + ','  + end
+            print(sql)
+            sql_count = 'select count(*)  from  app01_projects'        
+        else :
+            sql = 'select id,company_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  company_id = ' +   CompanyNameId  + ' and   projectName like '  +  " '%"    +   projectName  + "%' " +  ' limit '  +  start + ','  + end
+            print(sql)
+            sql_count = 'select count(*)  from app01_projects  where  company_id = ' +   CompanyNameId  + ' and  projectName = ' +   projectName   +  ' limit '  +  start + ','  + end
+            
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        rawData = cursor.fetchall()    
+        col_names = [desc[0] for desc in cursor.description]
+        result = []
         
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    rawData = cursor.fetchall()    
-    col_names = [desc[0] for desc in cursor.description]
-    result = []
-    
-    for row in rawData:
-        objDict = {}
+        for row in rawData:
+            objDict = {}
+            
+            for index, value in enumerate(row):           
+                objDict[col_names[index]] = value       
         
-        for index, value in enumerate(row):           
-            objDict[col_names[index]] = value       
-    
-        result.append(objDict)
-    cursor.execute(sql_count)
-    count = cursor.fetchall()
-    count = count[0][0]      
-    dict = {"code":0,"msg":"","count":count,"data":result}
-    return HttpResponse(json.dumps(dict), content_type="application/json")
+            result.append(objDict)
+        cursor.execute(sql_count)
+        count = cursor.fetchall()
+        count = count[0][0]      
+        dict = {"code":0,"msg":"","count":count,"data":result}
+        return HttpResponse(json.dumps(dict), content_type="application/json")
 
 
 
