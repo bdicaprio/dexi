@@ -13,7 +13,7 @@
                                    <input type="text" name="searchcompany" id="searchcompany" autocomplete="off" class="layui-input" />
                               </div>
                          <div style="display:block;float:right;margin-right:30px;margin-top:30px;" id="layerDemo"> 
-                              <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">批量导入</button>                         
+                              <!--<button data-method="offset" data-type="auto" class="layui-btn" id="add-project">批量导入</button>-->                         
                          </div>                  
                    </div>                
                </div>
@@ -57,7 +57,7 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
 	       {field:'username', width:70, title: '用户'}
 	      ,{field:'companyname', width:150, title: '公司名称'}
 	      ,{field:'phone', width:120, title: '电话'}
-	      ,{field:'hyperlink', width:150,title: '企业统计表〃',event: 'statisticsonclick'}	      
+	      ,{field:'hyperlink', width:150,title: '企业统计表',event: 'statisticsonclick'}	      
 	      ,{field:'hyperlink', width:150,title: '企业概况表',event: 'companyonclick'}
 	      ,{field:'hyperlink', width:150, title: '经济概况表',event: 'economiconclick'}
 	      ,{field:'hyperlink', width:150, title: '人员概况表',event: 'personnelonclick'}
@@ -171,8 +171,9 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
             		          data:{'companyname':companyname},
             		          success:function(text){
             		        	  var data = JSON.parse(text)
-            		        	  alert(data.a)
-            		              var url = '/static/' + 'template.xls'; 
+            		        	  filename = data.filename
+            		        	  
+            		              var url = '/static/' + filename; 
             		              window.location.href = url;   
          		             
             		          },error:function(){

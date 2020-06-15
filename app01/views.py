@@ -17,6 +17,7 @@ import datetime
 from openpyxl import load_workbook
 from openpyxl import Workbook
 from django.http import StreamingHttpResponse
+import os
 
 # Create your views here.
 
@@ -923,21 +924,301 @@ def delCompany(request):
     
 def createExcel(request):
     postData = request.POST.get("companyname")
-    print(postData)  
-    print("233131321312321") 
-    print("232131")
     workbook = load_workbook('E:\\1.xlsx')
     workbook.active = 0
     workbook1 = workbook.active
-    print(workbook1)
-    workbook1['F2'] = '陈银坤'
+    id = 1   
+    resulstatisticst = models.statistics.objects.values().filter(username_id=1)
+    for item in resulstatisticst:
+        workbook1['F2'] = item['organizationCode']
+        workbook1['L2'] = item['areaNumber']
+        workbook1['D3'] = item['enterpriseName']
+        workbook1['K3'] = item['natureOfCorporation']
+        workbook1['D4'] = item['corporateGender'] 
+        workbook1['G4'] = item['birthday']
+        workbook1['J4'] = item['education']
+        workbook1['D5'] = item['address']
+        workbook1['L5'] = item['postalCode']
+        workbook1['D6'] = item['registeredAddress']  
+        workbook1['D7'] = item['manager']
+        workbook1['G7'] = item['telephone']
+        workbook1['K2'] = item['fax']
+        workbook1['D8'] = item['statisticalControlOfficer']
+        workbook1['G8'] = item['preparedBy']  
+        workbook1['J8'] = item['preparedByTelephone']
+        workbook1['C9'] = item['fillingTime']
+        workbook1['F9'] = item['email']
+        workbook1['C10'] = item['url']
+        workbook1['K10'] = item['preparedByMobilephone'] 
+        
+    resultcompany = models.company.objects.values().filter(username_id=1) 
+    workbook.active = 1
+    workbook1 = workbook.active    
+    for item in resultcompany:
+        workbook1['C3'] = item['qb07_2']
+        workbook1['C4'] = item['qb07_3']
+        workbook1['C5'] = item['qb08']
+        workbook1['C6'] = item['qb21']
+        workbook1['C7'] = item['qb22'] 
+        workbook1['C8'] = item['qb101']
+        workbook1['C9'] = item['qb03_0']
+        workbook1['C10'] = item['qb03_1']
+        workbook1['C11'] = item['qb04']
+        workbook1['C12'] = item['qb04_0']  
+        workbook1['C13'] = item['qb20_1']
+        workbook1['C14'] = item['qb20']
+        workbook1['C15'] = item['qb06']
+        workbook1['C17'] = item['qb06_1']
+        workbook1['C18'] = item['qb06_2']    
+        workbook1['C19'] = item['qb18']
+        workbook1['C20'] = item['qb09']
+        workbook1['C21'] = item['qb10']
+        workbook1['C22'] = item['qb11']  
+        workbook1['C23'] = item['qb13']
+        workbook1['C24'] = item['qb12']
+        workbook1['C25'] = item['qb14']
+        workbook1['C26'] = item['qb14_1']
+        workbook1['C27'] = item['qb14_2']    
+        workbook1['C28'] = item['qb15']    
+        workbook1['C29'] = item['qb15_1']
+        workbook1['C30'] = item['qb15_2']
+        workbook1['C31'] = item['qb15_3']
+        workbook1['C32'] = item['qb15_4']  
+        workbook1['C33'] = item['qb15_5']
+        workbook1['C34'] = item['qb16']
+        workbook1['C35'] = item['qb16_1']                        
+    
+    resulteconomic = models.economic.objects.values().filter(username_id=1)
+    workbook.active = 2
+    workbook1 = workbook.active      
+    for item in resulteconomic:
+        workbook1['D3'] = item['qc02']
+        workbook1['D4'] = item['qc02_05']
+        workbook1['D5'] = item['qc55']
+        workbook1['D6'] = item['qc06']
+        workbook1['D7'] = item['qc06_1'] 
+        workbook1['D8'] = item['qc06_2']
+        workbook1['D9'] = item['qc06_3']
+        workbook1['D10'] = item['qc06_4']
+        workbook1['D11'] = item['qc07']
+        workbook1['D12'] = item['qc09']  
+        workbook1['D13'] = item['qc10']
+        workbook1['D14'] = item['qc49']
+        workbook1['D15'] = item['qc52']
+        workbook1['D16'] = item['qc11']        
+        workbook1['D17'] = item['qc38']    
+        workbook1['D18'] = item['qc11_1']
+        workbook1['D19'] = item['qc220']
+        workbook1['D20'] = item['qc220_1']
+        workbook1['D21'] = item['qc221']  
+        workbook1['D22'] = item['qc222']
+        workbook1['D23'] = item['qc223']
+        workbook1['D24'] = item['qc223_2']
+        workbook1['D25'] = item['qc223_3']
+        workbook1['D26'] = item['qc224']    
+        workbook1['D27'] = item['qc228']    
+        workbook1['D28'] = item['qc229']
+        workbook1['D29'] = item['qc225']
+        workbook1['D30'] = item['qc233']
+        workbook1['D31'] = item['qc232']  
+        workbook1['D32'] = item['qc120']
+        workbook1['D33'] = item['qc227']
+        workbook1['D34'] = item['qc230'] 
+        workbook1['D38'] = item['qc234'] 
+        workbook1['D39'] = item['qc12']   
+        workbook1['D40'] = item['qc231']
+        workbook1['D41'] = item['qc13']  
+        workbook1['D42'] = item['qc14']
+        workbook1['D43'] = item['qc16']
+        workbook1['D44'] = item['qc17']
+        workbook1['D45'] = item['qc18']        
+        workbook1['D46'] = item['qc20']
+        workbook1['D47'] = item['qc20_1']    
+        workbook1['D48'] = item['qc20_2']
+        workbook1['D49'] = item['qc20_3']
+        workbook1['D50'] = item['qc62']
+        workbook1['D51'] = item['qc51']  
+        workbook1['D52'] = item['qc24']
+        workbook1['D53'] = item['qc25']
+        workbook1['D54'] = item['qc27_1']
+        workbook1['D55'] = item['qc29']
+        workbook1['D56'] = item['qc30']    
+        workbook1['D57'] = item['qc65']    
+        workbook1['D58'] = item['qc61']
+        workbook1['D59'] = item['qc30']   
+        workbook1['D60'] = item['qc31']
+        workbook1['D61'] = item['qc33']  
+        workbook1['D62'] = item['qc34']
+        workbook1['D63'] = item['qc63']
+        workbook1['D64'] = item['qc50']
+        workbook1['D65'] = item['qc39']
+        workbook1['D66'] = item['qc40']                            
+        workbook1['D67'] = item['qc41']
+        workbook1['B69'] = item['QC226_1']
+        workbook1['B70'] = item['QC226_2'] 
+        workbook1['B71'] = item['QC226']           
+            
+    resultpersonnel = models.personnel.objects.values().filter(username_id=1)
+    workbook.active = 3
+    workbook1 = workbook.active      
+    for item in resultpersonnel:
+        workbook1['D4'] = item['qd01']
+        workbook1['D5'] = item['qd03']
+        workbook1['D6'] = item['qd25']
+        workbook1['D7'] = item['qd21'] 
+        workbook1['D8'] = item['qd26']
+        workbook1['D9'] = item['qd14']
+        workbook1['D10'] = item['qd05']      
+        workbook1['D13'] = item['qd18']
+        workbook1['D14'] = item['qd06']
+        workbook1['D15'] = item['qd07']
+        workbook1['D16'] = item['qd08']        
+        workbook1['D17'] = item['qd09']
+        workbook1['D18'] = item['qd30']    
+        workbook1['D19'] = item['qd31']
+        workbook1['D20'] = item['qd32']
+        workbook1['D21'] = item['qd33']
+        workbook1['D22'] = item['qd34']  
+        workbook1['D23'] = item['qd35']
+        workbook1['D24'] = item['qd36']
+        workbook1['D26'] = item['qd27']
+        workbook1['D27'] = item['qd28']    
+     
+          
+    resultprojects = models.projects.objects.values().filter(username_id=1)
+    count = models.projects.objects.values().filter(username_id=1).count()
+
+    workbook.active = 4
+    workbook1 = workbook.active 
+    for i in range(count):
+        i = str(i+3)       
+        for item in resultprojects:
+            
+            workbook1[str("B"+i)] = item['projectName']   
+            workbook1[str("C"+i)] = item['projectFrom']
+            workbook1[str("D"+i)] = item['developmentForm']
+            workbook1[str("E"+i)] = item['achievement']
+            workbook1[str("F"+i)] = item['economicGoals'] 
+            workbook1[str("G"+i)] = item['activityType']
+            workbook1[str("H"+i)] = item['startTime']
+            workbook1[str("I"+i)] = item['endTime']
+            workbook1[str("J"+i)] = item['personnel']
+            workbook1[str("K"+i)] = item['time']  
+            workbook1[str("L"+i)] = item['stage']
+            workbook1[str("M"+i)] = item['funds']
+            workbook1[str("N"+i)] = item['capital']                      
+            
+    
+       
+    resultactivities = models.activities.objects.values().filter(username_id=1)  
+    workbook.active = 5
+    workbook1 = workbook.active      
+    for item in resultactivities:
+        workbook1['D4'] = item['qj09']
+        workbook1['D5'] = item['qj67']
+        workbook1['D6'] = item['qj09_1']
+        workbook1['D7'] = item['qj09_2'] 
+        workbook1['D8'] = item['qj09_3']
+        
+        workbook1['D10'] = item['qj20']
+        workbook1['D11'] = item['qj23_1']
+        workbook1['D12'] = item['qj23_2']  
+        workbook1['D13'] = item['qj23_3']
+        workbook1['D14'] = item['qj23_4']
+        workbook1['D15'] = item['qj23_6']
+        workbook1['D16'] = item['qj23_7']        
+        workbook1['D17'] = item['qj33']    
+        workbook1['D18'] = item['qj33_1']
+        workbook1['D19'] = item['qj33_2']
+        workbook1['D20'] = item['qj33_4']
+        workbook1['D21'] = item['qj33_3']  
+        workbook1['D22'] = item['qj23_5']
+        
+        
+        workbook1['D24'] = item['qj250']
+        workbook1['D25'] = item['qj251']
+        
+           
+        workbook1['D27'] = item['qj01']    
+        workbook1['D28'] = item['qj07_0']
+        workbook1['D29'] = item['qj07_1']
+        workbook1['D30'] = item['qj07_2']
+        workbook1['D31'] = item['qj14_1']
+          
+        workbook1['D34'] = item['qj55'] 
+        workbook1['D35'] = item['qj56'] 
+        workbook1['D36'] = item['qj56_1']   
+        workbook1['D37'] = item['qj55_1']
+        workbook1['D38'] = item['qj55_2']  
+        workbook1['D39'] = item['qj74']
+        workbook1['D40'] = item['qj57']
+        workbook1['D41'] = item['qj57_1']
+        workbook1['D42'] = item['qj75']   
+        workbook1['D43'] = item['qj83']
+        workbook1['D44'] = item['qj83_1']
+        workbook1['D45'] = item['qj82'] 
+        
+        workbook1['D49'] = item['qj73']
+        workbook1['D50'] = item['qj73_2']   
+        workbook1['D51'] = item['qj73_1']
+        workbook1['D52'] = item['qj23']
+        workbook1['D53'] = item['qj24']    
+        
+        workbook1['D55'] = item['qj70']
+        workbook1['D56'] = item['qj71']
+        workbook1['D57'] = item['qj72'] 
+        
+        workbook1['D59'] = item['qj57_1']
+        workbook1['D60'] = item['qj75']   
+        workbook1['D61'] = item['qj83']
+        workbook1['D62'] = item['qj83_1'] 
+
+        workbook1['D64'] = item['qj25'] 
+        workbook1['D65'] = item['qj79'] 
+        workbook1['D66'] = item['qj77']   
+        workbook1['D67'] = item['qj79_1']
+        workbook1['D68'] = item['qj79_2']  
+        workbook1['D69'] = item['qj85']
+        workbook1['D70'] = item['qj85_1']
+        workbook1['D71'] = item['qj86']
+        workbook1['D72'] = item['qj86_1']   
+        workbook1['D73'] = item['qj87']
+        workbook1['D74'] = item['qj87_1']
+        workbook1['D75'] = item['qj101']   
+        workbook1['D76'] = item['qj101_1']
+        workbook1['D77'] = item['qj100']  
+        workbook1['D78'] = item['qj100_1']
+        workbook1['D79'] = item['qj98_1']
+        workbook1['D80'] = item['qj27_1']
+        workbook1['D81'] = item['qj28_1']   
+        
+        
+        workbook1['D83'] = item['qj80_1']
+        workbook1['D84'] = item['qj80']
+        
+        workbook1['D87'] = item['qj52']  
+        
+        workbook1['D89'] = item['qj58']
+        workbook1['D90'] = item['qj59']
+        workbook1['D91'] = item['qj61']
+        workbook1['D92'] = item['qj62']                                                
+      
+        
+        
+                   
+           
+        
+                                           
     timestr=datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    filename='E:\\2-' + timestr + '.xlsx'
-    workbook.save(filename) 
-    print("1111111")
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    filepath= BASE_DIR + '''\static\dexi-''' + timestr + ".xlsx"                           
+    filename = 'dexi-' + timestr + '.xlsx'
+
+    
+  
+    workbook.save(filepath) 
     dict = {
-    "a": "1" ,
-    "b": "2" ,  
+    "filename": filename , 
     }
     return HttpResponse(json.dumps(dict), content_type="application/json")
 
