@@ -168,11 +168,15 @@ layui.use(['jquery','element','form', 'layedit', 'laydate','table'], function(){
           ,layedit = layui.layedit
           ,table = layui.table
           ,laydate = layui.laydate;
- 
+ 		
+          
+          
+          var companyname = parent.$("#companyname").val();
+        
           
           table.render({
 	        elem: '#test'
-            ,url:'/getprojectlist/'
+            ,url:'/catprojectlist?companyname='+companyname
 		    ,cols: [[
 		       {field:'projectName', width:90, title: '项目名称'}
 		      ,{field:'projectFrom', width:90, title: '项目来源'}

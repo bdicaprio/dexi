@@ -30,13 +30,13 @@
                      <div class="layui-inline" style="margin-top:30px;">
                                 <label class="layui-form-label" style="margin-left:300px;">密码</label>
                                 <div class="layui-input-inline" >
-                                     <input style="width:600px;" type="password" name="nickname" id='nickname' autocomplete="off" class="layui-input" value={{ resultUser.nickname }} >
+                                     <input style="width:600px;" type="password" name="password" id='password' autocomplete="off" class="layui-input"  >
                                 </div>
                       </div>                       
                      <div class="layui-inline" style="margin-top:30px;">
                                 <label class="layui-form-label" style="margin-left:300px;">确认密码</label>
                                 <div class="layui-input-inline" >
-                                     <input style="width:600px;" type="password" name="nickname" id='nickname' autocomplete="off" class="layui-input" value={{ resultUser.nickname }} >
+                                     <input style="width:600px;" type="password" name="confirmPassword" id='confirmPassword' autocomplete="off" class="layui-input"  >
                                 </div>
                       </div>                                             
                      <div class="layui-inline" style="margin-top:30px;">
@@ -121,10 +121,11 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
                url: '/saveUser/',
        		   cache: false,
        		   async: false,
-  		       success:function(data){　　　　　　　　　
-  		    	     parent.layer.alert("保存成功", { });
-  		    	     parent.layui.table.reload('test',{page: {}});
+  		       success:function(data){　　　　
+  		       		 parent.layui.table.reload('idTest',{});　　　　　
+  		    	     parent.layer.alert("保存成功", { });    	   
   		    	     parent.layer.close(index);
+  		    	     
   		    	     
        		   }                
            })

@@ -53,14 +53,20 @@ def index(request,*args,**kwargs):
     superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
 
     id = ''
+    CompanyNameId = ''
     lsSuperuser = ''
     for i in resultId:
         id = i['id']
+        
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id']) 
+        
     for i in superuser:
         lsSuperuser = str(i['is_superuser'])
         
 
-    if lsSuperuser == 'True':
+    if lsSuperuser == 'True': #如果是管理员账号,性别和学历返回空
         resultStatistics = {"corporateGender":0,"education":0,} 
         return render (
             request,
@@ -71,14 +77,19 @@ def index(request,*args,**kwargs):
             "superuser":superuser,                                  
             }  
         )      
-        
-    try:
-        resultStatistics = models.statistics.objects.get(username_id=id)
-        resultCompany = models.company.objects.get(username_id=id)
-        resultEconomic = models.economic.objects.get(username_id=id)
-        resultPersonnel = models.personnel.objects.get(username_id=id)
-        resultActivities = models.activities.objects.get(username_id=id)
-        
+    print(CompanyNameId)    
+    try: #普通用户填过数据返回数据
+        print("11111222222111111111111")
+        resultStatistics = models.statistics.objects.get(company_id=companyNameId)
+        print("11111")
+        resultCompany = models.company.objects.get(company_id=companyNameId)
+        print("222222")
+        resultEconomic = models.economic.objects.get(company_id=companyNameId)
+        print("333333")
+        resultPersonnel = models.personnel.objects.get(company_id=companyNameId)
+        print("44444444444")
+        resultActivities = models.activities.objects.get(company_id=companyNameId)
+        print("5555555555555555")
         return render (
             request,
             "index.html", 
@@ -92,7 +103,8 @@ def index(request,*args,**kwargs):
             "superuser":superuser,                       
            } 
         )       
-    except:
+    except: #普通用户没填过数据
+        
         resultStatistics = {"corporateGender":0,"education":0,} #第一次登入传传默认值            
         return render (
             request,
@@ -104,7 +116,49 @@ def index(request,*args,**kwargs):
             }
         )
         
-   
+def catprojectlist(request): 
+    sql = ' '
+    sql_count = ''
+    id = ''
+    CompanyNameId = ''
+    getData = request.GET
+    p = request.GET.get('page')
+    l = request.GET.get('limit')    
+    companyname = request.GET.get('companyname')
+    print(companyname)        
+    
+    resultId = models.companyInfo.objects.values("id").filter(companyname=companyname)
+    
+    for i in resultId:
+        companyNameId = str(i['id'])  
+        
+    print(companyNameId)
+    start = str((int(p)-1) * int(l))
+    end = str(l)    
+    
+    print(companyNameId,start,end)  
+    sql = 'select id,company_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  company_id = ' +   companyNameId   +  ' limit '  +  start + ','  + end
+    print(sql)
+    sql_count = 'select count(*)  from  app01_projects where company_id = ' + companyNameId        
+
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    rawData = cursor.fetchall()    
+    col_names = [desc[0] for desc in cursor.description]
+    result = []
+    
+    for row in rawData:
+        objDict = {}
+        
+        for index, value in enumerate(row):           
+            objDict[col_names[index]] = value       
+    
+        result.append(objDict)
+    cursor.execute(sql_count)
+    count = cursor.fetchall()
+    count = count[0][0]      
+    dict = {"code":0,"msg":"","count":count,"data":result}
+    return HttpResponse(json.dumps(dict), content_type="application/json")          
     
 #获取项目表格数据
 def getPojectList(request):
@@ -115,6 +169,7 @@ def getPojectList(request):
     getData = request.GET
     p = request.GET.get('page')
     l = request.GET.get('limit')
+         
     username = request.session.get('username','anybody') 
     superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
     for i in superuser:
@@ -132,18 +187,22 @@ def getPojectList(request):
         resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
         for i in resultCompanyNameId:
             CompanyNameId = str(i['id'])            
-        if (str(projectName)) == 'None':
+        if (str(projectName)) == 'None':  #搜索为空
+            print("111111111111111111111111")
             sql = 'select id,company_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  company_id = ' +   CompanyNameId   +  ' limit '  +  start + ','  + end
             print(sql)
-            sql_count = 'select count(*)  from  app01_projects'
-        elif(len(str(projectName)) == 0):
+            sql_count = 'select count(*)  from  app01_projects where company_id = ' + CompanyNameId
+        elif(len(str(projectName)) == 0):   #搜索为空
+            print("2222222222222222222222222222222")
             sql = 'select id,company_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  company_id = ' +   CompanyNameId   +  ' limit '  +  start + ','  + end
             print(sql)
-            sql_count = 'select count(*)  from  app01_projects'        
-        else :
+            sql_count = 'select count(*)  from  app01_projects  where company_id  = ' + CompanyNameId        
+        else :   #搜索
             sql = 'select id,company_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projects  where  company_id = ' +   CompanyNameId  + ' and   projectName like '  +  " '%"    +   projectName  + "%' " +  ' limit '  +  start + ','  + end
             print(sql)
-            sql_count = 'select count(*)  from app01_projects  where  company_id = ' +   CompanyNameId  + ' and  projectName = ' +   projectName   +  ' limit '  +  start + ','  + end
+            sql_count = 'select count(*)  from app01_projects  where  company_id = ' +   CompanyNameId  + ' and  projectName   like '  +  " '%"    +   projectName  + "%' " +  ' limit '  +  start + ','  + end
+            print(sql)
+            print(sql_count)
             
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -172,7 +231,10 @@ def addStatistics(request):
     resultId = models.userProfile.objects.values("id").filter(username=username)
     id = ''
     for i in resultId:
-        id = i['id']            
+        id = i['id']    
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+    for i in resultCompanyNameId:
+            companyNameId = str(i['id'])             
     dict = {
         'organizationCode' : postData.get('organizationCode'),
         'areaNumber' : postData.get('areaNumber'),
@@ -194,14 +256,11 @@ def addStatistics(request):
         'email' : postData.get('email'),
         'url' : postData.get('url'),
         'preparedByMobilephone' : postData.get('preparedByMobilephone'), 
-        'username_id' : id,    
+        'company_id' : companyNameId,    
     }
-    
-    if models.statistics.objects.filter(username_id=id):
-        print("11111111111111111111111111111111")
-        models.statistics.objects.update(**dict)
+    if models.statistics.objects.filter(company_id=companyNameId):
+        models.statistics.objects.filter(company_id=companyNameId).update(**dict)
     else:
-        print("2222222222222222222222222")
         models.statistics.objects.create(**dict)
     return render(
         request,
@@ -234,12 +293,17 @@ def addProject(request):
 def saveProject(request):
     postData = request.POST
     username = request.session.get('username','anybody') 
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    username_id = ''
+    resultId = models.userProfile.objects.values("id").filter(username=username)  #获取用户的id
+    id = ''
+    companyNameId = ''
     for i in resultId:
-        username_id = i['id']         
+        id = i['id']  
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)  #获取公司的id
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id'])       
     try:    
-        id = postData.get('id')
+        id = postData.get('id')  
+        print(id)     
         dict = {
             'projectName' : postData.get('projectName'),
             'projectFrom' : postData.get('projectFrom'),
@@ -253,7 +317,8 @@ def saveProject(request):
             'personnel' : postData.get('personnel'),
             'funds' : postData.get('funds'),
             'capital' : postData.get('capital'),
-            'username_id' : username_id ,
+            'company_id' : companyNameId, 
+            'id': id,
         }
         
         models.projects.objects.filter(id=id).update(**dict)
@@ -272,9 +337,9 @@ def saveProject(request):
             'personnel' : postData.get('personnel'),
             'funds' : postData.get('funds'),
             'capital' : postData.get('capital'),
-            'username_id' : username_id ,
+            'company_id' : companyNameId, 
         }
-        
+        print(dict)
         models.projects.objects.create(**dict)    
      
          
@@ -290,11 +355,12 @@ def saveProject(request):
 def addCompany(request):
     postData = request.POST.getlist('companyData[]')
     username = request.session.get('username','anybody') 
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    id = ''
-    for i in resultId:
-        id = i['id']   
-    print(postData[31])        
+    resultUsernameId = models.userProfile.objects.values("id").filter(username=username)
+    for i in resultUsernameId:
+        id = str(i['id']) 
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id'])       
     dict = {
        'qb07_2': postData[1],
        'qb07_3': postData[2],
@@ -326,13 +392,12 @@ def addCompany(request):
        'qb15_5': postData[29],
        'qb16': postData[30],
        'qb16_1': postData[31], 
-       'username_id' : id,                      
+       'company_id' : companyNameId,                      
     }
-    if models.company.objects.filter(username_id=id):
-        print("11111111111111111111111111111111")
-        models.company.objects.update(**dict)
+    if models.company.objects.filter(company_id=companyNameId):
+
+        models.company.objects.filter(company_id=companyNameId).update(**dict)
     else:
-        print("2222222222222222222222222")
         models.company.objects.create(**dict)    
         
     return render(
@@ -348,10 +413,12 @@ def addEconomic(request):
     postData = request.POST.getlist('economicData[]')
     postDataContinues = request.POST.getlist('economicContinuesData[]') 
     username = request.session.get('username','anybody') 
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    id = ''
-    for i in resultId:
-        id = i['id']         
+    resultUsernameId = models.userProfile.objects.values("id").filter(username=username)
+    for i in resultUsernameId:
+        id = str(i['id']) 
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id'])       
     dict = {
        'qc02': postData[1],
        'qc02_05': postData[2],
@@ -418,13 +485,13 @@ def addEconomic(request):
        'QC226_1': postDataContinues[36],
        'QC226_2': postDataContinues[37],
        'QC226': postDataContinues[38], 
-       'username_id' : id,                                         
+       'company_id' : companyNameId,                                        
     }
-    if models.economic.objects.filter(username_id=id):
-        print("11111111111111111111111111111111")
-        models.economic.objects.update(**dict)
+    if models.economic.objects.filter(company_id=companyNameId):
+
+        models.economic.objects.filter(company_id=companyNameId).update(**dict)
     else:
-        print("2222222222222222222222222")
+
         models.economic.objects.create(**dict)
     return render(
         request,
@@ -438,10 +505,12 @@ def addEconomic(request):
 def addPersonnel(request):
     postData = request.POST.getlist('personnelData[]')
     username = request.session.get('username','anybody') 
-    resultId = models.userProfile.objects.values("id").filter(username=username)  
-    id = ''
-    for i in resultId:
-        id = i['id']    
+    resultUsernameId = models.userProfile.objects.values("id").filter(username=username)
+    for i in resultUsernameId:
+        id = str(i['id']) 
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id'])   
     dict = {
        'qd01': postData[2],
        'qd03': postData[3],
@@ -464,14 +533,12 @@ def addPersonnel(request):
        'qd36': postData[22],
        'qd27': postData[24],  
        'qd28': postData[25],   
-       'username_id' : id,                                         
+       'company_id' : companyNameId,                                        
     }
-    print()
-    if models.personnel.objects.filter(username_id=id):
-        print("11111111111111111111111111111111")
-        models.personnel.objects.update(**dict)
+
+    if models.personnel.objects.filter(company_id=companyNameId):
+        models.personnel.objects.filter(company_id=companyNameId).update(**dict)
     else:
-        print("2222222222222222222222222")
         models.personnel.objects.create(**dict)
       
     return render(
@@ -486,10 +553,13 @@ def addActivities(request):
     postData = request.POST.getlist('activitiesData[]')
     postDataContinues = request.POST.getlist('activitiesContinuesData[]')  
     username = request.session.get('username','anybody') 
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    id = ''
-    for i in resultId:
-        id = i['id']        
+    resultUsernameId = models.userProfile.objects.values("id").filter(username=username) #根据用户名获取用户id
+    for i in resultUsernameId:
+        id = str(i['id']) 
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id) #根据用户id获取公司id
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id']) 
+    print(companyNameId)     
     dict = {
        'qj09': postData[2],
        'qj67': postData[3],
@@ -562,14 +632,13 @@ def addActivities(request):
        'qj58': postDataContinues[42],  
        'qj59': postDataContinues[43],
        'qj61': postDataContinues[44],
-       'qj62': postDataContinues[45],                                       
+       'qj62': postDataContinues[45], 
+       'company_id' : companyNameId,                                      
     }
 
-    if models.activities.objects.filter(username_id=id):
-        print("11111111111111111111111111111111")
-        models.activities.objects.update(**dict)
+    if models.activities.objects.filter(company_id=companyNameId):
+        models.activities.objects.filter(company_id=companyNameId).update(**dict)
     else:
-        print("2222222222222222222222222")
         models.activities.objects.create(**dict)        
   
     return render(
@@ -618,13 +687,30 @@ def member(request):
 def saveUserinfo(request):
     postData = request.POST
     username = postData.get("username")
-    dict = {
+    
+    id = ''
+    CompanyNameId = ''
+    
+    resultUsernameId = models.userProfile.objects.values("id").filter(username=username)
+    for i in resultUsernameId:
+        id = str(i['id']) 
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id'])   
+        
+            
+    dictUserInfo = {
         "nickname": postData['nickname'], 
         "phone": postData['phone'], 
         "email": postData['email'], 
         "companyname": postData['companyname'],                                 
     }  
-    models.userProfile.objects.filter(username=username).update(**dict)
+    dictCompanyInfo = {
+        "companyname": postData['companyname'], 
+    }
+
+    models.userProfile.objects.filter(id=id).update(**dictUserInfo)
+    models.companyInfo.objects.filter(id=companyNameId).update(**dictCompanyInfo)
     return render(
         request,
         "member.html", 
@@ -689,14 +775,14 @@ def getcompanyinfo(request):
     print(company)
     start = str((int(p)-1) * int(l))
     end = str(l)
-    if company is not None:
+    if company is not None: #搜索
         sql = 'select id,username,phone, companyname,hyperlink,is_superuser  from auth_user  where companyname  like ' + "'%"  +  company  + "%' " +  ' limit '  +  start + ','  + end
         sql_count = 'select count(*)  from auth_user  where username  like ' + "'%"  +  company  + "%' " +  ' limit '  +  start + ','  + end
         print(sql)
     else:
-        sql = 'select id,username,phone, companyname,hyperlink,is_superuser  from auth_user '  +  ' limit '  +  start + ','  + end
+        sql = 'select auth_user.id,auth_user.username,auth_user.phone,auth_user.hyperlink,auth_user.is_superuser,app01_companyinfo.companyname  from auth_user,app01_companyinfo where auth_user.id = app01_companyinfo.username_id '  +  ' limit '  +  start + ','  + end
         print(sql)
-        sql_count = 'select count(*)  from  auth_user'
+        sql_count = 'select count(t.id) from  (select  auth_user.id,auth_user.username,auth_user.phone,auth_user.hyperlink,auth_user.is_superuser,app01_companyinfo.companyname  from auth_user,app01_companyinfo where auth_user.id = app01_companyinfo.username_id limit 0,10) t'
     cursor = connection.cursor()
     cursor.execute(sql)
     rawData = cursor.fetchall()    
@@ -729,11 +815,11 @@ def getuserinfo(request):
     start = str((int(p)-1) * int(l))
     end = str(l)
     if username is not None:
-        sql = 'select id,username,nickname,phone,email, companyname,hyperlink,is_superuser  from auth_user  where username  like ' + "'%"  +  username  + "%' " +  ' limit '  +  start + ','  + end
-        sql_count = 'select count(*)  from auth_user  where username  like ' + "'%"  +  username  + "%' " +  ' limit '  +  start + ','  + end
+        sql = 'select id,username,nickname,phone,email, companyname,hyperlink,is_superuser  from auth_user  where username  like ' + "'%"  +  username  + "%' " +  '  and   id <> 1  order by id  DESC  limit '  +  start + ','  + end  
+        sql_count = 'select count(*)  from auth_user  where username  like ' + "'%"  +  username  + "%' " +  '  and   id <> 1  order by id  DESC limit '  +  start + ','  + end
         print(sql)
     else:
-        sql = 'select id,username,nickname,phone,email, companyname,hyperlink,is_superuser  from auth_user '  +  ' limit '  +  start + ','  + end
+        sql = 'select id,username,nickname,phone,email, companyname,hyperlink,is_superuser  from auth_user  where id <> 1   order by id  DESC  limit '  +  start + ','  + end + ''
         print(sql)
         sql_count = 'select count(*)  from  auth_user'
     cursor = connection.cursor()
@@ -771,64 +857,116 @@ def torchgather(request):
     
 def getStatistics(request):
     postData = request.GET
-    username = postData.get('username')
- 
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    resultStatistics = models.statistics.objects.get(username_id=resultId)
-    return render(
-        request,
-        "getstatistics.html", 
-        {
-          'resultStatistics':resultStatistics,
-        }
-    )   
+    companyname = postData.get('companyname')
+
+    resultId = models.companyInfo.objects.values("id").filter(companyname=companyname)
+    companyNameId = ''
+    for i in resultId:
+        companyNameId = i['id']
+
+    try:
+        resultStatistics = models.statistics.objects.get(company_id=companyNameId)
+        return render(
+            request,
+            "getstatistics.html", 
+            {
+              'resultStatistics':resultStatistics,
+            }
+        )       
+    except:
+        return render(
+            request,
+            "getstatistics.html", 
+            {
+              
+            }
+        )   
     
     
 def getCompany(request):
     postData = request.GET
-    username = postData.get('username')
+    companyname = postData.get('companyname')
  
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    resultCompany = models.company.objects.get(username_id=resultId)
-    return render(
-        request,
-        "getcompany.html", 
-        {
-          'resultCompany':resultCompany,
-        }
-    )
+    resultId = models.companyInfo.objects.values("id").filter(companyname=companyname)
+    companyNameId = ''
+    for i in resultId:
+        companyNameId = i['id']
+    print(companyNameId)
+        
+    try:    
+        resultCompany = models.company.objects.get(company_id=companyNameId)
+        return render(
+            request,
+            "getcompany.html", 
+            {
+              'resultCompany':resultCompany,
+            }
+        )
+    except:
+        return render(
+            request,
+            "getcompany.html", 
+            {
+              
+            }
+        )          
+        
     
 def getEconomic(request):
     postData = request.GET
-    username = postData.get('username')
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    resultEconomic = models.economic.objects.get(username_id=resultId)
-
-    return render(
-        request,
-        "geteconomic.html", 
-        {
-          'resultEconomic':resultEconomic,
-        }
-    )      
+    companyname = postData.get('companyname')
+    resultId = models.companyInfo.objects.values("id").filter(companyname=companyname)
+    companyNameId = ''
+    for i in resultId:
+        companyNameId = i['id']    
+    try:    
+        resultEconomic = models.economic.objects.get(company_id=companyNameId)
+        return render(
+            request,
+            "geteconomic.html", 
+            {
+              'resultEconomic':resultEconomic,
+            }
+        )
+    except:
+        return render(
+            request,
+            "geteconomic.html", 
+            {
+              
+            }
+        )       
+   
     
 def getPersonnel(request):
     postData = request.GET
-    username = postData.get('username')
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    resultPersonnel = models.personnel.objects.get(username_id=resultId)
-    return render(
-        request,
-        "getpersonnel.html", 
-        {
-          'resultPersonnel':resultPersonnel,
-        }
-    )      
+    companyname = postData.get('companyname')
+    resultId = models.companyInfo.objects.values("id").filter(companyname=companyname)
+    companyNameId = ''
+    for i in resultId:
+        companyNameId = i['id']
+        
+    try:    
+        resultPersonnel = models.personnel.objects.get(company_id=companyNameId)
+        return render(
+            request,
+            "getpersonnel.html", 
+            {
+              'resultPersonnel':resultPersonnel,
+            }
+        )
+    except:
+        return render(
+            request,
+            "getpersonnel.html", 
+            {
+              
+            }
+        )       
+            
     
 def getProjects(request):
     postData = request.GET
-    username = postData.get('username')
-    print("123")
     return render(
         request,
         "getproject.html", 
@@ -839,17 +977,31 @@ def getProjects(request):
     
 def getActivities(request):
     postData = request.GET
-    username = postData.get('username')
- 
-    resultId = models.userProfile.objects.values("id").filter(username=username)
-    resultActivities = models.activities.objects.get(username_id=resultId)
-    return render(
-        request,
-        "getactivities.html", 
-        {
-          'resultActivities':resultActivities,
-        }
-    ) 
+    companyname = postData.get('companyname')
+    resultId = models.companyInfo.objects.values("id").filter(companyname=companyname)
+    companyNameId = ''
+    for i in resultId:
+        companyNameId = i['id']
+        
+    try:    
+        resultActivities = models.activities.objects.get(company_id=companyNameId)
+        return render(
+            request,
+            "getactivities.html", 
+            {
+              'resultActivities':resultActivities,
+            }
+        )
+    except:
+        return render(
+            request,
+            "getactivities.html", 
+            {
+              
+            }
+        )   
+        
+
     
     
 def addUser(request):
@@ -866,12 +1018,10 @@ def saveUser(request):
     postData = request.POST
     username = request.session.get('username','anybody') 
     try:
-        print("111111111111111111111111111111111111") 
         print(postData.get("superuser"))
-        id = postData.get("id")
-    
-        dict = {
-            
+        id = postData.get("id") #修改用户信息用的
+
+        dictUser = {         
           'username' : postData.get("username"),    
           'nickname' : postData.get("nickname"), 
           'password' : make_password(postData.get("password")), 
@@ -879,14 +1029,34 @@ def saveUser(request):
           'email' : postData.get("email"),
           'companyname' : postData.get("companyname"),  
           'is_superuser' : postData.get("superuser"),                                       
-        }
-        print(dict)
-        if id == None:
-            print("444444")
-            models.userProfile.objects.create(**dict)
-        else:
-            print("55555555555")
-            models.userProfile.objects.filter(id=id).update(**dict)
+        }    
+        print(dictUser)   
+            
+        if id == None:  #id为None就创建用户
+            models.userProfile.objects.create(**dictUser)    
+            resultName = postData.get("username")          
+            resultId = models.userProfile.objects.values('id').filter(username=resultName)        
+            id = ''        
+            for i in resultId:
+                id = i['id']
+            
+            print(id)
+        
+            dictCompany = {
+                'companyname' : postData.get("companyname"),
+                'username_id' :   id,         
+            }
+            models.companyInfo.objects.create(**dictCompany)
+        else:  #修改用户信息
+            dictCompany = {
+                'companyname' : postData.get("companyname"),
+            }
+            models.userProfile.objects.filter(id=id).update(**dictUser)
+            print(id,dictCompany)
+            models.companyInfo.objects.filter(username_id=id).update(**dictCompany)
+            
+            
+            
     except:
         print("22222222222222222222222222222222222222")
         dict = {           

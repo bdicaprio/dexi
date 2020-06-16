@@ -50,7 +50,7 @@ urlpatterns = [
     url(r'^getcompanyinfo/', views.getcompanyinfo),   
     url(r'^delCompany/', views.delCompany),        
     url(r'^createExcel/', views.createExcel),     
-        
+    url(r'^catprojectlist/', views.catprojectlist),            
      
     
                                                               

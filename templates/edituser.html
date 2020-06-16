@@ -122,9 +122,10 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
                url: '/saveUser/',
        		   cache: false,
        		   async: false,
-  		       success:function(data){　　　　　　　　　
+  		       success:function(data){　　　　　
+  		       		 parent.layui.table.reload('idTest',{});　　　　
   		    	     parent.layer.alert("保存成功", { });
-  		    	     parent.layui.table.reload('test',{page: {}});
+  		    	   
   		    	     parent.layer.close(index);
   		    	     
        		   }                
