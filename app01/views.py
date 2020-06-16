@@ -222,6 +222,60 @@ def getPojectList(request):
         count = count[0][0]      
         dict = {"code":0,"msg":"","count":count,"data":result}
         return HttpResponse(json.dumps(dict), content_type="application/json")
+    
+    
+def getprojectlisttmp(request):
+    sql = ''
+    sql_count = ''
+    id = ''
+    CompanyNameId = ''
+    getData = request.GET
+    p = request.GET.get('page')
+    l = request.GET.get('limit')
+         
+    username = request.session.get('username','anybody') 
+#    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
+#    for i in superuser:
+#        lsSuperuser = str(i['is_superuser'])        
+#    if lsSuperuser == 'True':
+#        dict = {"code":0,"msg":"","count":0,"data":""}
+#        return HttpResponse(json.dumps(dict), content_type="application/json")
+#    else:    
+#    projectName = getData.get('projectName') #搜索接受项目名称
+    start = str((int(p)-1) * int(l))
+    end = str(l)
+    resultUsernameId = models.userProfile.objects.values("id").filter(username=username)
+    for i in resultUsernameId:
+        id = str(i['id']) 
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+    for i in resultCompanyNameId:
+        CompanyNameId = str(i['id'])  
+    CompanyNameId = str(2)          
+
+    sql = 'select id,company_id,projectName,projectFrom,developmentForm,achievement,economicGoals,activityType,date_format(startTime,"%Y-%m-%d %T") as startTime,date_format(endTime,"%Y-%m-%d %T") as endTime,personnel,time,stage,funds,capital  from app01_projectstmp  where  company_id = ' +   CompanyNameId   +  ' limit '  +  start + ','  + end
+
+    sql_count = 'select count(*)  from  app01_projectstmp where company_id = ' + CompanyNameId
+       
+
+        
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    rawData = cursor.fetchall()    
+    col_names = [desc[0] for desc in cursor.description]
+    result = []
+    
+    for row in rawData:
+        objDict = {}
+        
+        for index, value in enumerate(row):           
+            objDict[col_names[index]] = value       
+    
+        result.append(objDict)
+    cursor.execute(sql_count)
+    count = cursor.fetchall()
+    count = count[0][0]      
+    dict = {"code":0,"msg":"","count":count,"data":result}
+    return HttpResponse(json.dumps(dict), content_type="application/json")    
 
 
 
@@ -290,6 +344,27 @@ def addProject(request):
     )
         
         
+def addProjectTmp(request):
+    getData = request.GET
+    id = getData.get('id')
+    try:
+        result = models.projectstmp.objects.get(id=id)
+        return render(
+        request,
+        "addprojecttmp.html", 
+        {
+            'result':result,
+        }  
+    )
+    except:
+        return render(request,"addprojecttmp.html",                
+                {
+                    
+                }  
+    )    
+    
+        
+        
 def saveProject(request):
     postData = request.POST
     username = request.session.get('username','anybody') 
@@ -350,6 +425,68 @@ def saveProject(request):
     
             }                
         )
+    
+def saveProjectTmp(request):
+    postData = request.POST
+    username = request.session.get('username','anybody') 
+    resultId = models.userProfile.objects.values("id").filter(username=username)  #获取用户的id
+    id = ''
+    companyNameId = ''
+    for i in resultId:
+        id = i['id']  
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)  #获取公司的id
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id'])       
+    try:    
+        id = postData.get('id')  
+        print(id)     
+        dict = {
+            'projectName' : postData.get('projectName'),
+            'projectFrom' : postData.get('projectFrom'),
+            'developmentForm' : postData.get('developmentForm'),
+            'achievement' : postData.get('achievement'),
+            'economicGoals' : postData.get('economicGoals'),
+            'activityType' : postData.get('activityType'),
+            'stage' : postData.get('stage'),
+            'startTime' : postData.get('startTime'),
+            'endTime' : postData.get('endTime'),
+            'personnel' : postData.get('personnel'),
+            'funds' : postData.get('funds'),
+            'capital' : postData.get('capital'),
+            'company_id' : companyNameId, 
+            'id': id,
+        }
+        print(dict)
+        models.projectstmp.objects.filter(id=id).update(**dict)
+        
+    except:
+        dict = {
+            'projectName' : postData.get('projectName'),
+            'projectFrom' : postData.get('projectFrom'),
+            'developmentForm' : postData.get('developmentForm'),
+            'achievement' : postData.get('achievement'),
+            'economicGoals' : postData.get('economicGoals'),
+            'activityType' : postData.get('activityType'),
+            'stage' : postData.get('stage'),
+            'startTime' : postData.get('startTime'),
+            'endTime' : postData.get('endTime'),
+            'personnel' : postData.get('personnel'),
+            'funds' : postData.get('funds'),
+            'capital' : postData.get('capital'),
+            'company_id' : companyNameId, 
+        }
+        print(dict)
+        models.projectstmp.objects.create(**dict)    
+     
+         
+    return render(
+            request,
+            "addprojecttmp.html", 
+            {
+    
+            }                
+        )    
+    
 
        
 def addCompany(request):
@@ -664,6 +801,22 @@ def delProject(request):
 
        }
     )  
+
+def delTmpProject(request):
+    postData = request.POST
+    delid = postData.get('delid')
+    print(delid)
+    models.projectstmp.objects.filter(id=delid).delete() 
+
+      
+    return render(
+        request,
+        "index.html", 
+        {
+
+       }
+    )      
+    
     
     
 def member(request): 
@@ -776,13 +929,13 @@ def getcompanyinfo(request):
     start = str((int(p)-1) * int(l))
     end = str(l)
     if company is not None: #搜索
-        sql = 'select id,username,phone, companyname,hyperlink,is_superuser  from auth_user  where companyname  like ' + "'%"  +  company  + "%' " +  ' limit '  +  start + ','  + end
+        sql = 'select auth_user.id,auth_user.username,auth_user.phone,auth_user.hyperlink,auth_user.is_superuser,app01_companyinfo.companyname  from auth_user,app01_companyinfo where auth_user.id = app01_companyinfo.username_id and  app01_companyinfo.companyname  like ' + "'%"  +  company  + "%' " +  ' limit '  +  start + ','  + end
         sql_count = 'select count(*)  from auth_user  where username  like ' + "'%"  +  company  + "%' " +  ' limit '  +  start + ','  + end
         print(sql)
-    else:
+    else: #不搜索
         sql = 'select auth_user.id,auth_user.username,auth_user.phone,auth_user.hyperlink,auth_user.is_superuser,app01_companyinfo.companyname  from auth_user,app01_companyinfo where auth_user.id = app01_companyinfo.username_id '  +  ' limit '  +  start + ','  + end
         print(sql)
-        sql_count = 'select count(t.id) from  (select  auth_user.id,auth_user.username,auth_user.phone,auth_user.hyperlink,auth_user.is_superuser,app01_companyinfo.companyname  from auth_user,app01_companyinfo where auth_user.id = app01_companyinfo.username_id limit 0,10) t'
+        sql_count = 'select count(t.id) from  (select  auth_user.id,auth_user.username,auth_user.phone,auth_user.hyperlink,auth_user.is_superuser,app01_companyinfo.companyname  from auth_user,app01_companyinfo where auth_user.id = app01_companyinfo.username_id ) t'
     cursor = connection.cursor()
     cursor.execute(sql)
     rawData = cursor.fetchall()    

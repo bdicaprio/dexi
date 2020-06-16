@@ -206,6 +206,23 @@ class projects(models.Model):
     funds = models.IntegerField(blank=True,null=True)
     capital = models.IntegerField(blank=True,null=True)
 
+
+class projectstmp(models.Model):
+    id = models.AutoField(primary_key=True) 
+    company = models.ForeignKey(companyInfo,blank=True,null=True)
+    projectName = models.CharField(max_length=64,blank=True,null=True)   
+    projectFrom = models.CharField(max_length=64,blank=True,null=True)   
+    developmentForm = models.CharField(max_length=64,blank=True,null=True)
+    achievement = models.CharField(max_length=64,blank=True,null=True)
+    economicGoals = models.CharField(max_length=64,blank=True,null=True)
+    activityType = models.CharField(max_length=64,blank=True,null=True)
+    startTime = models.DateTimeField(blank=True,null=True)
+    endTime = models.DateTimeField(blank=True,null=True)
+    personnel =  models.CharField(max_length=64,blank=True,null=True)
+    time = models.CharField(max_length=64,blank=True,null=True)
+    stage = models.CharField(max_length=64,blank=True,null=True)
+    funds = models.IntegerField(blank=True,null=True)
+    capital = models.IntegerField(blank=True,null=True)
 #�Ƽ���ſ�    
 class activities(models.Model):
     id = models.AutoField(primary_key=True)

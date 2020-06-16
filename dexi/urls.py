@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^authlogin/', views.authlogin),       
     url(r'^index/', views.index),
     url(r'^getprojectlist/', views.getPojectList),
+    url(r'^getprojectlisttmp/', views.getprojectlisttmp),        
     url(r'^addProject/', views.addProject),
     url(r'^saveProject/', views.saveProject),     
     url(r'^addCompany/', views.addCompany),    
@@ -51,7 +52,8 @@ urlpatterns = [
     url(r'^delCompany/', views.delCompany),        
     url(r'^createExcel/', views.createExcel),     
     url(r'^catprojectlist/', views.catprojectlist),            
-     
-    
+    url(r'^addProjectTmp/', views.addProjectTmp),       
+    url(r'^saveProjectTmp/', views.saveProjectTmp),    
+    url(r'^delTmpProject/', views.delTmpProject),           
                                                               
 ]
