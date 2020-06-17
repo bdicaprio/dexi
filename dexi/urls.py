@@ -54,6 +54,8 @@ urlpatterns = [
     url(r'^catprojectlist/', views.catprojectlist),            
     url(r'^addProjectTmp/', views.addProjectTmp),       
     url(r'^saveProjectTmp/', views.saveProjectTmp),    
-    url(r'^delTmpProject/', views.delTmpProject),           
+    url(r'^delTmpProject/', views.delTmpProject),  
+    url(r'^addAll/', views.addAll),  
+             
                                                               
 ]

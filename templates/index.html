@@ -6,17 +6,17 @@
         <div class="layui-tab">
         {% for row in superuser %}
         {% if row.is_superuser == 0 %}   
-          <ul class="layui-tab-title">
-             <li class="layui-this">国家高新技术产业开发区企业统计报表</li>
-             <li>企业概况</li>
-             <li>经济概况</li>
-             <li>人员概况</li>
-             <li>科技项目概况</li>
-             <li>科技活动概况</li>
-          </ul>
              <div class="layui-tab-content">             
                <div class="layui-tab-item layui-show">
                  <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter=from-statistics>{% csrf_token %}
+                      <ul class="layui-tab-title">
+                          <li class="layui-this">国家高新技术产业开发区企业统计报表</li>
+                          <li>企业概况</li>
+                          <li>经济概况</li>
+                          <li>人员概况</li>
+                          <li>科技项目概况</li>
+                          <li>科技活动概况</li>
+                      </ul>
                       <div class="layui-form-item">
                            <div class="layui-inline">
                                 <label class="layui-form-label">统一社会信用代码或企业组织机构代码(qa03)</label>
@@ -1621,9 +1621,17 @@
           
         {% for row in superuser %}
         {% if row.is_superuser == 1 %} 
-              <div style="width:100%;height:50px;">
-                   <div style="display:block;float:right" id="layerDemo">                                                                            
-                         <input type='submit' class='layui-btn layui-btn-danger' value='保存'  lay-submit="" lay-filter="save-allinfo">                                  
+        
+            <div style="width:100%;height:50px;">
+                   <div style="display:block;float:right" id="layerDemo"> 
+                          <div class="layui-inline">
+                              <input type="hidden"  name="hiddenManagerCompanyName"  id="hiddenManagerCompanyName" value={{ companyname }} >
+                              <label class="layui-form-label">企业名称</label>
+                              <div class="layui-input-inline">
+                                     <input type="text" name="managerCompanyName" id="managerCompanyName" autocomplete="off" class="layui-input">
+                              </div>
+                          </div>                                                                               
+                         <input type='submit' class='layui-btn layui-btn-danger' id="save-allinfo" name="save-allinfo" value='管理员专用保存'  lay-submit="" lay-filter="save-allinfo">                                  
                    </div>
              </div>     
           <ul class="layui-tab-title">
@@ -1639,13 +1647,7 @@
              <div class="layui-tab-content">             
                <div class="layui-tab-item layui-show">
                  <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter=from-statistics>{% csrf_token %}
-                      <div class="layui-form-item">
-                           <div class="layui-inline">
-                                <label class="layui-form-label">企业名称</label>
-                                <div class="layui-input-inline">
-                                     <input type="text" name="areaNumber" id="areaNumber" autocomplete="off" class="layui-input" value={{ resultStatistics.areaNumber }}>
-                                </div>
-                           </div>                      
+                      <div class="layui-form-item">                  
                            <div class="layui-inline">
                                 <label class="layui-form-label">统一社会信用代码或企业组织机构代码(qa03)</label>
                                 <div class="layui-input-inline">
@@ -1691,7 +1693,7 @@
                             <div class="layui-inline">
                                    <label class="layui-form-label">出生年月（qa20）</label>
                                    <div class="layui-input-inline">
-                                         <input type="text" name="birthday" id="birthday"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value={{ resultStatistics.birthday|date:"Y-m-d H:i:s"  }} >
+                                         <input type="text" name="birthday1" id="birthday1"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" value={{ resultStatistics.birthday|date:"Y-m-d H:i:s"  }} >
                                    </div>
                             </div>
                             
@@ -3232,6 +3234,7 @@
 
 {% block js %}
 <script>
+var  a;
 //JavaScript代码区域
 layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
       var $ = layui.$
@@ -3255,32 +3258,59 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
           elem: '#birthday'
       });
 
+       laydate.render({
+          elem: '#birthday1'
+      });
       laydate.render({
           elem: '#fillingTime'
       });
       
       //保存全部信息
-      form.on('submit(save-all)', function(data){
-          var options_personnel = [];
-          
+      form.on('submit(save-allinfo)', function(data){
+  	
+          var options_company = [];              
+          var options_economic = [];
+          var options_economic_continues = [];   
+          var options_personnel = [];          
+		  var options_activities = [];
+          var options_activities_continues = [];
+                                           
+          $("#tableCompany tr").each(function() {                        
+                options_company.push($(this).children().eq(2).text());                       
+           });  
+		
+      
+          $("#tableEconomic tr").each(function() {                        
+                 options_economic.push($(this).children().eq(3).text());                       
+           });  
+          $("#tableEconomicContinues tr").each(function() {                        
+        	     options_economic_continues.push($(this).children().eq(3).text());                       
+          });            
+          $("#tableEconomicContinues .replenish").each(function() {                        
+     	     options_economic_continues.push($(this).children().eq(1).text());                       
+          });  
+             
+          $("#tablePersonnel tr").each(function() {                        
+        	 options_personnel.push($(this).children().eq(3).text());                       
+         });  
+     
           $("#tablePersonnel tr").each(function() {                        
           	 options_personnel.push($(this).children().eq(3).text());                       
-           });  
-            
-         	  
-      $.ajax({
-  		   type: 'POST',
-           data: {
-          	personnelData: options_personnel,
-              csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
-           },
-             url: '/addAll/',
-  		   cache: false,
-  		   async: false,
-  		   success: function(data){　　　　　　　　　
-           layer.alert("保存成功", { });
-  		}
-      })       
+          });  
+       
+         $("#tableActivities tr").each(function() {                        
+        	 options_activities.push($(this).children().eq(3).text());                       
+          });         
+         $("#tableActivitiesContinues tr").each(function() {                        
+        	 options_activities_continues.push($(this).children().eq(3).text());                       
+         });  
+         
+         
+        layer.alert(JSON.stringify(data.field), {
+        
+              title: "最终的提交信息"
+        });      
+	   
     return false;        
   });       
       
@@ -3485,31 +3515,21 @@ layui.use(['layer','jquery','element','form', 'layedit', 'laydate'], function(){
 	  
 	  
 
-	  $('#add-project-tmp').click(function(){
-          layer.open({
-              type:2 ,
-              area: ['1500px','700px'],   
-              manmin: true,             
-              content: '/addProjectTmp/'         
-          })
-          
-			laydate.render({
-                elem: '#startTime'
-            });
-            
 
-           laydate.render({
-               elem: '#endTime'
-           });
-	  });
             
 });
 
 
 
-
-layui.use('table', function(){
-	  var table = layui.table;
+layui.use(['layer','jquery','element','form', 'layedit', 'laydate','table'], function(){ 
+	  var $ = layui.jquery
+	  ,table =  layui.table
+	  , layer = layui.layer
+	  , form = layui.form
+	  , laydate = layui.laydate;
+	  
+	  var managerCompanyName = ''
+	  	  
 	  table.render({
 	    elem: '#test'
 	    ,url:'/getprojectlist/'
@@ -3535,7 +3555,37 @@ layui.use('table', function(){
 	    ,page: true
 	  });
 	  
-	  table.render({
+	  	  $('#add-project-tmp').click(function(){
+	  
+
+	      
+	      $('#hiddenManagerCompanyName').val(document.getElementById("managerCompanyName").value) 
+       
+           a = document.getElementById("hiddenManagerCompanyName").value;
+         
+
+         
+          layer.open({
+              type:2 ,
+              area: ['1500px','700px'],   
+              manmin: true,             
+              content: '/addProjectTmp/'       
+          })
+          
+			laydate.render({
+                elem: '#startTime'
+            });
+            
+
+           laydate.render({
+               elem: '#endTime'
+           });
+	  });
+	  
+	
+
+
+	  table.render({	  
 		    elem: '#testTmp'
 		    ,url:'/getprojectlisttmp/'
 		    ,cols: [[
@@ -3635,15 +3685,14 @@ layui.use('table', function(){
                $('#capital').val(data.capital)                                                               
            } 
            else if(obj.event === 'edittmp'){
-         	  var id = data.id
-         	  layer.open({
-         		      
+         	  var editId = data.id
+         	  layer.open({      		      
                       type:2 ,
                       area: ['1500px','700px'],   
                       manmin: true,             
                       content: '/addProjectTmp?id='+ id         
                 })
-                var id = data.id    
+                   
                 $('#projectName').val(data.projectName)          
                 $('#projectFrom').val(data.projectFrom)
                 $('#developmentForm').val(data.developmentForm)
@@ -3663,7 +3712,7 @@ layui.use('table', function(){
                    var delid = data.id
                    $.ajax({
 	       		        type:'POST',
-                       data: {
+                        data: {
        	                  delid: delid, 	       	
                              csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
                        },

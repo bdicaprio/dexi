@@ -107,7 +107,8 @@
                                                                 <div style="display:block;float:right" id="layerDemo">                        
                                                                        <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">添加</button>
                                                                         <button data-method="offset" data-type="auto" class="layui-btn" id="cancel-project">取消</button>-->
-                                                                        <input type='hidden' id='activitiesData' name='activitiesData' />
+                                                                        <input type='hidden' id='companyName' name='companyName' />
+                                                                        <input type="hidden" name="id" id="id"  value={{  result.id  }}>
                                                                         <input type='submit' class='layui-btn' value='保存'  lay-submit="" lay-filter="save-project">  
                                                                         <input type='submit' class='layui-btn' value='取消'  lay-submit="" lay-filter="cancal-project">                                                                                                                                                   
                                                                 </div>
@@ -143,10 +144,17 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
               elem: '#endTime'
           });
           
-
-          var index = parent.layer.getFrameIndex(window.name);
           
-          form.on('submit(save-project)', function(data){                                            
+          companyName = window.parent.document.getElementById("managerCompanyName").value;
+         
+          $('#companyName').val(companyName)  <!--获取父页面的值 -->
+          
+          
+         
+          
+          var index = parent.layer.getFrameIndex(window.name);
+     
+          form.on('submit(save-project)', function(data){                                   
                $.ajax({
        		   type: 'POST',
        		   data:data.field,
@@ -155,10 +163,16 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
        		   async: false,
   		       success:function(data){　　　　　　　　　
   		    	     parent.layer.alert("添加成功", { });
-  		    	     parent.layui.table.reload('idTest',{page: {}});
+  		    	     parent.layui.table.reload('idTest',{
+  		    	         where: {companyname : companyName }	    	     
+  		    	        ,page: {}
+  		    	      });
+  		    	        
   		    	     parent.layer.close(index);
   		    	     
-       		   }                
+       		   },error:function(){
+            	     parent.layer.alert('公司名称未填写或公司已添加过');
+               }                
            })
        });
 
