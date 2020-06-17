@@ -3267,18 +3267,44 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
       
       //保存全部信息
       form.on('submit(save-allinfo)', function(data){
-  	
+  	      var options_statistics = [];
+  	      var options_statistics_continues = [];
           var options_company = [];              
           var options_economic = [];
           var options_economic_continues = [];   
           var options_personnel = [];          
 		  var options_activities = [];
           var options_activities_continues = [];
-                                           
+          
+          options_statistics.push( $('#managerCompanyName').val())
+          options_statistics.push( $('#organizationCode').val())
+		  options_statistics.push( $('#areaNumber').val())
+          options_statistics.push( $('#enterpriseName').val())
+		  options_statistics.push( $('#natureOfCorporation').val())
+          options_statistics.push( $('#corporateGender').val())
+		  options_statistics.push( $('#birthday1').val())	
+          options_statistics.push( $('#education').val())
+		  options_statistics.push( $('#address').val())
+          options_statistics.push( $('#postalCode').val())
+		  options_statistics.push( $('#registeredAddress').val())
+          options_statistics.push( $('#manager').val())
+		  options_statistics.push( $('#telephone').val())
+		  options_statistics.push( $('#fax').val())
+          options_statistics.push( $('#statisticalControlOfficer').val())
+		  options_statistics.push( $('#preparedBy').val())
+          options_statistics.push( $('#preparedByTelephone').val())
+		  options_statistics.push( $('#fillingTime').val())	
+		  options_statistics.push( $('#email').val())
+          options_statistics_continues.push( $('#url').val())
+		  options_statistics_continues.push( $('#preparedByMobilephone').val())				  
+          
+
+		  
           $("#tableCompany tr").each(function() {                        
                 options_company.push($(this).children().eq(2).text());                       
            });  
-		
+          
+		   alert(options_company.length);
       
           $("#tableEconomic tr").each(function() {                        
                  options_economic.push($(this).children().eq(3).text());                       
@@ -3293,10 +3319,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
           $("#tablePersonnel tr").each(function() {                        
         	 options_personnel.push($(this).children().eq(3).text());                       
          });  
-     
-          $("#tablePersonnel tr").each(function() {                        
-          	 options_personnel.push($(this).children().eq(3).text());                       
-          });  
+      
        
          $("#tableActivities tr").each(function() {                        
         	 options_activities.push($(this).children().eq(3).text());                       
@@ -3305,11 +3328,26 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
         	 options_activities_continues.push($(this).children().eq(3).text());                       
          });  
          
-         
-        layer.alert(JSON.stringify(data.field), {
-        
-              title: "最终的提交信息"
-        });      
+         $.ajax({
+    		   type: 'POST',
+               data: {
+            	   statisticsData: options_statistics, 
+            	   statisticsContinuesData:	options_statistics_continues,
+                   companyData: options_company,
+            	   economicData: options_economic,
+            	   economicContinuesData: options_economic_continues,                   
+               	   personnelData: options_personnel,                   
+               	   activitiesData: options_activities,
+        	       activitiesContinuesData: options_activities_continues,                
+                 
+             },
+               url: '/addAll/',
+    		   cache: false,
+    		   async: false,
+    		   success: function(data){　　　　　　　　　
+             layer.alert("保存成功", { });
+    		}
+        })    
 	   
     return false;        
   });       

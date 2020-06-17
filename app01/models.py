@@ -300,7 +300,4 @@ class activities(models.Model):
     qj58 = models.CharField(max_length=64,blank=True,null=True)
     qj59 = models.CharField(max_length=64,blank=True,null=True)
     qj61 = models.CharField(max_length=64,blank=True,null=True)
-    qj62 = models.CharField(max_length=64,blank=True,null=True)    
-    qj87_1 = models.CharField(max_length=64,blank=True,null=True)
-    qj101 = models.CharField(max_length=64,blank=True,null=True)
-    qj101_1 = models.CharField(max_length=64,blank=True,null=True)       
+    qj62 = models.CharField(max_length=64,blank=True,null=True)      

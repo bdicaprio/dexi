@@ -19,6 +19,7 @@ from django.http import StreamingHttpResponse
 import os
 from numpy.ma.core import getdata
 from _ast import Dict
+from app01.models import company
 
 # Create your views here.
 
@@ -1594,13 +1595,271 @@ def createExcel(request):
 
 
 def addAll(request):
-     
-    return render(
-        request,
-        "index.html", 
-        {
+    print("1111111111111111111111111111")
+    postDataStatistics = request.POST.getlist('statisticsData[]')
+    postDataStatisticsContinues  =  request.POST.getlist('statisticsContinuesData[]')
+    print(postDataStatistics)
+    print(postDataStatisticsContinues)
+    postDataCompany = request.POST.getlist('companyData[]')   
+    postDataEconomic = request.POST.getlist('economicData[]')
+    postDataEconomicContinues = request.POST.getlist('economicContinuesData[]')  
+    postDataPersonnel = request.POST.getlist('personnelData[]')
+    postDataActivities = request.POST.getlist('activitiesData[]')   
+    postDataActivitiesContinues = request.POST.getlist('activitiesContinuesData[]')    
+    
+    print("postDataStatistics",postDataStatistics)
+    print("postDataStatisticsContinues",postDataStatisticsContinues)
+    print("postDataCompany",postDataCompany)
+    print("postDataEconomic",postDataEconomic)
+    print("postDataEconomicContinues",postDataEconomicContinues)
+    print("postDataPersonnel",postDataPersonnel)
+    print("postDataActivities",postDataActivities)
+    print("postDataActivitiesContinues",postDataActivitiesContinues)
 
-       }
-    )     
+    print("2222222222222222222222")
+    companyname = postDataStatistics[0]
+    print(companyname)
+    
+    if len(companyname) == 0:   #没有输公司名字
+        models.projectstmp.objects.create(**dict)      #让程序报错         
+    elif models.companyInfo.objects.filter(companyname=companyname):  #改公司已经登记过
+        models.projectstmp.objects.create(**dict)    
+    else:
+        
+        print("3333333333333333333333333333")
+        dict = {
+            'organizationCode':postDataStatistics[1],
+            'areaNumber':postDataStatistics[2],
+            'enterpriseName':postDataStatistics[3],
+            'natureOfCorporation':postDataStatistics[4],
+            'corporateGender':postDataStatistics[5],
+            'birthday':postDataStatistics[6], 
+            'education':postDataStatistics[7],
+            'address':postDataStatistics[8],
+            'postalCode':postDataStatistics[9],
+            'registeredAddress':postDataStatistics[10],
+            'manager':postDataStatistics[11],
+            'telephone':postDataStatistics[12], 
+            'fax':postDataStatistics[13],
+            'statisticalControlOfficer':postDataStatistics[14],
+            'preparedBy':postDataStatistics[15],
+            'preparedByTelephone':postDataStatistics[16],
+            'fillingTime':postDataStatistics[17],
+            'email':postDataStatistics[18], 
+            'url':postDataStatisticsContinues[0],
+            'preparedByMobilephone':postDataStatisticsContinues[1],
+            
+            
+            'qb07_2':postDataCompany[1],
+            'qb07_3':postDataCompany[2],
+            'qb08':postDataCompany[3],
+            'qb21':postDataCompany[4], 
+            'qb22':postDataCompany[5],
+            'qb101':postDataCompany[6],
+            'qb03_0':postDataCompany[7],
+            'qb03_1':postDataCompany[8],
+            'qb04':postDataCompany[9],
+            'qb04_0':postDataCompany[10],  
+            'qb20_1':postDataCompany[11],
+            'qb20':postDataCompany[12],
+            'qb06':postDataCompany[13],
+            'qb06_1':postDataCompany[15],
+            'qb06_2':postDataCompany[16],
+            'qb18':postDataCompany[17], 
+            'qb09':postDataCompany[18],
+            'qb10':postDataCompany[19],
+            'qb12':postDataCompany[20],
+            'qb14':postDataCompany[21], 
+            'qb14_1':postDataCompany[22],
+            'qb14_2':postDataCompany[23],
+            'qb15':postDataCompany[24],
+            'qb15_1':postDataCompany[25],
+            'qb15_2':postDataCompany[26],
+            'qb15_3':postDataCompany[27], 
+            'qb15_4':postDataCompany[28],
+            'qb15_5':postDataCompany[29],
+            'qb16':postDataCompany[30],
+            'qb16_1':postDataCompany[31],
+            
+            
+            'qc02':postDataEconomic[1],
+            'qc02_05':postDataEconomic[2], 
+            'qc55':postDataEconomic[3],
+            'qc06':postDataEconomic[4],
+            'qc06_1':postDataEconomic[5],
+            'qc06_2':postDataEconomic[6],
+            'qc06_3':postDataEconomic[7],
+            'qc06_4':postDataEconomic[8],
+            'qc07':postDataEconomic[9],
+            'qc09':postDataEconomic[10],
+            'qc10':postDataEconomic[11],
+            'qc49':postDataEconomic[12],
+            'qc52':postDataEconomic[13],
+            'qc11':postDataEconomic[14], 
+            'qc38':postDataEconomic[15],
+            'qc11_1':postDataEconomic[16],
+            'qc220':postDataEconomic[17],
+            'qc220_1':postDataEconomic[18],
+            'qc221':postDataEconomic[19],
+            'qc222':postDataEconomic[20], 
+            'qc223':postDataEconomic[21],
+            'qc223_2':postDataEconomic[22],
+            'qc223_3':postDataEconomic[23],
+            'qc224':postDataEconomic[24],
+            'qc228':postDataEconomic[25],
+            'qc229':postDataEconomic[26], 
+            'qc225':postDataEconomic[27],
+            'qc233':postDataEconomic[28],
+            'qc232':postDataEconomic[29],
+            'qc120':postDataEconomic[30],
+            'qc227':postDataEconomic[31],
+            'qc230':postDataEconomic[32], 
+            'qc234':postDataEconomicContinues[2],
+            'qc12':postDataEconomicContinues[3],
+            'qc231':postDataEconomicContinues[4],
+            'qc13':postDataEconomicContinues[5],
+            'qc14':postDataEconomicContinues[6],
+            'qc16':postDataEconomicContinues[7],
+            'qc17':postDataEconomicContinues[8],
+            'qc18':postDataEconomicContinues[9],
+            'qc20':postDataEconomicContinues[10],
+            'qc20_1':postDataEconomicContinues[11],
+            'qc20_2':postDataEconomicContinues[12],
+            'qc20_3':postDataEconomicContinues[13], 
+            'qc62':postDataEconomicContinues[14],
+            'qc51':postDataEconomicContinues[15],
+            'qc24':postDataEconomicContinues[16],
+            'qc25':postDataEconomicContinues[17],
+            'qc27_1':postDataEconomicContinues[18],
+            'qc29':postDataEconomicContinues[19], 
+            'qc30':postDataEconomicContinues[20],
+            'qc65':postDataEconomicContinues[21],
+            'qc61':postDataEconomicContinues[22],
+            'qc30':postDataEconomicContinues[23],
+            'qc31':postDataEconomicContinues[24],
+            'qc33':postDataEconomicContinues[25], 
+            'qc34':postDataEconomicContinues[26],
+            'qc63':postDataEconomicContinues[27],
+            'qc50':postDataEconomicContinues[28],
+            'qc39':postDataEconomicContinues[29],
+            'qc40':postDataEconomicContinues[30],
+            'qc41':postDataEconomicContinues[31], 
+            'QC226_1':postDataEconomicContinues[32],
+            'QC226_2':postDataEconomicContinues[33],
+            'QC226':postDataEconomicContinues[34],
+            
+            
+            
+            'qd01':postDataPersonnel[2],
+            'qd03':postDataPersonnel[3],
+            'qd25':postDataPersonnel[4],
+            'qd21':postDataPersonnel[5],
+            'qd26':postDataPersonnel[6],
+            'qd14':postDataPersonnel[7],
+            'qd05':postDataPersonnel[8],
+            'qd18':postDataPersonnel[11],
+            'qd06':postDataPersonnel[12], 
+            'qd07':postDataPersonnel[13],
+            'qd08':postDataPersonnel[14],
+            'qd09':postDataPersonnel[15],
+            'qd30':postDataPersonnel[16],
+            'qd31':postDataPersonnel[17],
+            'qd32':postDataPersonnel[18], 
+            'qd33':postDataPersonnel[19],
+            'qd34':postDataPersonnel[20],
+            'qd35':postDataPersonnel[21],
+            'qd36':postDataPersonnel[22],
+            'qd27':postDataPersonnel[24],
+            'qd28':postDataPersonnel[25], 
+            
+            
+            
+            'qj09':postDataActivities[2],
+            'qj67':postDataActivities[3],
+            'qj09_1':postDataActivities[4],
+            'qj09_2':postDataActivities[5],
+            'qj09_3':postDataActivities[6],
+            'qj20':postDataActivities[8], 
+            'qj23_1':postDataActivities[9],
+            'qj23_2':postDataActivities[10],
+            'qj23_3':postDataActivities[11],
+            'qj23_4':postDataActivities[12],
+            'qj23_6':postDataActivities[13],
+            'qj23_7':postDataActivities[14], 
+            'qj33':postDataActivities[15],
+            'qj33_1':postDataActivities[16], 
+            'qj33_2':postDataActivities[17],
+            'qj33_4':postDataActivities[18],
+            'qj33_3':postDataActivities[19],
+            'qj23_5':postDataActivities[20],
+            'qj250':postDataActivities[22],
+            'qj251':postDataActivities[23],
+            'qj01':postDataActivities[25],
+            'qj07_0':postDataActivities[26],
+            'qj07_1':postDataActivities[27],
+            'qj07_2':postDataActivities[28],
+            'qj55':postDataActivities[31], 
+            'qj56':postDataActivities[32],
+            'qj56_1':postDataActivities[33],
+            'qj55_1':postDataActivities[34],
+            'qj55_2':postDataActivities[35],
+            'qj74':postDataActivities[36],
+            'qj57':postDataActivities[37], 
+            'qj57_1':postDataActivities[38],
+            'qj75':postDataActivities[39],
+            'qj83':postDataActivities[40],
+            'qj83_1':postDataActivities[41],           
+            'qj82':postDataActivities[42],
+            
+            
+            
+            'qj73':postDataActivitiesContinues[2], 
+            'qj73_2':postDataActivitiesContinues[3],
+            'qj73_1':postDataActivitiesContinues[4],
+            'qj23':postDataActivitiesContinues[5],
+            'qj24':postDataActivitiesContinues[6],
+            'qj70':postDataActivitiesContinues[8],
+            'qj71':postDataActivitiesContinues[9], 
+            'qj72':postDataActivitiesContinues[10],
+            'qj99':postDataActivitiesContinues[12],
+            'qj90':postDataActivitiesContinues[13],
+            'qj92':postDataActivitiesContinues[14],
+            'qj102':postDataActivitiesContinues[15],
+            'qj25':postDataActivitiesContinues[17],
+            'qj79':postDataActivitiesContinues[18],
+            'qj77':postDataActivitiesContinues[19],
+            'qj79_1':postDataActivitiesContinues[20],
+            'qj79_2':postDataActivitiesContinues[21],
+            'qj85':postDataActivitiesContinues[22],
+            'qj85_1':postDataActivitiesContinues[23], 
+            'qj86':postDataActivitiesContinues[24],
+            'qj86_1':postDataActivitiesContinues[25],
+            'qj87':postDataActivitiesContinues[26],
+            'qj87_1':postDataActivitiesContinues[27],
+            'qj101':postDataActivitiesContinues[28],
+            'qj101_1':postDataActivitiesContinues[29], 
+            'qj100':postDataActivitiesContinues[30],
+            'qj100_1':postDataActivitiesContinues[31],
+            'qj98_1':postDataActivitiesContinues[32],
+            'qj27_1':postDataActivitiesContinues[33],
+            'qj28_1':postDataActivitiesContinues[34],
+            'qj80_1':postDataActivitiesContinues[36], 
+            'qj80':postDataActivitiesContinues[37],
+            'qj52':postDataActivitiesContinues[40],
+            'qj58':postDataActivitiesContinues[42],
+            'qj59':postDataActivitiesContinues[43],
+            'qj61':postDataActivitiesContinues[44],
+            'qj62':postDataActivitiesContinues[45], 
+         
+        }
+        
+        print(dict)
+        return render(
+            request,
+            "index.html", 
+            {
+    
+           }
+        )     
 
         
