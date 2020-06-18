@@ -6,17 +6,17 @@
         <div class="layui-tab">
         {% for row in superuser %}
         {% if row.is_superuser == 0 %}   
+                 <ul class="layui-tab-title">
+                      <li class="layui-this">国家高新技术产业开发区企业统计报表</li>
+                      <li>企业概况</li>
+                      <li>经济概况</li>
+                      <li>人员概况</li>
+                      <li>科技项目概况</li>
+                      <li>科技活动概况</li>
+                  </ul>
              <div class="layui-tab-content">             
                <div class="layui-tab-item layui-show">
                  <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter=from-statistics>{% csrf_token %}
-                      <ul class="layui-tab-title">
-                          <li class="layui-this">国家高新技术产业开发区企业统计报表</li>
-                          <li>企业概况</li>
-                          <li>经济概况</li>
-                          <li>人员概况</li>
-                          <li>科技项目概况</li>
-                          <li>科技活动概况</li>
-                      </ul>
                       <div class="layui-form-item">
                            <div class="layui-inline">
                                 <label class="layui-form-label">统一社会信用代码或企业组织机构代码(qa03)</label>
@@ -2642,7 +2642,7 @@
 	                            
                  <!-- 获取表格数据 --> 
                   <input type='hidden' id='projectName' name='projectName' />
-             	 <table class="layui-hide" id="testTmp" lay-filter="demo123" lay-data="{id: 'idTest'}" ></table>      
+             	 <table class="layui-hide" id="testTmp" lay-filter="demo123" lay-data="{id: 'idTest1'}" ></table>      
              </div>
              
              
@@ -3593,34 +3593,6 @@ layui.use(['layer','jquery','element','form', 'layedit', 'laydate','table'], fun
 	    ,page: true
 	  });
 	  
-	  	  $('#add-project-tmp').click(function(){
-	  
-
-	      
-	      $('#hiddenManagerCompanyName').val(document.getElementById("managerCompanyName").value) 
-       
-           a = document.getElementById("hiddenManagerCompanyName").value;
-         
-
-         
-          layer.open({
-              type:2 ,
-              area: ['1500px','700px'],   
-              manmin: true,             
-              content: '/addProjectTmp/'       
-          })
-          
-			laydate.render({
-                elem: '#startTime'
-            });
-            
-
-           laydate.render({
-               elem: '#endTime'
-           });
-	  });
-	  
-	
 
 
 	  table.render({	  
@@ -3644,7 +3616,7 @@ layui.use(['layer','jquery','element','form', 'layedit', 'laydate','table'], fun
 		      ,{fixed: 'right',  toolbar: '#barDemo1'}
 		      
 		    ]]
-		    ,id: 'idTest'
+		    ,id: 'idTest1'
 		    ,page: true
 		  });	  
 	  
@@ -3653,6 +3625,7 @@ layui.use(['layer','jquery','element','form', 'layedit', 'laydate','table'], fun
       var $ = layui.$, active = {
     		  
     	        reload: function(){
+    	        
     	            var searchproject = $('#searchproject');
     	            
     	            	
@@ -3670,12 +3643,46 @@ layui.use(['layer','jquery','element','form', 'layedit', 'laydate','table'], fun
     	            });
     	        }
     	    };
+    	    
+    	    	    
       
       $('#search-project').on('click', function(){
     	    var type = $(this).data('type');
     	    active[type] ? active[type].call(this) : '';
     	
-    	});   
+    	});  
+    	
+    	
+    	
+    	
+    	
+
+	  $('#add-project-tmp').click(function(){
+	  
+	    	$('#hiddenManagerCompanyName').val(document.getElementById("managerCompanyName").value) 
+       
+            a = document.getElementById("hiddenManagerCompanyName").value;
+         
+
+         
+          layer.open({
+              type:2 ,
+              area: ['1500px','700px'],   
+              manmin: true,             
+              content: '/addProjectTmp/'       
+          })
+          
+			laydate.render({
+                elem: '#startTime'
+            });
+            
+
+           laydate.render({
+               elem: '#endTime'
+           });
+	  });
+	  
+	      	 
 	  
 	  table.on('tool(demo123)', function(obj){
 	       var data = obj.data;
@@ -3728,7 +3735,7 @@ layui.use(['layer','jquery','element','form', 'layedit', 'laydate','table'], fun
                       type:2 ,
                       area: ['1500px','700px'],   
                       manmin: true,             
-                      content: '/addProjectTmp?id='+ id         
+                      content: '/addProjectTmp?id='+ editId         
                 })
                    
                 $('#projectName').val(data.projectName)          

@@ -188,6 +188,7 @@
                       <div style="width:100%;height:50px;">
                            <div style="display:block;float:right" id="layerDemo">                        
                                  <input type='hidden' id='companyData' name='companyData' />
+                                 <input type=text id="companyId" name="companyId" value={{ resultCompany.id }}  >  
                                  <input type='submit' class='layui-btn' value='保存'  lay-submit="" lay-filter="save-company"> 
                            </div>
                      </div>
@@ -203,8 +204,8 @@
 <script src="/static/layui.js"></script>
 <script src="/static/jquery.min.js" type="text/javascript"></script>
 <script>
-      //JavaScript代码区域
-    layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
+//JavaScript代码区域
+layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
           var $ = layui.$
           ,element = layui.element
           ,form = layui.form
@@ -219,9 +220,38 @@
           laydate.render({
               elem: '#fillingTime'
           });
-    }); 
+          
+         form.on('submit(save-company)', function(data){
+          var options_company = [];                               
+          $("#tableCompany tr").each(function() {                        
+                 options_company.push($(this).children().eq(2).text());                       
+          });  
+              
+          var companyId = $('#companyId').val() 	
+
+          
+          $.ajax({
+  		   type: 'POST',
+           data: {
+               companyData: options_company,
+               companyId: companyId,
+               csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+           },
+           url: '/addCompany/',
+  		   cache: false,
+  		   async: false,
+  		   success: function(data){　　　　　　　　　
+           layer.alert("保存成功", { });
+  		}
+      })       
+        return false;        
+     });   
+          
+}); 
    
     var username = window.parent.username;
+    
+    
 
 </script>
 </body>

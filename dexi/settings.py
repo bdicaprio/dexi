@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'dexi',
         'USER': 'root',
         'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
+        'HOST': '172.16.1.130',
         'PORT': '3306',
     }
 }

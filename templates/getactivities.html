@@ -578,6 +578,7 @@
                            <div style="display:block;float:right" id="layerDemo">                        
                                  <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button>-->
                                  <input type='hidden' id='activitiesData' name='activitiesData' />
+                                 <input type=text id="activitiesId" name="activitiesId" value={{ resultActivities.id }}  > 
                                  <input type='submit' class='layui-btn' value='提交'  lay-submit="" lay-filter="save-activities">                                     
                            </div>
                      </div>
@@ -608,7 +609,40 @@
           laydate.render({
               elem: '#fillingTime'
           });
-    }); 
+          
+      var activitiesId = $('#activitiesId').val() 	
+          
+    form.on('submit(save-activities)', function(data){
+        var options_activities = [];
+        var options_activities_continues = [];
+        
+        $("#tableActivities tr").each(function() {                        
+        	 options_activities.push($(this).children().eq(3).text());                       
+         });
+          
+        $("#tableActivitiesContinues tr").each(function() {                        
+        	 options_activities_continues.push($(this).children().eq(3).text());                       
+         });             
+         
+       	  
+    $.ajax({
+		   type: 'POST',
+           data: {
+        	activitiesData: options_activities,
+    	    activitiesContinuesData: options_activities_continues, 
+    	    activitiesId: activitiesId,       	       	
+            csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+         },
+           url: '/addActivities/',
+		   cache: false,
+		   async: false,
+		   success: function(data){　　　　　　　　　
+         layer.alert("保存成功", { });
+		}
+    })       
+  return false;        
+});           
+}); 
    
     var username = window.parent.username;
 

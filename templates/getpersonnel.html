@@ -188,6 +188,7 @@
                            <div style="display:block;float:right" id="layerDemo">                        
                                  <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="add-project">保存</button> -->
                                  <input type='hidden' id='personnelData' name='personnelData' />
+                                 <input type=text id="personnelId" name="personnelId" value={{ resultPersonnel.id }}  > 
                                  <input type='submit' class='layui-btn' value='提交'  lay-submit="" lay-filter="save-personnel">                                  
                            </div>
                      </div>   
@@ -218,7 +219,34 @@
           laydate.render({
               elem: '#fillingTime'
           });
-    }); 
+          
+           
+       form.on('submit(save-personnel)', function(data){
+             var options_personnel = [];
+        
+            $("#tablePersonnel tr").each(function() {                        
+        	       options_personnel.push($(this).children().eq(3).text());                       
+             });  
+             
+          var personnelId = $('#personnelId').val() 	 
+       	  
+       $.ajax({
+		   type: 'POST',
+           data: {
+           	personnelData: options_personnel,
+           	personnelId: personnelId ,
+             csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+           },
+           url: '/addPersonnel/',
+		   cache: false,
+		   async: false,
+		   success: function(data){　　　　　　　　　
+         layer.alert("保存成功", { });
+		}
+      })       
+      return false;        
+    });           
+}); 
    
     var username = window.parent.username;
 

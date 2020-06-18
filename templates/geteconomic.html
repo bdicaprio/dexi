@@ -448,6 +448,7 @@
                            <div style="display:block;float:right" id="layerDemo">                        
                                  <!-- <button data-method="offset" data-type="auto" class="layui-btn" id="save-economic">保存</button>-->
                                  <input type='hidden' id='economicData' name='economicData' />
+                                 <input type=text id="economicId" name="economicId" value={{ resultEconomic.id }}  > 
                                  <input type='submit' class='layui-btn' value='提交'  lay-submit="" lay-filter="save-economic"> 
                            </div>
                      </div>   
@@ -478,7 +479,42 @@
           laydate.render({
               elem: '#fillingTime'
           });
-    }); 
+          
+          
+      form.on('submit(save-economic)', function(data){
+           var options_economic = [];
+           var options_economic_continues = [];
+          
+           $("#tableEconomic tr").each(function() {                        
+                 options_economic.push($(this).children().eq(3).text());                       
+           });  
+          $("#tableEconomicContinues tr").each(function() {                        
+        	     options_economic_continues.push($(this).children().eq(3).text());                       
+          });            
+          $("#tableEconomicContinues .replenish").each(function() {                        
+     	     options_economic_continues.push($(this).children().eq(1).text());                       
+         }); 
+          
+          var economicId = $('#economicId').val() 	
+                 	  
+      $.ajax({
+		   type: 'POST',
+           data: {
+    	   economicData: options_economic,
+    	   economicContinuesData: options_economic_continues,
+    	   economicId: economicId,
+           csrfmiddlewaretoken:$('[name="csrfmiddlewaretoken"]').val()
+           },
+           url: '/addEconomic/',
+		   cache: false,
+		   async: false,
+		   success: function(data){　　　　　　　　　
+           layer.alert("保存成功", { });
+		}
+      })       
+       return false;        
+   });           
+}); 
    
     var username = window.parent.username;
 
