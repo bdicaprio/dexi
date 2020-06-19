@@ -51,21 +51,12 @@ def authlogin(request,*args,**kwargs):
     
 #获取index页面所有数据   
 def index(request,*args,**kwargs):
-    username = request.session.get('username','anybody')
-    
+    username = request.session.get('username','anybody') 
     resultId = models.userProfile.objects.values("id").filter(username=username)
-    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
-
-    id = ''
-    CompanyNameId = ''
-    lsSuperuser = ''
     for i in resultId:
-        id = i['id']
-        
-    resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
-    for i in resultCompanyNameId:
-        companyNameId = str(i['id']) 
-        
+        id = i['id']    
+             
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)        
     for i in superuser:
         lsSuperuser = str(i['is_superuser'])
         
@@ -80,36 +71,47 @@ def index(request,*args,**kwargs):
             "username":username, 
             "superuser":superuser,                                  
             }  
-        )      
-    print(CompanyNameId)    
-    try: #普通用户填过数据返回数据
-        print("11111222222111111111111")
-        resultStatistics = models.statistics.objects.get(company_id=companyNameId)
-        print("11111")
-        resultCompany = models.company.objects.get(company_id=companyNameId)
-        print("222222")
-        resultEconomic = models.economic.objects.get(company_id=companyNameId)
-        print("333333")
-        resultPersonnel = models.personnel.objects.get(company_id=companyNameId)
-        print("44444444444")
-        resultActivities = models.activities.objects.get(company_id=companyNameId)
-        print("5555555555555555")
-        return render (
-            request,
-            "index.html", 
-            {
-            "resultStatistics":resultStatistics, 
-            "resultCompany":resultCompany, 
-            "resultEconomic":resultEconomic, 
-            "resultPersonnel":resultPersonnel, 
-            "resultActivities":resultActivities, 
-            "username":username,
-            "superuser":superuser,                       
-           } 
-        )       
-    except: #普通用户没填过数据
-        
-        resultStatistics = {"corporateGender":0,"education":0,} #第一次登入传传默认值            
+        ) 
+    else: 
+        resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
+        for i in resultCompanyNameId:
+            companyNameId = str(i['id'])      
+        try: #普通用户填过数据返回数据
+            
+            resultStatistics = models.statistics.objects.filter(company_id=companyNameId)
+            if resultStatistics.exists:
+                resultStatistics = models.statistics.objects.get(company_id=companyNameId)
+            resultCompany = models.statistics.objects.filter(company_id=companyNameId)
+            if resultCompany.exists:
+                resultCompany = models.statistics.objects.get(company_id=companyNameId)  
+            resultEconomic = models.statistics.objects.filter(company_id=companyNameId)
+            if resultEconomic.exists:
+                resultEconomic = models.statistics.objects.get(company_id=companyNameId)  
+            resultPersonnel = models.statistics.objects.filter(company_id=companyNameId)
+            if resultPersonnel.exists:
+                resultPersonnel = models.statistics.objects.get(company_id=companyNameId) 
+            resultActivities = models.statistics.objects.filter(company_id=companyNameId)
+            if resultActivities.exists:
+                resultActivities = models.statistics.objects.get(company_id=companyNameId)                                                                  
+
+
+            return render (
+                request,
+                "index.html", 
+                {
+                "resultStatistics":resultStatistics, 
+                "resultCompany":resultCompany, 
+                "resultEconomic":resultEconomic, 
+                "resultPersonnel":resultPersonnel, 
+                "resultActivities":resultActivities, 
+                "username":username,
+                "superuser":superuser,                       
+               } 
+            )       
+        except: #普通用户没填过数据         
+            resultStatistics = {"corporateGender":0,"education":0,} #第一次登入传传默认值      
+            
+                  
         return render (
             request,
             "index.html", 
@@ -1658,12 +1660,19 @@ def delCompany(request):
 
     
 def createExcel(request):
-    postData = request.POST.get("companyname")
+    postData = request.POST
+    companyName = postData.get('companyname')
+
+    resultCompanyNameId = models.companyInfo.objects.values("id").filter(companyname=companyName)
+    for i in resultCompanyNameId:
+        companyNameId = str(i['id'])
+                
     workbook = load_workbook('E:\\1.xlsx')
     workbook.active = 0
     workbook1 = workbook.active
-    id = 1   
-    resulstatisticst = models.statistics.objects.values().filter(username_id=1)
+    print("1111111111111111111111111111111111")
+    resulstatisticst = models.statistics.objects.values().filter(company_id=companyNameId)
+    print("22222222222222222222222222222222222") 
     for item in resulstatisticst:
         workbook1['F2'] = item['organizationCode']
         workbook1['L2'] = item['areaNumber']
@@ -1677,7 +1686,7 @@ def createExcel(request):
         workbook1['D6'] = item['registeredAddress']  
         workbook1['D7'] = item['manager']
         workbook1['G7'] = item['telephone']
-        workbook1['K2'] = item['fax']
+        workbook1['K7'] = item['fax']
         workbook1['D8'] = item['statisticalControlOfficer']
         workbook1['G8'] = item['preparedBy']  
         workbook1['J8'] = item['preparedByTelephone']
@@ -1686,7 +1695,9 @@ def createExcel(request):
         workbook1['C10'] = item['url']
         workbook1['K10'] = item['preparedByMobilephone'] 
         
-    resultcompany = models.company.objects.values().filter(username_id=1) 
+    print("3333333333333333333333333333333333333333333") 
+           
+    resultcompany = models.company.objects.values().filter(company_id=companyNameId) 
     workbook.active = 1
     workbook1 = workbook.active    
     for item in resultcompany:
@@ -1723,7 +1734,7 @@ def createExcel(request):
         workbook1['C34'] = item['qb16']
         workbook1['C35'] = item['qb16_1']                        
     
-    resulteconomic = models.economic.objects.values().filter(username_id=1)
+    resulteconomic = models.economic.objects.values().filter(company_id=companyNameId)
     workbook.active = 2
     workbook1 = workbook.active      
     for item in resulteconomic:
@@ -1793,7 +1804,7 @@ def createExcel(request):
         workbook1['B70'] = item['QC226_2'] 
         workbook1['B71'] = item['QC226']           
             
-    resultpersonnel = models.personnel.objects.values().filter(username_id=1)
+    resultpersonnel = models.personnel.objects.values().filter(company_id=companyNameId)
     workbook.active = 3
     workbook1 = workbook.active      
     for item in resultpersonnel:
@@ -1820,8 +1831,8 @@ def createExcel(request):
         workbook1['D27'] = item['qd28']    
      
           
-    resultprojects = models.projects.objects.values().filter(username_id=1)
-    count = models.projects.objects.values().filter(username_id=1).count()
+    resultprojects = models.projects.objects.values().filter(company_id=companyNameId)
+    count = models.projects.objects.values().filter(company_id=companyNameId).count()
 
     workbook.active = 4
     workbook1 = workbook.active 
@@ -1845,7 +1856,7 @@ def createExcel(request):
             
     
        
-    resultactivities = models.activities.objects.values().filter(username_id=1)  
+    resultactivities = models.activities.objects.values().filter(company_id=companyNameId)  
     workbook.active = 5
     workbook1 = workbook.active      
     for item in resultactivities:

@@ -167,12 +167,15 @@ layui.use(['jquery','element','form','table', 'layedit', 'laydate'], function(){
             
             else if (obj.event === 'saveAs'){
             	      var companyname = data.companyname
-            	      
+            	      var companyId = data.id
+
             	      $.ajax({
             		          type:'POST',
             		          url:'/createExcel/',
             		          dataType:'text',
-            		          data:{'companyname':companyname},
+            		          data:{'companyname':companyname,
+            		        	     'companyId':companyId,
+            		          },
             		          success:function(text){
             		        	  var data = JSON.parse(text)
             		        	  filename = data.filename
