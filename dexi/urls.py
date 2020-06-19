@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^saveProjectTmp/', views.saveProjectTmp),    
     url(r'^delTmpProject/', views.delTmpProject),  
     url(r'^addAll/', views.addAll),  
+    url(r'^saveOwnUser/', views.saveOwnUser),      
              
                                                               
 ]

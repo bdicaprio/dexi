@@ -124,10 +124,10 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
   		       success:function(data){　　　　
   		       		 parent.layui.table.reload('idTest',{});　　　　　
   		    	     parent.layer.alert("保存成功", { });    	   
-  		    	     parent.layer.close(index);
-  		    	     
-  		    	     
-       		   }                
+  		    	     parent.layer.close(index); 		    	     		    	     
+       		         },error:function(){
+            		 parent.layer.alert('账号已存在');
+                 }     		         		                 
            })
        });
 

@@ -6,7 +6,7 @@ from app01 import models
 from _cffi_backend import string
 from django.db import connection
 import json
-from builtins import dict
+from builtins import dict, id
 from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponseRedirect
 from django.utils.encoding import repercent_broken_unicode
@@ -21,6 +21,7 @@ from numpy.ma.core import getdata
 from _ast import Dict, If
 from app01.models import company
 from pickle import DICT
+from pylint.test.functional import unnecessary_pass
 
 # Create your views here.
 
@@ -1206,19 +1207,19 @@ def member(request):
     
 def saveUserinfo(request):
     postData = request.POST
-    username = postData.get("username")
-    
+    #username = postData.get("username")
+    username = request.session.get('username','anybody')
     id = ''
     CompanyNameId = ''
-    
+
     resultUsernameId = models.userProfile.objects.values("id").filter(username=username)
     for i in resultUsernameId:
         id = str(i['id']) 
+
     resultCompanyNameId = models.companyInfo.objects.values("id").filter(username_id=id)
     for i in resultCompanyNameId:
         companyNameId = str(i['id'])   
         
-            
     dictUserInfo = {
         "nickname": postData['nickname'], 
         "phone": postData['phone'], 
@@ -1229,8 +1230,16 @@ def saveUserinfo(request):
         "companyname": postData['companyname'], 
     }
 
-    models.userProfile.objects.filter(id=id).update(**dictUserInfo)
-    models.companyInfo.objects.filter(id=companyNameId).update(**dictCompanyInfo)
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
+    for i in superuser:
+        lsSuperuser = i['is_superuser']
+        
+    if str(lsSuperuser) == 'True':
+        models.userProfile.objects.filter(id=id).update(**dictUserInfo)
+    else:
+        models.userProfile.objects.filter(id=id).update(**dictUserInfo)    
+        models.companyInfo.objects.filter(id=companyNameId).update(**dictCompanyInfo)
+
     return render(
         request,
         "member.html", 
@@ -1337,10 +1346,8 @@ def getuserinfo(request):
     if username is not None:
         sql = 'select id,username,nickname,phone,email, companyname,hyperlink,is_superuser  from auth_user  where username  like ' + "'%"  +  username  + "%' " +  '  and   id <> 1  order by id  DESC  limit '  +  start + ','  + end  
         sql_count = 'select count(*)  from auth_user  where username  like ' + "'%"  +  username  + "%' " +  '  and   id <> 1  order by id  DESC limit '  +  start + ','  + end
-        print(sql)
     else:
         sql = 'select id,username,nickname,phone,email, companyname,hyperlink,is_superuser  from auth_user  where id <> 1   order by id  DESC  limit '  +  start + ','  + end + ''
-        print(sql)
         sql_count = 'select count(*)  from  auth_user'
     cursor = connection.cursor()
     cursor.execute(sql)
@@ -1495,7 +1502,6 @@ def getProjects(request):
     print(companyNameId)    
     try:  
         resultProjects = models.projects.objects.get(company_id=companyNameId)
-        print("45454545454545")
         return render(
             request,
             "getproject.html", 
@@ -1504,7 +1510,6 @@ def getProjects(request):
             }
         ) 
     except:
-        print("4543534543534534534534324234")
         return render(
             request,
             "getproject.html", 
@@ -1552,62 +1557,114 @@ def addUser(request):
         }
     )     
                                    
-def saveUser(request):
+def saveUser(request):  #管理员增加保存用户的信息
     postData = request.POST
     username = request.session.get('username','anybody') 
-    try:
-        print(postData.get("superuser"))
-        id = postData.get("id") #修改用户信息用的
+    superuser = postData.get("superuser")
+    id = postData.get("id") #修改用户信息用的
+    print(superuser)
+    if id is not None:  #获取到id就是修改用户表
+        dictUser = {         
+               'username' : postData.get("username"),    
+               'nickname' : postData.get("nickname"), 
+               'password' : make_password(postData.get("password")), 
+               'phone' : postData.get("phone"), 
+               'email' : postData.get("email"),
+               'companyname' : postData.get("companyname"),                          
+        }          
+        try:   #修改管理员用户
+            int(superuser) == 1
+            models.userProfile.objects.filter(id=id).update(**dictUser)
+        except:   #修改普通用户                            
+            dictCompany = {                
+                'companyname': postData.get("companyname"),
+                'username_id': id
+            }
+            models.userProfile.objects.filter(id=id).update(**dictUser)   
+            models.companyInfo.objects.filter(id=id).update(**dictUser)     #修改公司表   
+    else: #没有获取到id就是新增
 
         dictUser = {         
-          'username' : postData.get("username"),    
-          'nickname' : postData.get("nickname"), 
-          'password' : make_password(postData.get("password")), 
-          'phone' : postData.get("phone"), 
-          'email' : postData.get("email"),
-          'companyname' : postData.get("companyname"),  
-          'is_superuser' : postData.get("superuser"),                                       
-        }    
-        print(dictUser)   
-            
-        if id == None:  #id为None就创建用户
-            models.userProfile.objects.create(**dictUser)    
-            resultName = postData.get("username")          
-            resultId = models.userProfile.objects.values('id').filter(username=resultName)        
-            id = ''        
+           'username' : postData.get("username"),    
+           'nickname' : postData.get("nickname"), 
+           'password' : make_password(postData.get("password")), 
+           'phone' : postData.get("phone"), 
+           'email' : postData.get("email"),
+           'companyname' : postData.get("companyname"),   
+           'is_superuser' :postData.get("superuser"),                                        
+        }  
+        try:
+            int(superuser) == 1  #新增管理员       
+            models.userProfile.objects.create(**dictUser)
+        except:
+            resultId = models.userProfile.objects.values("id").filter(username=username)
             for i in resultId:
-                id = i['id']
-            
-            print(id)
-        
+                id = i['id'] 
+              
+    #        resultCompanyName = models.companyInfo.objects.values("id").filter(username_id=id)
+    #        for i in resultCompanyName:
+    #            CompanyNameId = i['id']                
             dictCompany = {
-                'companyname' : postData.get("companyname"),
-                'username_id' :   id,         
+                'companyname': postData.get("companyname"),
+                'username_id': id
             }
+            models.userProfile.objects.create(**dictUser)
             models.companyInfo.objects.create(**dictCompany)
-        else:  #修改用户信息
-            dictCompany = {
-                'companyname' : postData.get("companyname"),
-            }
-            models.userProfile.objects.filter(id=id).update(**dictUser)
-            print(id,dictCompany)
-            models.companyInfo.objects.filter(username_id=id).update(**dictCompany)
-            
-            
-            
-    except:
-        print("22222222222222222222222222222222222222")
-        dict = {           
-          'username' : postData.get("username"),    
-          'nickname' : postData.get("nickname"), 
-          'password' : make_password(postData.get("password")), 
-          'phone' : postData.get("phone"), 
-          'email' : postData.get("email"),
-          'companyname' : postData.get("companyname"),  
-          'is_superuser' :  postData.get("superuser"),                                        
-        } 
-        models.userProfile.objects.create(**dict)  
+
+    return render(
+            request,
+            "adduser.html", 
+            {
     
+            }                
+        )      
+    
+    
+    
+def saveOwnUser(request):  #每个人修改自己的信息
+    postData = request.POST
+    username = request.session.get('username','anybody') 
+    resultId = models.userProfile.objects.values('id').filter(username=username)          
+    for i in resultId:  #知找到自己的id
+        id = i['id']       
+    superuser = models.userProfile.objects.values("is_superuser").filter(username=username)
+    for i in superuser:
+        lsSuperUser = i['is_superuser']        
+    print(lsSuperUser)   
+    print("111111111111111111111111111111")   
+    if lsSuperUser is True: #管理员保存        
+        
+        dictUser = {         
+           'username' : postData.get("username"),    
+           'nickname' : postData.get("nickname"), 
+           'password' : make_password(postData.get("password")), 
+           'phone' : postData.get("phone"), 
+           'email' : postData.get("email"),
+           'companyname' : postData.get("companyname"),                          
+        }  
+        print("2222222222222222222222222222")  
+        models.companyInfo.objects.filter(username_id=id).update(**dictUser)
+
+    else:               #普通用户保存
+        resultCompanyId = models.companyInfo.objects.values("id").filter(username_id=id)  #找到公司id
+        for i in resultCompanyId:
+          companyNameId = i['id']
+        dictCompany = {
+            'companyname' : postData.get("companyname"),
+            'username_id' :   id,         
+        }
+        dictUser = {         
+           'username' : postData.get("username"),    
+           'nickname' : postData.get("nickname"), 
+           'password' : make_password(postData.get("password")), 
+           'phone' : postData.get("phone"), 
+           'email' : postData.get("email"),
+           'companyname' : postData.get("companyname"),                          
+        }          
+           
+        models.userProfile.objects.filter(id=id).update(**dictUser)        
+        models.companyInfo.objects.filter(id=companyNameId).update(**dictCompany)
+
     return render(
             request,
             "adduser.html", 
@@ -1615,6 +1672,18 @@ def saveUser(request):
     
             }                
         )  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 def editUser(request):
     getData = request.GET
@@ -1971,7 +2040,6 @@ def createExcel(request):
 
 
 def addAll(request):
-
     postDataStatistics = request.POST.getlist('statisticsData[]')
     postDataStatisticsContinues  =  request.POST.getlist('statisticsContinuesData[]')
     postDataCompany = request.POST.getlist('companyData[]')   
@@ -1989,8 +2057,6 @@ def addAll(request):
     for i in resultCompanyNameId:
         companyNameId = str(i['id'])  
     
-    
-    print("3333333333333333333333333333")
     dictStatistics = {
         'organizationCode':postDataStatistics[1],
         'areaNumber':postDataStatistics[2],
@@ -2014,7 +2080,6 @@ def addAll(request):
         'preparedByMobilephone':postDataStatisticsContinues[1],
         'company_id':companyNameId,
     }
-    print("9999999999999999999999999999999999")
 
            
     dictCompany = {   
@@ -2050,7 +2115,6 @@ def addAll(request):
         'qb16_1':postDataCompany[31],
         'company_id':companyNameId,        
     }
-    print("888888888888888888888888888888888")
  
     
     dictEconomic = {
@@ -2122,9 +2186,6 @@ def addAll(request):
         'QC226':postDataEconomicContinues[34],
         'company_id':companyNameId,        
     }
-    
-  
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa") 
      
     dictPersonnel = {    
         'qd01':postDataPersonnel[2],
@@ -2235,44 +2296,38 @@ def addAll(request):
         'qj61':postDataActivitiesContinues[44],
         'qj62':postDataActivitiesContinues[45],     
         'company_id':companyNameId,         
-    }
-        
-
-    print("555555555555555555555555555555555555555555555")
-    print("666666666666666666666666666666666666666666666")
-    
-        
+    }     
     
     if len(companyname) == 0:   #没有输公司名字
+       
         models.projectstmp.objects.create(**dict)      #让程序报错         
     elif models.companyInfo.objects.filter(companyname=companyname):  #该公司已经登记过
-#        models.projectstmp.objects.create(**dict)        
+#        models.projectstmp.objects.create(**dict)      
+            
         if models.statistics.objects.filter(company_id=companyNameId):
-            print("aaaaaaaaaaaaaa")
             models.statistics.objects.filter(company_id=companyNameId).update(**dictStatistics)
         else:
-            models.statistics.objects.create(**dict)  
-        if models.company.objects.filter(company_id=companyNameId):     
-            print("bbbbbbbbbbbbbbbbb")       
+            models.statistics.objects.create(**dictStatistics)         
+        if models.company.objects.filter(company_id=companyNameId):         
             models.company.objects.filter(company_id=companyNameId).update(**dictCompany)
         else:
-            models.company.objects.create(**dict)  
+            models.company.objects.create(**dictCompany)  
                         
         if models.economic.objects.filter(company_id=companyNameId):
             models.economic.objects.filter(company_id=companyNameId).update(**dictEconomic)
         else:
-            models.economic.objects.create(**dict)
+            models.economic.objects.create(**dictEconomic)
             
         if models.personnel.objects.filter(company_id=companyNameId):
             models.personnel.objects.filter(company_id=companyNameId).update(**dictPersonnel)
         else:
-            models.personnel.objects.create(**dict)    
-            
+            models.personnel.objects.create(**dictPersonnel)     
         if models.activities.objects.filter(company_id=companyNameId):
             models.activities.objects.filter(company_id=companyNameId).update(**dictActivities) 
         else:
-            models.activities.objects.create(**dict)                                
+            models.activities.objects.create(**dictActivities)                                
     else:
+        
         username = request.session.get('username','anybody')
         resultId = models.userProfile.objects.values("id").filter(username=username)  #获取用户的id
         for i in resultId:
@@ -2281,7 +2336,7 @@ def addAll(request):
             'username_id': id,
             'companyname': companyname,
             }
-        print("88888888888888888888888888888888")
+
         models.companyInfo.objects.create(**dict)
         models.statistics.objects.create(**dict)
         models.company.objects.create(**dict)   

@@ -14,7 +14,7 @@
         <div class="layui-tab">
              <div class="layui-tab-content">
                <div class="layui-tab-item layui-show" style="margin-top:-80px;margin-left:-300px;">
-                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();" lay-filter="example">{% csrf_token %}
+                 <from class="layui-form" method="post" action="" onsubmit="return dosubmit();"  lay-filter=from-addUser>{% csrf_token %}
                      <div class="layui-inline" style="margin-top:50px;">
                                 <label class="layui-form-label"  style="margin-left:300px;" >账号</label>
                                 <div class="layui-input-inline" >
@@ -58,20 +58,20 @@
                                 </div>
                       </div>   
                       
-                     <div class="layui-inline" style="margin-top:30px;">
+<!--                     <div class="layui-inline" style="margin-top:30px;">
                                 <label class="layui-form-label" style="margin-left:300px;">是否管理员</label>
                                    <div class="layui-input-inline">
                                         <select name="superuser" lay-filter="aihao" id='superuser'  >
                                             <option value="">否</option>
-                                            <option value="1">是</option>
-                                            
+                                            <option value="1">是</option>                                          
                                         </select>
                                  </div>
                       </div>                           
-
+-->
                      <div class="layui-inline" style="margin-top:30px;">
                                 <label class="layui-form-label" style="margin-left:300px;"></label>
                                 <div style="display:block;float:right" id="layerDemo">                        
+                                      <input type='hidden' id='isSuperuser' name='isSuperuser' value= {{ result.is_superuser }} />
                                       <input type='hidden' id='id' name='id' value= {{ result.id }} />
                                       <input type='submit' class='layui-btn' value='保存'  lay-submit="" lay-filter="save-userinfo"> 
                                 </div>
@@ -110,6 +110,9 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
               elem: '#endTime'
           });
           
+          
+
+          
   
 
           var index = parent.layer.getFrameIndex(window.name);
@@ -136,9 +139,7 @@ layui.use(['jquery','element','form', 'layedit', 'laydate'], function(){
         	    parent.layer.close(index);         	  
           });
           
-          
-          
-          
+        
           
           
           
